@@ -1,0 +1,5 @@
+DirectorySlash Off
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_URI} !^/controller.php
+RewriteRule .* /controller.php [L,QSA]

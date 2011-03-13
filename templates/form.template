@@ -1,0 +1,7 @@
+<form action="/" method="post">
+	<p>
+		<label for="time">Enter a UNIX timestamp, or any description of a time</label>
+		<span class="inputwrapper"><input type="text" name="time" id="time" value="" /></span>
+		<span class="inputwrapper"><input type="submit" value="Go" /></span>
+	</p>
+</form>

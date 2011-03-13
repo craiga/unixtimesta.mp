@@ -1,0 +1,11 @@
+<div id="compatability-message">
+	<p><strong>Note:</strong> You are using a version of Internet Explorer earlier than version 8, so you may have a sub-optimal experience on this site.</p>
+	<p>We recommend one of the following browsers, which offer better support for the web standards used to build this site:</p>
+	<ul>
+		<li><a href="http://getfirefox.com/">Firefox</a></li>
+		<li><a href="http://apple.com/safari">Safari</a></li>
+		<li><a href="http://google.com/">Chrome</a></li>
+		<li><a href="http://opera.com/">Opera</a></li>
+	</ul>
+	<p>For more information, check out <a href="http://browsehappy.com/">Browse Happy</a>.</p>
+</div>

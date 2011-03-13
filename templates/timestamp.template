@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" version="-//W3C//DTD XHTML 1.1//EN" xml:lang="en">
+<head>
+	<title>Unix Timestamp {timestamp}</title>
+	<link rel="canonical" href="http://unixtimesta.mp/{timestamp}" />
+	<meta name="Description" content="Unix Timestamp {timestamp} = {date:timestamp:l jS F Y g:i:s A} UTC" />
+</head>
+
+<body id="unixtimesta-mp">
+
+<h1>Unix Timestamp <span id="timestamp">{timestamp}</span></h1>
+
+<p id="utctime" class="time">It's <span class="date">{date:timestamp:l jS F Y g:i:s A} UTC</span>.</p>
+
+<!-- startBlock(warning) -->
+<p class="warning">{message}</p>
+<!-- endBlock(warning) -->
+
+<!-- form here -->
+
+
+
+</body>
+</html>
