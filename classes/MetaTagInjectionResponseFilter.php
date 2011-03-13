@@ -1,6 +1,6 @@
 <?php
 
-class MetaTagInjectionResponseFilter extends HeaderInjectionResponseFilter
+class MetaTagInjectionResponseFilter extends HeadInjectionResponseFilter
 {
 	private $_name;
 	private $_content;
