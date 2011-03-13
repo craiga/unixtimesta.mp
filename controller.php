@@ -162,7 +162,7 @@ try
 	{
 		$googleAnalyticsTemplate = new Template("templates/google-analytics.template");
 		$googleAnalyticsTemplate->setVar("google-analytics-account", Config::Get("google-analytics-account"));
-		$responseFilters[] = new HeaderTemplateInjectionResponseFilter($googleAnalyticsTemplate);
+		$responseFilters[] = new FooterTemplateInjectionResponseFilter($googleAnalyticsTemplate);
 	}
 	catch(ConfigNotSetException $e)
 	{
