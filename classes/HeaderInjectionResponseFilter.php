@@ -4,12 +4,12 @@ abstract class HeaderInjectionResponseFilter extends PatternReplacementResponseF
 {
 	protected function _getPattern($body, $requestIdentifier, $parameters)
 	{
-		return "/<body>/";
+		return "/<body([^>]*)>/";
 	}
 	
 	protected function _getReplacement($body, $requestIdentifier, $parameters)
 	{
-		return sprintf("\n<body>\n%s\n", $this->_getInjection());
+		return sprintf("\n<body$1>\n%s\n", $this->_getInjection());
 	}
 	
 	/**
