@@ -1,0 +1,3 @@
+url_rewrites:
+    - ^(.*\/?)$ /controller.php
+index_list: [controller.php]
