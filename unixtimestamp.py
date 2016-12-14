@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.route('/<int:timestamp>')
-def timestamp(timestamp):
+def show_timestamp(timestamp):
     """Display the current timestamp."""
     return render_template('timestamp.html', timestamp=timestamp)
 

@@ -1,5 +1,8 @@
+"""
+Tests for unixtimesta.mp.
+"""
+
 import unittest
-from pprint import pprint
 from contextlib import contextmanager
 
 from flask import template_rendered
@@ -15,6 +18,7 @@ def captured_templates(app):
     recorded = []
 
     def record(sender, template, context, **extra):
+        # pylint:disable=unused-argument
         recorded.append((template, context))
 
     template_rendered.connect(record, app)
@@ -26,13 +30,19 @@ def captured_templates(app):
 
 
 class TestCase(unittest.TestCase):
+    """
+    Base test class.
+    """
     def setUp(self):
         unixtimestamp.app.config['TESTING'] = True
         self.app = unixtimestamp.app.test_client()
 
 
 class TimestampTestCase(TestCase):
-    def test_timestamp(self):
+    """
+    Tests for showing timestamp.
+    """
+    def test_show_timestamp(self):
         with captured_templates(unixtimestamp.app) as templates:
             response = self.app.get('/123456789')
             self.assertEqual(200, response.status_code)
