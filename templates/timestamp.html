@@ -4,6 +4,7 @@
         <title>Unix Timestamp {{ timestamp }}</title>
     </head>
     <body>
-        <h1>Unix Timestamp {{ timestamp }}</h1>
+        <h1>Unix Timestamp <span id="timestamp">{{ timestamp }}</span></h1>
+        <p>It's {{ datetime.strftime('%A %d %B %Y %H:%M:%S %Z') }}.</p>
     </body>
 </html>
