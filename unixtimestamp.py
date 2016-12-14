@@ -3,15 +3,16 @@ unixtimesta.mp Flask application.
 """
 
 import os
-from flask import Flask
+
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello():
-    """A simple "Hello, world!" response to get started."""
-    return "Hello world!"
+@app.route('/<int:timestamp>')
+def timestamp(timestamp):
+    """Display the current timestamp."""
+    return render_template('timestamp.html', timestamp=timestamp)
 
 
 if __name__ == '__main__':

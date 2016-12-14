@@ -2,3 +2,4 @@ pip-tools
 pycodestyle
 pylint
 flask
+blinker     # Required for signal support in Flask
