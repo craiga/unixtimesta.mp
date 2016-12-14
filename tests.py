@@ -38,17 +38,24 @@ class TestCase(unittest.TestCase):
         self.app = unixtimestamp.app.test_client()
 
 
-class TimestampTestCase(TestCase):
+class ShowTimestampTestCase(TestCase):
     """
     Tests for showing timestamp.
     """
-    def test_show_timestamp(self):
-        with captured_templates(unixtimestamp.app) as templates:
-            response = self.app.get('/123456789')
-            self.assertEqual(200, response.status_code)
-            self.assertEqual(1, len(templates))
-            context = templates[0][1]
-            self.assertEqual(123456789, context['timestamp'])
+    def test_timestamp(self):
+        for timestamp in (0, 1, 123456):
+            with captured_templates(unixtimestamp.app) as templates:
+                response = self.app.get('/{}'.format(timestamp))
+                self.assertEqual(200, response.status_code)
+                self.assertEqual(1, len(templates))
+                context = templates[0][1]
+                self.assertEqual(timestamp, context['timestamp'])
+                self.assertEqual(timestamp, context['datetime'].timestamp())
+
+    def test_invalid_timestamp(self):
+        for timestamp in (-1, -123456):
+            response = self.app.get('/{}'.format(timestamp))
+            self.assertEqual(404, response.status_code)
 
 
 if __name__ == '__main__':
