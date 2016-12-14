@@ -6,15 +6,19 @@ from flask import template_rendered
 
 import unixtimestamp
 
+
 @contextmanager
 def captured_templates(app):
     """
     Captures all templates being rendered along with the context used.
     """
     recorded = []
+
     def record(sender, template, context, **extra):
         recorded.append((template, context))
+
     template_rendered.connect(record, app)
+
     try:
         yield recorded
     finally:
@@ -25,6 +29,7 @@ class TestCase(unittest.TestCase):
     def setUp(self):
         unixtimestamp.app.config['TESTING'] = True
         self.app = unixtimestamp.app.test_client()
+
 
 class TimestampTestCase(TestCase):
     def test_timestamp(self):
