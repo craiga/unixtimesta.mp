@@ -1,0 +1,4 @@
+pip-tools
+pycodestyle
+pylint
+flask
