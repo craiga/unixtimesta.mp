@@ -1,0 +1,11 @@
+language: python
+
+python:
+    - "3.5"
+    - "3.5-dev"
+    - "nightly"
+
+script:
+    - pycodestyle
+    - pylint unixtimestamp.py tests.py
+    - python tests.py
