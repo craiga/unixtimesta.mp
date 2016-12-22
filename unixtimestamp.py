@@ -20,6 +20,12 @@ def show_timestamp(timestamp):
                            locale=locale)
 
 
+@app.route('/usage')
+def show_usage():
+    """Display usage information."""
+    return render_template('usage.html')
+
+
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", True))
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

@@ -69,5 +69,14 @@ class ShowTimestampTestCase(TestCase):
             self.assertEqual(404, response.status_code)
 
 
+class UsageTestCase(TestCase):
+    """
+    Tests for showing usage information.
+    """
+    def test_timestamp(self):
+        response = self.app.get('/usage')
+        self.assertEqual(200, response.status_code)
+
+
 if __name__ == '__main__':
     unittest.main()
