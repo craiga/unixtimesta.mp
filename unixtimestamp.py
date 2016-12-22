@@ -13,13 +13,17 @@ app = Flask(__name__)
 
 @app.route('/<int:timestamp>')
 def show_timestamp(timestamp):
-    """Display the current timestamp."""
+    """Display a timestamp."""
     locale = request.headers.get('Accept-Language', 'en-US')
     return render_template('timestamp.html',
                            timestamp=timestamp,
                            datetime=datetime.fromtimestamp(timestamp),
                            locale=locale)
 
+@app.route('/-<int:negative_timestamp>')
+def show_negative_timestamp(negative_timestamp):
+    """Display a negative timestamp (i.e. one before the epoch)."""
+    return show_timestamp(negative_timestamp * -1)
 
 @app.route('/<int:year>/<int:month>')
 @app.route('/<int:year>/<int:month>/<int:day>')

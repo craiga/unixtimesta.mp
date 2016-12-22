@@ -48,14 +48,15 @@ class ShowTimestampTestCase(TestCase):
     Tests for showing timestamp.
     """
     def test_timestamp(self):
-        for timestamp in (0, 1, 123456):
+        for timestamp in (0, 1, 123456, '-0', -1, -123456):
             with captured_templates(unixtimestamp.app) as templates:
                 response = self.app.get('/{}'.format(timestamp))
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
-                self.assertEqual(timestamp, context['timestamp'])
-                self.assertEqual(timestamp, context['datetime'].timestamp())
+                self.assertEqual(int(timestamp), context['timestamp'])
+                self.assertEqual(int(timestamp),
+                                 context['datetime'].timestamp())
 
     def test_locale(self):
         with captured_templates(unixtimestamp.app) as templates:
@@ -67,11 +68,6 @@ class ShowTimestampTestCase(TestCase):
             self.assertEqual(1, len(templates))
             context = templates[0][1]
             self.assertEqual(locale, context['locale'])
-
-    def test_invalid_timestamp(self):
-        for timestamp in (-1, -123456):
-            response = self.app.get('/{}'.format(timestamp))
-            self.assertEqual(404, response.status_code)
 
 
 class DateRedirectTestCase(TestCase):
@@ -161,14 +157,12 @@ class DateRedirectTestCase(TestCase):
         Test redirection to timestamps based on date components.
         """
         for url, expected_redirect in self.valid_datetime_redirects():
-            print(url)
             response = self.app.get(url)
             self.assertEqual(response.status_code, 301)
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
 
         for url in self.invalid_datetime_redirects():
-            print(url)
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)
 
