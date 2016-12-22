@@ -5,3 +5,4 @@ pylint_mccabe
 pylint-flask
 flask
 blinker     # Required for signal support in Flask
+pytz

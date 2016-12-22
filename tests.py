@@ -4,8 +4,13 @@ Tests for unixtimesta.mp.
 
 import unittest
 from contextlib import contextmanager
+from urllib.parse import urlparse
+from datetime import datetime, MINYEAR, MAXYEAR
+from calendar import monthrange
+from itertools import product
 
 from flask import template_rendered
+from pytz import utc
 
 import unixtimestamp
 
@@ -67,6 +72,105 @@ class ShowTimestampTestCase(TestCase):
         for timestamp in (-1, -123456):
             response = self.app.get('/{}'.format(timestamp))
             self.assertEqual(404, response.status_code)
+
+
+class DateRedirectTestCase(TestCase):
+    """
+    Tests for date URL redirects.
+    """
+
+    valid_years = (MINYEAR, 1969, 1970, MAXYEAR)
+    invalid_years = (MINYEAR - 1, MAXYEAR + 1)
+    valid_months = (1, 2, 3, 4, 12)
+    invalid_months = (0, 13)
+    valid_days = (1, 28,)  # the last day of the month will be calculated
+    invalid_days = (0, 32)  # the last day of the month + 1 will be calculated
+    valid_hours = (0, 12, 23)
+    invalid_hours = (-1, 24)
+    valid_minutes = (0, 59)
+    invalid_minutes = (-1, 60)
+    valid_seconds = (0, 59)
+    invalid_seconds = (-1, 60)
+
+    def valid_datetime_redirects(self):
+        """
+        Generator of 2-tuples containing a date URL and the timestamp URL it
+        should redirect to.
+        """
+        # A list of n-tuples of lists to generate valid dates
+        valid_datetime_lists = (
+            (self.valid_years, self.valid_months, self.valid_days),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.valid_hours),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.valid_hours, self.valid_minutes),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.valid_hours, self.valid_minutes, self.valid_seconds))
+
+        for valid_datetime_list in valid_datetime_lists:
+            for valid_datetime_parts in product(*valid_datetime_list):
+                path = '/' + '/'.join([str(i) for i in valid_datetime_parts])
+                valid_datetime = datetime(*valid_datetime_parts, tzinfo=utc)
+                redirect = '/{:.0f}'.format(valid_datetime.timestamp())
+                yield (path, redirect)
+
+        # Ensure special cases are tested
+        for year, month in product(self.valid_years, self.valid_months):
+            # Month without day
+            path = '/{:d}/{:d}'.format(year, month)
+            valid_datetime = datetime(year=year, month=month, day=1,
+                                      tzinfo=utc)
+            redirect = '/{:.0f}'.format(valid_datetime.timestamp())
+            yield (path, redirect)
+
+            # Last day of the month
+            last_day_of_month = monthrange(year, month)[1]
+            path = '/{:d}/{:d}/{:d}'.format(year, month, last_day_of_month)
+            valid_datetime = datetime(year=year, month=month,
+                                      day=last_day_of_month, tzinfo=utc)
+            redirect = '/{:.0f}'.format(valid_datetime.timestamp())
+            yield (path, redirect)
+
+    def invalid_datetime_redirects(self):
+        """
+        Generator of invalid date URLs.
+        """
+        # A list of n-tuples of lists to generate invalid dates
+        invalid_datetime_lists = (
+            (self.invalid_years, self.valid_months),
+            (self.valid_years, self.invalid_months),
+            (self.valid_years, self.valid_months, self.invalid_days),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.invalid_hours),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.valid_hours, self.invalid_minutes),
+            (self.valid_years, self.valid_months, self.valid_days,
+             self.valid_hours, self.valid_minutes, self.invalid_seconds))
+
+        for invalid_datetime_list in invalid_datetime_lists:
+            for invalid_datetime_parts in product(*invalid_datetime_list):
+                yield '/' + '/'.join([str(i) for i in invalid_datetime_parts])
+
+        # Test last day of month + 1
+        for year, month in product(self.valid_years, self.valid_months):
+            last_day_of_month = monthrange(year, month)[1]
+            yield '/{:d}/{:d}/{:d}'.format(year, month, last_day_of_month + 1)
+
+    def test_redirects(self):
+        """
+        Test redirection to timestamps based on date components.
+        """
+        for url, expected_redirect in self.valid_datetime_redirects():
+            print(url)
+            response = self.app.get(url)
+            self.assertEqual(response.status_code, 301)
+            redirect = urlparse(response.location).path
+            self.assertEqual(expected_redirect, redirect)
+
+        for url in self.invalid_datetime_redirects():
+            print(url)
+            response = self.app.get(url)
+            self.assertEqual(response.status_code, 404)
 
 
 class UsageTestCase(TestCase):
