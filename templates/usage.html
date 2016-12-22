@@ -3,7 +3,7 @@
 <h1>Usage of this Site</h1>
 <p>This site can be used in a number of different ways.</p>
 <h2>URIs</h2>
-<p>This is this site's <em>raison d'être</em> &mdash; to give easy access to 
+<p>This is this site's <em>raison d'être</em>&mdash;to give easy access to 
     timestamp translations directly from a browser's address bar.</p>
 <h3>Timestamp URIs</h3>
 <p>The easiest way to get information on a particular timestamp is to enter 
@@ -22,11 +22,11 @@
 <pre><a href="/1978/3/31/15/45/22" title="Example link to a Unix Timestamp for a specific date and time">http://unixtimesta.mp/1978/3/31/15/45/22</a></pre>
 <h3>Descriptive URIs</h3>
 <p>You can also request a description of any date and time, and using the 
-    magic of PHP's
-    <a href="http://php.net/strtotime" title="Documentation on PHP's strtotime function">strtotime</a>
+    magic of 
+    <a href="http://labix.org/python-dateutil">python-dateutil</a>
     function, the site will do it's best to try and figure what you're on 
     about.</p>
-<pre><a href="/Next%20Wednesday" title="Example link to a Unix Timestamp for a description of a date and time" style="text-decoration: none;">http://unixtimesta.mp/Next%20Wednesday</a></pre>
+<pre><a href="/Wednesday" title="Example link to a Unix Timestamp for a description of a date and time" style="text-decoration: none;">http://unixtimesta.mp/Wednesday</a></pre>
 <h2>Bookmarklet</h2>
 <p>For easy access to this site, install
     <a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">this bookmarklet</a>
