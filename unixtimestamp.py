@@ -7,6 +7,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, abort
 from pytz import utc
+from dateutil.parser import parse
 
 app = Flask(__name__)
 
@@ -35,7 +36,12 @@ def show_negative_timestamp(negative_timestamp):
     '/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>/<int:second>')
 # pylint:disable=too-many-arguments
 def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
-    """Display the current timestamp."""
+    """
+    Redirect to a timestamp based on the year, month, day, hour, minute and
+    second in the URL.
+
+    Only year and month are required.
+    """
     try:
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
                              minute=minute, second=second, tzinfo=utc)
@@ -50,6 +56,18 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
 def show_usage():
     """Display usage information."""
     return render_template('usage.html')
+
+
+@app.route('/<string:datetime_string>')
+def redirect_to_timestamp_string(datetime_string):
+    """Redirect to a timestamp based on the given description of a datetime."""
+    try:
+        timestamp = parse(datetime_string, fuzzy=True)
+    except ValueError:
+        abort(404)
+
+    url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    return redirect(url, code=302)
 
 
 if __name__ == '__main__':

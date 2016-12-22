@@ -4,13 +4,14 @@ Tests for unixtimesta.mp.
 
 import unittest
 from contextlib import contextmanager
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from datetime import datetime, MINYEAR, MAXYEAR
 from calendar import monthrange
 from itertools import product
 
 from flask import template_rendered
 from pytz import utc
+from dateutil.parser import parse
 
 import unixtimestamp
 
@@ -163,6 +164,29 @@ class DateRedirectTestCase(TestCase):
             self.assertEqual(expected_redirect, redirect)
 
         for url in self.invalid_datetime_redirects():
+            response = self.app.get(url)
+            self.assertEqual(response.status_code, 404)
+
+
+class StringRedirectTestCase(TestCase):
+    """
+    Tests for datetime description URL redirects.
+    """
+    def test_redirect(self):
+        """
+        Test datetime descriptin URL redirects.
+        """
+        for valid_date_string in ('31st March 1978', '2017-07-29'):
+            url = '/{}'.format(quote(valid_date_string))
+            expected_datetime = parse(valid_date_string, fuzzy=True)
+            expected_redirect = '/{:.0f}'.format(expected_datetime.timestamp())
+            response = self.app.get(url)
+            self.assertEqual(response.status_code, 302)
+            redirect = urlparse(response.location).path
+            self.assertEqual(expected_redirect, redirect)
+
+        for invalid_date_string in ('foobar',):
+            url = '/{}'.format(quote(invalid_date_string))
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)
 
