@@ -52,6 +52,17 @@ class ShowTimestampTestCase(TestCase):
                 self.assertEqual(timestamp, context['timestamp'])
                 self.assertEqual(timestamp, context['datetime'].timestamp())
 
+    def test_locale(self):
+        with captured_templates(unixtimestamp.app) as templates:
+            locale = 'fr-CA'
+            lang_header = ('Accept-Language', locale)
+            response = self.app.get('/123456',
+                                    headers=((lang_header),))
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(1, len(templates))
+            context = templates[0][1]
+            self.assertEqual(locale, context['locale'])
+
     def test_invalid_timestamp(self):
         for timestamp in (-1, -123456):
             response = self.app.get('/{}'.format(timestamp))
