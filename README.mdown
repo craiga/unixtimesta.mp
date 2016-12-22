@@ -1,8 +1,48 @@
 Code for the web site [http://unixtimesta.mp/](http://unixtimesta.mp/).
 
-[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master-python)](https://travis-ci.org/craiga/unixtimesta.mp)
+[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp)
 
-Reporting Issues
-================
+# Getting Started
+
+First, check out the code:
+
+    git clone https://github.com/craiga/unixtimesta.mp.git
+    cd unixtimesta.mp
+
+Set up the project by creating a virtual environment, activating it, and installing the required packages:
+
+    virtualenv --python=python3 venv
+    . venv/bin/activate
+    pip install -r requirements.txt
+
+Finally, run the the Flask development server and access the application in a web browser at [http://localhost:5000](http://localhost:5000).
+
+    python unixtimestamp.py
+
+# Managing Packages
+
+This project uses [`pip-tools`](https://github.com/nvie/pip-tools) to manage dependencies.
+
+ * Add packages to `requirements.in`.
+ * Run `pip-compile` to produce a new version of `requirements.txt` (use `pip-compile --upgrade` to update to the latest versions of packages).
+ * Run `pip-sync` update your environment to the packages in `requirements.txt`.
+
+# Ensuring Code Quality
+
+The most important way to ensure code quality is to run the test suite.
+
+    python tests.py
+
+Setting up this project will install `pycodestyle` to test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/).
+
+    pycodestyle
+
+This project also includes [Pylint](https://www.pylint.org) which will run a number of checks across the code.
+
+    pylint *.py
+
+Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
+
+# Reporting Issues
 
 [Report bugs, issues and requests through GitHub.](https://github.com/craiga/unixtimesta.mp/issues)
