@@ -221,7 +221,7 @@ class NowTestCase(TestCase):
             upper_bound = ceil(datetime.now().timestamp())
             self.assertEqual(response.status_code, 302)
             redirect = urlparse(response.location).path
-            match = re.match('^\/(\d+)$', redirect)
+            match = re.match(r'^/(\d+)$', redirect)
             timestamp = int(match.group(1))
             self.assertTrue(lower_bound <= timestamp <= upper_bound)
 
