@@ -1,63 +1,8 @@
 Code for the web site [http://unixtimesta.mp/](http://unixtimesta.mp/).
 
+[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master-python)](https://travis-ci.org/craiga/unixtimesta.mp)
+
 Reporting Issues
 ================
 
 [Report bugs, issues and requests through GitHub.](https://github.com/craiga/unixtimesta.mp/issues)
-
-Configuration
-=============
-
-To configure the site, create a file called ``config.php`` in the root directory, as set configuration as shown below:
-
-	Config::Set("key1", "value1");
-	Config::Set("key2", "value2");
-
-The following configuration keys are supported:
-
-<table>
-	<thead>
-		<tr>
-			<th scope="col">Key</th>
-			<th scope="col">Type</th>
-			<th scope="col">Description</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><code>production</code></td>
-			<td>Boolean</td>
-			<td>
-				<p>Set to true to disable development and debugging features.</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>google-analytics-account</code></td>
-			<td>String</td>
-			<td>
-				<p>Google Analytics account.</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>google-site-verification</code></td>
-			<td>String</td>
-			<td>
-				<p>Google verification.</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>msvalidate.01</code></td>
-			<td>String</td>
-			<td>
-				<p>Bing verification.</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>y_key</code></td>
-			<td>String</td>
-			<td>
-				<p>Yahoo! verification.</p>
-			</td>
-		</tr>
-	</tbody>
-</table>

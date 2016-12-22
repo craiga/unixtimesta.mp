@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Unix Timestamp {{ timestamp }}{% endblock %}
+{% block body %}
+    <h1>Unix Timestamp <span id="timestamp">{{ timestamp }}</span></h1>
+    <p id="utctime">It's {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }} UTC.</p>
+{% endblock %}
+{% block script %}
+    <script>
+    $(function() {
+        var t = parseInt($("span#timestamp").text(), 10);
+        var d = new Date(t * 1000);
+        var s = d.toLocaleDateString("{{ locale }}", {
+                "weekday": "long",
+                "day": "numeric",
+                "month": "long",
+                "year": "numeric"
+            })
+            + ' '
+            + d.toLocaleTimeString("{{ locale }}");
+        $("p#utctime").after("<p id=\"localtime\" style=\"display: none;\">That's <span class=\"date\">" + s + "</span> in your local time zone.</p>");
+        $("p#localtime").show("slow");
+    });
+    </script>
+{% endblock %}
