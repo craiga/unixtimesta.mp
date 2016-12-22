@@ -191,6 +191,20 @@ class StringRedirectTestCase(TestCase):
             self.assertEqual(response.status_code, 404)
 
 
+class PostRedirectTestCase(TestCase):
+    """
+    Test redirecting post requests.
+    """
+    def test_redirect(self):
+        """
+        Test redirecting post requests
+        """
+        response = self.app.post('/', data={'time': 'foobar'})
+        self.assertEqual(response.status_code, 302)
+        redirect = urlparse(response.location).path
+        self.assertEqual('/foobar', redirect)
+
+
 class UsageTestCase(TestCase):
     """
     Tests for showing usage information.

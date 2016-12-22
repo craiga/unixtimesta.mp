@@ -70,6 +70,11 @@ def redirect_to_timestamp_string(datetime_string):
     return redirect(url, code=302)
 
 
+@app.route('/', methods=['POST'])
+def handle_post():
+    return redirect('/{}'.format(request.form.get('time')))
+
+
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", True))
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
