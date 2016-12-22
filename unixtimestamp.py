@@ -75,6 +75,13 @@ def handle_post():
     return redirect('/{}'.format(request.form.get('time')))
 
 
+@app.route('/')
+@app.route('/now')
+def redirect_to_now():
+    url = url_for('show_timestamp', timestamp=datetime.now().timestamp())
+    return redirect(url, code=302)
+
+
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", True))
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

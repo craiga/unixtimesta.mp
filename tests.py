@@ -8,6 +8,8 @@ from urllib.parse import urlparse, quote
 from datetime import datetime, MINYEAR, MAXYEAR
 from calendar import monthrange
 from itertools import product
+import re
+from math import ceil, floor
 
 from flask import template_rendered
 from pytz import utc
@@ -203,6 +205,25 @@ class PostRedirectTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         redirect = urlparse(response.location).path
         self.assertEqual('/foobar', redirect)
+
+
+class NowTestCase(TestCase):
+    """
+    Test requests for now.
+    """
+    def test_redirect(self):
+        """
+        Test redirecting requests for now.
+        """
+        for url in ('/', '/now'):
+            lower_bound = floor(datetime.now().timestamp())
+            response = self.app.get(url)
+            upper_bound = ceil(datetime.now().timestamp())
+            self.assertEqual(response.status_code, 302)
+            redirect = urlparse(response.location).path
+            match = re.match('^\/(\d+)$', redirect)
+            timestamp = int(match.group(1))
+            self.assertTrue(lower_bound <= timestamp <= upper_bound)
 
 
 class UsageTestCase(TestCase):
