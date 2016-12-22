@@ -19,7 +19,8 @@ def show_timestamp(timestamp):
     return render_template('timestamp.html',
                            timestamp=timestamp,
                            datetime=datetime.fromtimestamp(timestamp),
-                           locale=locale)
+                           locale=locale,
+                           ga_tracking_id=os.environ.get('GA_TRACKING_ID'))
 
 
 @app.route('/-<int:negative_timestamp>')
@@ -55,7 +56,8 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
 @app.route('/usage')
 def show_usage():
     """Display usage information."""
-    return render_template('usage.html')
+    return render_template('usage.html',
+                           ga_tracking_id=os.environ.get('GA_TRACKING_ID'))
 
 
 @app.route('/<string:datetime_string>')
@@ -83,5 +85,5 @@ def redirect_to_now():
 
 
 if __name__ == '__main__':
-    app.debug = bool(os.environ.get("DEBUG", True))
+    app.debug = bool(os.environ.get("DEBUG", False))
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
