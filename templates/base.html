@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}unixtimesta.mp{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    </head>
+    <body>
+        
+        <div class="container">
+            {% block body %}
+                <p>Body missing?</p>
+            {% endblock %}
+            <form action="/" method="post">
+                <label for="time">Enter a UNIX timestamp, or any description of a time</label>
+                <input type="text" name="time" id="time" value="" />
+                <input type="submit" value="Go" />
+            </form>
+            <ul>
+                <li><a href="/usage">Usage</a></li>
+                <li><a href="/now">Now</a></li>
+                <li><a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">Bookmarklet</a></li>
+            </ul>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+                integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+                crossorigin="anonymous"></script>
+        {% block script %}{% endblock %}
+    </body>
+</html>
