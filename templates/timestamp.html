@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Unix Timestamp {{ timestamp }}{% endblock %}
 {% block body %}
-    <h1>Unix Timestamp <span id="timestamp">{{ timestamp }}</span></h1>
     <p id="utctime">It's {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }} UTC.</p>
 {% endblock %}
 {% block script %}
     <script>
     $(function() {
-        var t = parseInt($("span#timestamp").text(), 10);
-        var d = new Date(t * 1000);
+        var d = new Date({{ timestamp * 1000 }});
         var s = d.toLocaleDateString("{{ locale }}", {
                 "weekday": "long",
                 "day": "numeric",
