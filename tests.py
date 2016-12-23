@@ -235,5 +235,18 @@ class UsageTestCase(TestCase):
         self.assertEqual(200, response.status_code)
 
 
+class NotFoundTestCase(TestCase):
+    """
+    Tests for 404 handler.
+    """
+    def test_not_found(self):
+        with captured_templates(unixtimestamp.app) as templates:
+            response = self.app.get('/blahblahblah')
+            self.assertEqual(404, response.status_code)
+            self.assertEqual(1, len(templates))
+            template = templates[0][0]
+            self.assertEqual('page_not_found.html', template.name)
+
+
 if __name__ == '__main__':
     unittest.main()
