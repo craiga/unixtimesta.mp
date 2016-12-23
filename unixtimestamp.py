@@ -1,6 +1,4 @@
-"""
-Unix Timestamp Flask application.
-"""
+"""Unix Timestamp Flask application."""
 
 import os
 from datetime import datetime
@@ -38,10 +36,10 @@ def show_negative_timestamp(negative_timestamp):
 # pylint:disable=too-many-arguments
 def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
     """
-    Redirect to a timestamp based on the year, month, day, hour, minute and
-    second in the URL.
+    Redirect to a timestamp based on the components in the URL.
 
-    Only year and month are required.
+    Only year and month are required; year, month, day, hour, minute and second
+    are supported.
     """
     try:
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
@@ -74,18 +72,21 @@ def redirect_to_timestamp_string(datetime_string):
 
 @app.route('/', methods=['POST'])
 def handle_post():
+    """Handle post request."""
     return redirect('/{}'.format(request.form.get('time')))
 
 
 @app.route('/')
 @app.route('/now')
 def redirect_to_now():
+    """Redirect to current timestamp."""
     url = url_for('show_timestamp', timestamp=datetime.now().timestamp())
     return redirect(url, code=302)
 
 
 @app.errorhandler(404)
 def page_not_found(error):  # pylint:disable=unused-argument
+    """Page not found."""
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)

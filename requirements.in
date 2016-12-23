@@ -1,5 +1,6 @@
 pip-tools
 pycodestyle
+pydocstyle
 pylint
 pylint_mccabe
 pylint-flask

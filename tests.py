@@ -1,6 +1,4 @@
-"""
-Tests for unixtimesta.mp.
-"""
+"""Tests for Unix Timestamp Flask application."""
 
 import unittest
 from contextlib import contextmanager
@@ -20,9 +18,7 @@ import unixtimestamp
 
 @contextmanager
 def captured_templates(app):
-    """
-    Captures all templates being rendered along with the context used.
-    """
+    """Capture all templates being rendered along with the context used."""
     recorded = []
 
     def record(sender, template, context, **extra):
@@ -38,19 +34,19 @@ def captured_templates(app):
 
 
 class TestCase(unittest.TestCase):
-    """
-    Base test class.
-    """
+    """Base test case."""
+
     def setUp(self):
+        """Set up test case."""
         unixtimestamp.app.config['TESTING'] = True
         self.app = unixtimestamp.app.test_client()
 
 
 class ShowTimestampTestCase(TestCase):
-    """
-    Tests for showing timestamp.
-    """
+    """Tests for showing timestamp."""
+
     def test_timestamp(self):
+        """Test getting timestamps."""
         for timestamp in (0, 1, 123456, '-0', -1, -123456):
             with captured_templates(unixtimestamp.app) as templates:
                 response = self.app.get('/{}'.format(timestamp))
@@ -62,6 +58,7 @@ class ShowTimestampTestCase(TestCase):
                                  context['datetime'].timestamp())
 
     def test_locale(self):
+        """Test locale is passed into template."""
         with captured_templates(unixtimestamp.app) as templates:
             locale = 'fr-CA'
             lang_header = ('Accept-Language', locale)
@@ -74,9 +71,7 @@ class ShowTimestampTestCase(TestCase):
 
 
 class DateRedirectTestCase(TestCase):
-    """
-    Tests for date URL redirects.
-    """
+    """Tests for date URL redirects."""
 
     valid_years = (MINYEAR, 1969, 1970, MAXYEAR)
     invalid_years = (MINYEAR - 1, MAXYEAR + 1)
@@ -93,8 +88,11 @@ class DateRedirectTestCase(TestCase):
 
     def valid_datetime_redirects(self):
         """
-        Generator of 2-tuples containing a date URL and the timestamp URL it
-        should redirect to.
+        Generate valid, iterable test data.
+
+        Test data returned as a series of 2-tuples containing a date URL path
+        (e.g. "/yyyy/mm/dd") and the expected timestamp path the site should
+        redirect to.
         """
         # A list of n-tuples of lists to generate valid dates
         valid_datetime_lists = (
@@ -132,7 +130,9 @@ class DateRedirectTestCase(TestCase):
 
     def invalid_datetime_redirects(self):
         """
-        Generator of invalid date URLs.
+        Generate invalid iterable test data.
+
+        Test data returned as a series of invalid date URL paths.
         """
         # A list of n-tuples of lists to generate invalid dates
         invalid_datetime_lists = (
@@ -156,9 +156,7 @@ class DateRedirectTestCase(TestCase):
             yield '/{:d}/{:d}/{:d}'.format(year, month, last_day_of_month + 1)
 
     def test_redirects(self):
-        """
-        Test redirection to timestamps based on date components.
-        """
+        """Test redirection to timestamps based on date components."""
         for url, expected_redirect in self.valid_datetime_redirects():
             response = self.app.get(url)
             self.assertEqual(response.status_code, 301)
@@ -171,13 +169,10 @@ class DateRedirectTestCase(TestCase):
 
 
 class StringRedirectTestCase(TestCase):
-    """
-    Tests for datetime description URL redirects.
-    """
+    """Tests for datetime description URL redirects."""
+
     def test_redirect(self):
-        """
-        Test datetime descriptin URL redirects.
-        """
+        """Test datetime description URL redirects."""
         for valid_date_string in ('31st March 1978', '2017-07-29'):
             url = '/{}'.format(quote(valid_date_string))
             expected_datetime = parse(valid_date_string, fuzzy=True)
@@ -194,13 +189,10 @@ class StringRedirectTestCase(TestCase):
 
 
 class PostRedirectTestCase(TestCase):
-    """
-    Test redirecting post requests.
-    """
+    """Test redirecting post requests."""
+
     def test_redirect(self):
-        """
-        Test redirecting post requests
-        """
+        """Test redirecting post requests."""
         response = self.app.post('/', data={'time': 'foobar'})
         self.assertEqual(response.status_code, 302)
         redirect = urlparse(response.location).path
@@ -208,13 +200,10 @@ class PostRedirectTestCase(TestCase):
 
 
 class NowTestCase(TestCase):
-    """
-    Test requests for now.
-    """
+    """Test requests for now."""
+
     def test_redirect(self):
-        """
-        Test redirecting requests for now.
-        """
+        """Test redirecting requests for now."""
         for url in ('/', '/now'):
             lower_bound = floor(datetime.now().timestamp())
             response = self.app.get(url)
@@ -227,19 +216,19 @@ class NowTestCase(TestCase):
 
 
 class UsageTestCase(TestCase):
-    """
-    Tests for showing usage information.
-    """
-    def test_timestamp(self):
+    """Test for usage information."""
+
+    def test_usage(self):
+        """Test for usage information."""
         response = self.app.get('/usage')
         self.assertEqual(200, response.status_code)
 
 
 class NotFoundTestCase(TestCase):
-    """
-    Tests for 404 handler.
-    """
+    """Test for 404 handler."""
+
     def test_not_found(self):
+        """Test for 404 handler."""
         with captured_templates(unixtimestamp.app) as templates:
             response = self.app.get('/blahblahblah')
             self.assertEqual(404, response.status_code)

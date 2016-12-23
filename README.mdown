@@ -33,9 +33,10 @@ The most important way to ensure code quality is to run the test suite.
 
     python tests.py
 
-Setting up this project will install `pycodestyle` to test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/).
+Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/) and [pydocstyle](http://www.pydocstyle.org) to help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/) and [PEP 257](https://www.python.org/dev/peps/pep-0257/).
 
     pycodestyle
+    pydocstyle
 
 This project also includes [Pylint](https://www.pylint.org) which will run a number of checks across the code.
 
