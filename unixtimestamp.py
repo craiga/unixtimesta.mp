@@ -84,6 +84,13 @@ def redirect_to_now():
     return redirect(url, code=302)
 
 
+@app.errorhandler(404)
+def page_not_found(error):  # pylint:disable=unused-argument
+    return (render_template('page_not_found.html',
+                            ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
+            404)
+
+
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", False))
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
