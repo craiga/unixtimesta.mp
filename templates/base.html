@@ -15,10 +15,12 @@
                 <div class="col-xs-12">
                     <h1>{{ self.title() }}</h1>
                     {% block body %}{% endblock %}
-                    <form action="/" method="post">
-                        <label for="time">Enter a UNIX timestamp, or any description of a time</label>
-                        <input type="text" name="time" id="time" value="" />
-                        <input type="submit" value="Go" />
+                    <form action="/" method="post" class="form-inline">
+                        <div class="form-group">
+                            <label for="time">Enter a UNIX timestamp, or any description of a time</label>
+                            <input type="text" name="time" id="time" value="" class="form-control" />
+                            <input type="submit" value="Go" class="btn btn-default" />
+                        </div>
                     </form>
                     <ul>
                         <li><a href="/usage">Usage</a></li>
