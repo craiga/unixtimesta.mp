@@ -6,9 +6,11 @@
 #
 astroid==1.4.8            # via pylint, pylint-flask, pylint-plugin-utils
 blinker==1.4
+chronyk==1.0.1
 click==6.6                # via flask, pip-tools
 first==2.0.1              # via pip-tools
 flask==0.11.1
+freezegun==0.3.8
 gunicorn==19.6.0
 isort==4.2.5              # via pylint
 itsdangerous==0.24        # via flask
@@ -26,6 +28,6 @@ pylint-plugin-utils==0.2.4  # via pylint-flask
 pylint==1.6.4
 python-dateutil==2.6.0
 pytz==2015.7
-six==1.10.0               # via astroid, pip-tools, pylint, python-dateutil
+six==1.10.0               # via astroid, freezegun, pip-tools, pylint, python-dateutil
 werkzeug==0.11.11         # via flask
 wrapt==1.10.8             # via astroid

@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, abort
 from pytz import utc
 from dateutil.parser import parse
+from chronyk import Chronyk
 
 app = Flask(__name__)
 
@@ -62,11 +63,14 @@ def show_usage():
 def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
     try:
-        timestamp = parse(datetime_string, fuzzy=True)
+        parsed_datetime = Chronyk(datetime_string)
     except ValueError:
-        abort(404)
+        try:
+            parsed_datetime = parse(datetime_string, fuzzy=True)
+        except ValueError:
+            abort(404)
 
-    url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    url = url_for('show_timestamp', timestamp=parsed_datetime.timestamp())
     return redirect(url, code=302)
 
 
@@ -77,7 +81,6 @@ def handle_post():
 
 
 @app.route('/')
-@app.route('/now')
 def redirect_to_now():
     """Redirect to current timestamp."""
     url = url_for('show_timestamp', timestamp=datetime.now().timestamp())

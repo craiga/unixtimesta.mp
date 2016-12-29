@@ -8,4 +8,6 @@ flask
 blinker     # Required for signal support in Flask
 pytz
 python-dateutil
+chronyk
 gunicorn
+freezegun

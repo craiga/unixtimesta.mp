@@ -3,7 +3,7 @@
 import unittest
 from contextlib import contextmanager
 from urllib.parse import urlparse, quote
-from datetime import datetime, MINYEAR, MAXYEAR
+from datetime import datetime, timedelta, MINYEAR, MAXYEAR
 from calendar import monthrange
 from itertools import product
 import re
@@ -11,7 +11,7 @@ from math import ceil, floor
 
 from flask import template_rendered
 from pytz import utc
-from dateutil.parser import parse
+from freezegun import freeze_time
 
 import unixtimestamp
 
@@ -168,14 +168,27 @@ class DateRedirectTestCase(TestCase):
             self.assertEqual(response.status_code, 404)
 
 
+def next_friday(relative_to):
+    """Get a datetime at the start of next Friday."""
+    result = relative_to.replace(hour=0, minute=0, second=0)
+    while result.weekday() != 4:
+        result += timedelta(days=1)
+
+    return result
+
+
 class StringRedirectTestCase(TestCase):
     """Tests for datetime description URL redirects."""
 
+    @freeze_time('1980-03-11 12:34:56', tz_offset=0)
     def test_redirect(self):
         """Test datetime description URL redirects."""
-        for valid_date_string in ('31st March 1978', '2017-07-29'):
-            url = '/{}'.format(quote(valid_date_string))
-            expected_datetime = parse(valid_date_string, fuzzy=True)
+        test_data = {'31st March 1978': datetime(year=1978, month=3, day=31),
+                     'now': datetime.now(),
+                     '2017-07-29': datetime(year=2017, month=7, day=29),
+                     'next friday': next_friday(datetime.now())}
+        for string, expected_datetime in test_data.items():
+            url = '/{}'.format(quote(string))
             expected_redirect = '/{:.0f}'.format(expected_datetime.timestamp())
             response = self.app.get(url)
             self.assertEqual(response.status_code, 302)
