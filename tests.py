@@ -186,7 +186,10 @@ class StringRedirectTestCase(TestCase):
         test_data = {'31st March 1978': datetime(year=1978, month=3, day=31),
                      'now': datetime.now(),
                      '2017-07-29': datetime(year=2017, month=7, day=29),
-                     'next friday': next_friday(datetime.now())}
+                     'next friday': next_friday(datetime.now()),
+                     '10 minutes ago': datetime.now() - timedelta(minutes=10),
+                     'in 2 hours': datetime.now() + timedelta(hours=2),
+                     '5 hours ago': datetime.now() - timedelta(hours=5)}
         for string, expected_datetime in test_data.items():
             url = '/{}'.format(quote(string))
             expected_redirect = '/{:.0f}'.format(expected_datetime.timestamp())
