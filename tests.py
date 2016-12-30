@@ -8,6 +8,7 @@ from calendar import monthrange
 from itertools import product
 import re
 from math import ceil, floor
+from xml.etree import ElementTree
 
 from flask import template_rendered
 from pytz import utc
@@ -235,6 +236,36 @@ class NotFoundTestCase(TestCase):
             self.assertEqual(1, len(templates))
             template = templates[0][0]
             self.assertEqual('page_not_found.html', template.name)
+
+
+class SitemapTestCase(TestCase):
+    """Tests for sitemap requests."""
+
+    XML_NAMESPACE = 'http://www.sitemaps.org/schemas/sitemap/0.9'
+
+    def test_sitemap_index(self):
+        """Test for sitemap index."""
+        response = self.app.get('/sitemap.xml')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('application/xml', response.content_type)
+        root = ElementTree.fromstring(response.data)
+        expected_tag = '{{{}}}sitemapindex'.format(self.XML_NAMESPACE)
+        self.assertEqual(expected_tag, root.tag)
+        sitemap_locations = root.findall('./s:sitemap/s:loc',
+                                         namespaces={'s': self.XML_NAMESPACE})
+        self.assertGreater(len(sitemap_locations), 0)
+
+    def test_sitemap(self):
+        """Test for sitemap."""
+        response = self.app.get('/sitemap1.xml')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('application/xml', response.content_type)
+        root = ElementTree.fromstring(response.data)
+        expected_tag = '{{{}}}urlset'.format(self.XML_NAMESPACE)
+        self.assertEqual(expected_tag, root.tag)
+        url_locations = root.findall('./s:url/s:loc',
+                                     namespaces={'s': self.XML_NAMESPACE})
+        self.assertGreater(len(url_locations), 0)
 
 
 if __name__ == '__main__':
