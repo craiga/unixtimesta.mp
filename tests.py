@@ -245,27 +245,65 @@ class SitemapTestCase(TestCase):
 
     def test_sitemap_index(self):
         """Test for sitemap index."""
-        response = self.app.get('/sitemap.xml')
+        for start, size, sitemap_size in ((0, 10, 10),
+                                          (1234, 5678, 1234),
+                                          (-100000, 10, 10)):
+            url = '/sitemapindex.xml?start={}&size={}&sitemap_size={}'.format(start, size, sitemap_size)
+            self._test_sitemap_index(url, start, size, sitemap_size)
+
+        self._test_sitemap_index('/sitemapindex.xml',
+                                 unixtimestamp.app.config['SITEMAP_INDEX_DEFAULT_START'],
+                                 unixtimestamp.app.config['SITEMAP_INDEX_DEFAULT_SIZE'],
+                                 unixtimestamp.app.config['SITEMAP_DEFAULT_SIZE'])
+
+    def _test_sitemap_index(self, test_url, expected_start, expected_size,
+                            expected_sitemap_size):
+        """Execute a test of a sitemap index."""
+        
+        expected_urls = []
+        for sitemap_index in range(0, expected_size):
+            start = expected_start + (expected_start * sitemap_index)
+            url = 'http://localhost/sitemap.xml?start={}&size={}'.format(start, expected_sitemap_size)
+            expected_urls.append(url)
+
+        response = self.app.get(test_url)
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/xml', response.content_type)
         root = ElementTree.fromstring(response.data)
         expected_tag = '{{{}}}sitemapindex'.format(self.XML_NAMESPACE)
         self.assertEqual(expected_tag, root.tag)
-        sitemap_locations = root.findall('./s:sitemap/s:loc',
-                                         namespaces={'s': self.XML_NAMESPACE})
-        self.assertGreater(len(sitemap_locations), 0)
+        locs = root.findall('./s:sitemap/s:loc',
+                            namespaces={'s': self.XML_NAMESPACE})
+        self.assertEqual(len(locs), expected_size)
+        self.assertEqual(expected_urls, [l.text for l in locs])
+
+
+
 
     def test_sitemap(self):
-        """Test for sitemap."""
-        response = self.app.get('/sitemap1.xml')
+        """Test sitemap range parameters."""
+        for start, size in ((0, 10), (1234, 5678), (-100, 10)):
+            sitemap_url = '/sitemap.xml?start={}&size={}'.format(start, size)
+            self._test_sitemap(sitemap_url, start, size)
+
+        self._test_sitemap('/sitemap.xml',
+                           unixtimestamp.app.config['SITEMAP_DEFAULT_START'],
+                           unixtimestamp.app.config['SITEMAP_DEFAULT_SIZE'])
+
+    def _test_sitemap(self, test_url, expected_start, expected_size):
+        """Execute a test of a sitemap."""
+        timestamps = range(expected_start, expected_start + expected_size)
+        expected_urls = ['http://localhost/{}'.format(t) for t in timestamps]
+        response = self.app.get(test_url)
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/xml', response.content_type)
         root = ElementTree.fromstring(response.data)
         expected_tag = '{{{}}}urlset'.format(self.XML_NAMESPACE)
         self.assertEqual(expected_tag, root.tag)
-        url_locations = root.findall('./s:url/s:loc',
-                                     namespaces={'s': self.XML_NAMESPACE})
-        self.assertGreater(len(url_locations), 0)
+        locs = root.findall('./s:url/s:loc',
+                            namespaces={'s': self.XML_NAMESPACE})
+        self.assertEqual(len(locs), expected_size)
+        self.assertEqual(expected_urls, [l.text for l in locs])
 
 
 if __name__ == '__main__':

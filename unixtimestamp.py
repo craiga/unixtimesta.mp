@@ -3,13 +3,13 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, abort
+from flask import (Flask, render_template, request, redirect, url_for, abort,
+                   make_response)
 from pytz import utc
 from dateutil.parser import parse
 
 app = Flask(__name__)
 app.config.from_object('config')
-
 
 
 @app.route('/<int:timestamp>')
@@ -58,6 +58,37 @@ def show_usage():
     """Display usage information."""
     return render_template('usage.html',
                            ga_tracking_id=os.environ.get('GA_TRACKING_ID'))
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Display sitemap XML."""
+    start = int(request.args.get('start',
+                                 app.config.get('SITEMAP_DEFAULT_START')))
+    size = int(request.args.get('size',
+                                app.config.get('SITEMAP_DEFAULT_SIZE')))
+    content = render_template('sitemap.xml',
+                              timestamps=range(start, start + size))
+    response = make_response(content)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
+
+@app.route('/sitemapindex.xml')
+def sitemap_index():
+    """Display sitemap index XML."""
+    start = int(request.args.get('start',
+                                 app.config.get('SITEMAP_INDEX_DEFAULT_START')))
+    size = int(request.args.get('size',
+                                app.config.get('SITEMAP_INDEX_DEFAULT_SIZE')))
+    sitemap_size = int(request.args.get('size',
+                       app.config.get('SITEMAP_DEFAULT_SIZE')))
+    content = render_template('sitemapindex.xml',
+                              timestamps=range(start, sitemap_size, start + size),
+                              size=sitemap_size)
+    response = make_response(content)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
 
 
 @app.route('/<string:datetime_string>')
