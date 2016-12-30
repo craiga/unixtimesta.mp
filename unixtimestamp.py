@@ -96,6 +96,7 @@ def page_not_found(error):  # pylint:disable=unused-argument
 
 @sitemap.register_generator
 def sitemap():
+    """Generate routes for all timestamps to be included in sitemap."""
     max_timestamp = 100000
     for timestamp in range(max_timestamp * -1, max_timestamp * 2):
         yield ('show_timestamp', {'timestamp': timestamp})

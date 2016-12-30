@@ -2,7 +2,7 @@
 load-plugins = pylint_mccabe, pylint_flask
 
 [BASIC]
-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__)|(app))$
+const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__)|(app)|(sitemap))$
 docstring-min-length=3
 
 [REPORTS]
