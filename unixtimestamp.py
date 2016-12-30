@@ -2,7 +2,6 @@
 
 import os
 from datetime import datetime
-from math import floor
 
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask_sitemap import Sitemap
@@ -10,6 +9,7 @@ from pytz import utc
 from dateutil.parser import parse
 
 app = Flask(__name__)
+app.config.from_object('config')
 sitemap = Sitemap(app=app)
 
 
@@ -109,10 +109,4 @@ def sitemap():
 
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", False))
-    app.server_name = os.environ.get('SERVER_NAME')
-    if not app.server_name:
-        if os.environ.get('HEROKU_APP_NAME'):
-            heroku_app_name = os.environ.get('HEROKU_APP_NAME')
-            app.server_name = '{}.herokuapp.com'.format(heroku_app_name)
-
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
