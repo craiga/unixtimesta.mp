@@ -8,7 +8,6 @@ astroid==1.4.9            # via pylint, pylint-flask, pylint-plugin-utils
 blinker==1.4
 click==6.6                # via flask, pip-tools
 first==2.0.1              # via pip-tools
-flask-sitemap==0.2.0
 flask==0.12
 gunicorn==19.6.0
 isort==4.2.5              # via pylint
