@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from math import floor
 
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask_sitemap import Sitemap
@@ -101,8 +102,8 @@ def page_not_found(error):  # pylint:disable=unused-argument
 @sitemap.register_generator
 def sitemap():
     """Generate routes for all timestamps to be included in sitemap."""
-    max_timestamp = 100000
-    for timestamp in range(max_timestamp * -1, max_timestamp * 2):
+    sitemap_entries = int(os.environ.get('SITEMAP_ENTRIES', 10000))
+    for timestamp in range((sitemap_entries // 2) * -1, sitemap_entries):
         yield ('show_timestamp', {'timestamp': timestamp})
 
 
