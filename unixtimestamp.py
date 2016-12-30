@@ -94,6 +94,10 @@ def page_not_found(error):  # pylint:disable=unused-argument
             404)
 
 
+# TODO: Need to configure hostname.
+# TODO: Need to speed up sitemaps.
+# TODO: Need to add sitemap to robots.txt?
+
 @sitemap.register_generator
 def sitemap():
     """Generate routes for all timestamps to be included in sitemap."""
@@ -104,4 +108,10 @@ def sitemap():
 
 if __name__ == '__main__':
     app.debug = bool(os.environ.get("DEBUG", False))
+    app.server_name = os.environ.get('SERVER_NAME')
+    if not app.server_name:
+        if os.environ.get('HEROKU_APP_NAME'):
+            heroku_app_name = os.environ.get('HEROKU_APP_NAME')
+            app.server_name = '{}.herokuapp.com'.format(heroku_app_name)
+
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
