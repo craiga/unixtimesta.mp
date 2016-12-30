@@ -4,10 +4,12 @@ import os
 from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, abort
+from flask_sitemap import Sitemap
 from pytz import utc
 from dateutil.parser import parse
 
 app = Flask(__name__)
+sitemap = Sitemap(app=app)
 
 
 @app.route('/<int:timestamp>')
@@ -90,6 +92,13 @@ def page_not_found(error):  # pylint:disable=unused-argument
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
+
+
+@sitemap.register_generator
+def sitemap():
+    max_timestamp = 100000
+    for timestamp in range(max_timestamp * -1, max_timestamp * 2):
+        yield ('show_timestamp', {'timestamp': timestamp})
 
 
 if __name__ == '__main__':

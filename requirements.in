@@ -6,6 +6,7 @@ pylint_mccabe
 pylint-flask
 flask
 blinker     # Required for signal support in Flask
+flask-sitemap
 pytz
 python-dateutil
 gunicorn

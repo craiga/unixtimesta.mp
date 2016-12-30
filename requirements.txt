@@ -8,13 +8,14 @@ astroid==1.4.9            # via pylint, pylint-flask, pylint-plugin-utils
 blinker==1.4
 click==6.6                # via flask, pip-tools
 first==2.0.1              # via pip-tools
+flask-sitemap==0.2.0
 flask==0.12
 gunicorn==19.6.0
 isort==4.2.5              # via pylint
 itsdangerous==0.24        # via flask
-Jinja2==2.8.1             # via flask
+jinja2==2.8.1             # via flask
 lazy-object-proxy==1.2.2  # via astroid
-MarkupSafe==0.23          # via jinja2
+markupsafe==0.23          # via jinja2
 mccabe==0.5.3             # via pylint, pylint-mccabe
 pep8==1.7.0               # via pylint-mccabe
 pip-tools==1.8.0
@@ -27,5 +28,5 @@ pylint==1.6.4
 python-dateutil==2.6.0
 pytz==2016.10
 six==1.10.0               # via astroid, pip-tools, pylint, python-dateutil
-Werkzeug==0.11.13         # via flask
+werkzeug==0.11.13         # via flask
 wrapt==1.10.8             # via astroid
