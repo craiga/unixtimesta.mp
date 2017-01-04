@@ -6,7 +6,7 @@ script:
 - pycodestyle
 - pydocstyle
 - pylint *.py
-- python tests.py
+- nosetests
 deploy:
   provider: heroku
   app: unixtimesta-mp
