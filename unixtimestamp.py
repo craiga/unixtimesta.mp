@@ -3,11 +3,13 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, abort
+from flask import (Flask, render_template, request, redirect, url_for, abort,
+                   make_response)
 from pytz import utc
 from dateutil.parser import parse
 
 app = Flask(__name__, static_url_path='')
+app.config.from_object('config')
 
 
 @app.route('/<int:timestamp>')
@@ -56,6 +58,79 @@ def show_usage():
     """Display usage information."""
     return render_template('usage.html',
                            ga_tracking_id=os.environ.get('GA_TRACKING_ID'))
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Display sitemap XML."""
+    start = int(request.args.get('start',
+                                 app.config.get('SITEMAP_DEFAULT_START')))
+    size = int(request.args.get('size',
+                                app.config.get('SITEMAP_DEFAULT_SIZE')))
+    content = render_template('sitemap.xml',
+                              timestamps=range(start, start + size))
+    response = make_response(content)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
+
+@app.route('/sitemapindex.xml')
+def sitemap_index():
+    """Display sitemap index XML."""
+    # Get the first timestamp to display in the first sitemap
+    first_sitemap_start = request.args.get('start')
+    if first_sitemap_start is None:
+        first_sitemap_start = app.config.get('SITEMAP_INDEX_DEFAULT_START')
+
+    first_sitemap_start = int(first_sitemap_start)
+
+    # Get the size of each sitemap
+    sitemap_size = request.args.get('sitemap_size')
+    if sitemap_size is None:
+        sitemap_size = app.config.get('SITEMAP_DEFAULT_SIZE')
+
+    sitemap_size = int(sitemap_size)
+
+    # Get the number of sitemaps to include
+    size = int(request.args.get('size',
+                                app.config.get('SITEMAP_INDEX_DEFAULT_SIZE')))
+
+    # Calculate a list of sitemap start timestamps
+    last_sitemap_start = first_sitemap_start + (sitemap_size * size)
+    sitemap_starts = range(first_sitemap_start,
+                           last_sitemap_start,
+                           sitemap_size)
+
+    # Render the sitemap index
+    content = render_template('sitemapindex.xml',
+                              sitemap_starts=sitemap_starts,
+                              sitemap_size=sitemap_size)
+    response = make_response(content)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
+
+@app.route('/robots.txt')
+def robots():
+    """Show robots.txt."""
+    # Calculate sitemap index starts
+    first_index = int(app.config.get('ROBOTS_SITEMAP_INDEX_DEFAULT_START'))
+    robots_size = int(app.config.get('ROBOTS_SITEMAP_INDEX_DEFAULT_SIZE'))
+    index_size = int(app.config.get('SITEMAP_INDEX_DEFAULT_SIZE'))
+    sitemap_size = int(app.config.get('SITEMAP_DEFAULT_SIZE'))
+    last_index = first_index + (robots_size * index_size * sitemap_size)
+    sitemap_starts = range(first_index,
+                           last_index,
+                           (index_size * sitemap_size))
+
+    # Render the sitemap index
+    content = render_template('robots.txt',
+                              sitemap_starts=sitemap_starts,
+                              sitemap_size=sitemap_size,
+                              sitemap_index_size=index_size)
+    response = make_response(content)
+    response.headers['Content-Type'] = 'text/plain'
+    return response
 
 
 @app.route('/<string:datetime_string>')

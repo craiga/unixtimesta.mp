@@ -8,10 +8,12 @@ from calendar import monthrange
 from itertools import product
 import re
 from math import ceil, floor
+from xml.etree import ElementTree
 
 from flask import template_rendered
 from pytz import utc
 from dateutil.parser import parse
+from werkzeug.urls import url_encode
 
 import unixtimestamp
 
@@ -235,6 +237,18 @@ class HumansTestCase(TestCase):
             self.assertIn(b'Craig Anderson', response.data)
 
 
+class RobotsTestCase(TestCase):
+    """Tests for robots.txt."""
+
+    def test_robots_txt(self):
+        """Test for robots.txt."""
+        with self.app.get('/robots.txt') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^text/plain')
+            self.assertIn(b'Sitemap: http://localhost/sitemapindex.xml',
+                          response.data)
+
+
 class NotFoundTestCase(TestCase):
     """Test for 404 handler."""
 
@@ -246,6 +260,58 @@ class NotFoundTestCase(TestCase):
             self.assertEqual(1, len(templates))
             template = templates[0][0]
             self.assertEqual('page_not_found.html', template.name)
+
+
+class SitemapTestCase(TestCase):
+    """Tests for sitemap requests."""
+
+    XML_NAMESPACE = 'http://www.sitemaps.org/schemas/sitemap/0.9'
+
+    def test_sitemap_index(self):
+        """Test sitemap index."""
+        for start, size, sitemap_size in ((0, 10, 10),
+                                          (1234, 5678, 1234),
+                                          (-100000, 10, 10)):
+            query_string = url_encode({'start': start, 'size': size,
+                                       'sitemap_size': sitemap_size})
+            url = '/sitemapindex.xml?' + query_string
+            response = self.app.get(url)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual('application/xml', response.content_type)
+            root = ElementTree.fromstring(response.data)
+            self.assertEqual('{{{}}}sitemapindex'.format(self.XML_NAMESPACE),
+                             root.tag)
+            locs = root.findall('./s:sitemap/s:loc',
+                                namespaces={'s': self.XML_NAMESPACE})
+            self.assertEqual(len(locs), size)
+
+            expected_urls = []
+            for sitemap_index in range(0, size):
+                expected_qs = url_encode({
+                    'start': start + (sitemap_size * sitemap_index),
+                    'size': sitemap_size
+                })
+                expected_url = 'http://localhost/sitemap.xml?' + expected_qs
+                expected_urls.append(expected_url)
+
+            self.assertEqual(expected_urls, [l.text for l in locs])
+
+    def test_sitemap(self):
+        """Test sitemap."""
+        for start, size in ((0, 10), (1234, 5678), (-100, 10)):
+            url = '/sitemap.xml?start={}&size={}'.format(start, size)
+            response = self.app.get(url)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual('application/xml', response.content_type)
+            root = ElementTree.fromstring(response.data)
+            self.assertEqual('{{{}}}urlset'.format(self.XML_NAMESPACE),
+                             root.tag)
+            locs = root.findall('./s:url/s:loc',
+                                namespaces={'s': self.XML_NAMESPACE})
+            self.assertEqual(len(locs), size)
+            timestamps = range(start, start + size)
+            urls = ['http://localhost/{}'.format(t) for t in timestamps]
+            self.assertEqual(urls, [l.text for l in locs])
 
 
 if __name__ == '__main__':
