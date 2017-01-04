@@ -249,9 +249,9 @@ class SitemapTestCase(TestCase):
         for start, size, sitemap_size in ((0, 10, 10),
                                           (1234, 5678, 1234),
                                           (-100000, 10, 10)):
-            qs = url_encode({'start': start, 'size': size,
-                             'sitemap_size': sitemap_size})
-            url = '/sitemapindex.xml?' + qs
+            query_string = url_encode({'start': start, 'size': size,
+                                       'sitemap_size': sitemap_size})
+            url = '/sitemapindex.xml?' + query_string
             response = self.app.get(url)
             self.assertEqual(200, response.status_code)
             self.assertEqual('application/xml', response.content_type)

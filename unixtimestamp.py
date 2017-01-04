@@ -85,8 +85,11 @@ def sitemap_index():
     first_sitemap_start = int(first_sitemap_start)
 
     # Get the size of each sitemap
-    sitemap_size = int(request.args.get('sitemap_size',
-                                        app.config.get('SITEMAP_DEFAULT_SIZE')))
+    sitemap_size = request.args.get('sitemap_size')
+    if sitemap_size is None:
+        sitemap_size = app.config.get('SITEMAP_DEFAULT_SIZE')
+
+    sitemap_size = int(sitemap_size)
 
     # Get the number of sitemaps to include
     size = int(request.args.get('size',
