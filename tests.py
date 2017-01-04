@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 from flask import template_rendered
 from pytz import utc
 from dateutil.parser import parse
+from werkzeug.urls import url_encode
 
 import unixtimestamp
 
@@ -259,11 +260,11 @@ class SitemapTestCase(TestCase):
     def _test_sitemap_index(self, test_url, expected_start, expected_size,
                             expected_sitemap_size):
         """Execute a test of a sitemap index."""
-        
+
         expected_urls = []
         for sitemap_index in range(0, expected_size):
-            start = expected_start + (expected_start * sitemap_index)
-            url = 'http://localhost/sitemap.xml?start={}&size={}'.format(start, expected_sitemap_size)
+            start = expected_start + (expected_sitemap_size * sitemap_index)
+            url = 'http://localhost/sitemap.xml?{}'.format(url_encode({'start': start, 'size': expected_sitemap_size}))
             expected_urls.append(url)
 
         response = self.app.get(test_url)
@@ -276,8 +277,6 @@ class SitemapTestCase(TestCase):
                             namespaces={'s': self.XML_NAMESPACE})
         self.assertEqual(len(locs), expected_size)
         self.assertEqual(expected_urls, [l.text for l in locs])
-
-
 
 
     def test_sitemap(self):

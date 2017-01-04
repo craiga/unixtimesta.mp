@@ -77,15 +77,31 @@ def sitemap():
 @app.route('/sitemapindex.xml')
 def sitemap_index():
     """Display sitemap index XML."""
-    start = int(request.args.get('start',
-                                 app.config.get('SITEMAP_INDEX_DEFAULT_START')))
+    # Get the first timestamp to display in the first sitemap
+    first_sitemap_start = request.args.get('start')
+    if first_sitemap_start is None:
+        first_sitemap_start = app.config.get('SITEMAP_INDEX_DEFAULT_START')
+
+    first_sitemap_start = int(first_sitemap_start)
+
+    # Get the size of each sitemap
+    sitemap_size = int(request.args.get('sitemap_size',
+                                        app.config.get('SITEMAP_DEFAULT_SIZE')))
+
+    # Get the number of sitemaps to include
     size = int(request.args.get('size',
                                 app.config.get('SITEMAP_INDEX_DEFAULT_SIZE')))
-    sitemap_size = int(request.args.get('size',
-                       app.config.get('SITEMAP_DEFAULT_SIZE')))
+
+    # Calculate a list of sitemap start timestamps
+    last_sitemap_start = first_sitemap_start + (sitemap_size * size)
+    sitemap_starts = range(first_sitemap_start,
+                           last_sitemap_start,
+                           sitemap_size)
+
+    # Render the sitemap index
     content = render_template('sitemapindex.xml',
-                              timestamps=range(start, sitemap_size, start + size),
-                              size=sitemap_size)
+                              sitemap_starts=sitemap_starts,
+                              sitemap_size=sitemap_size)
     response = make_response(content)
     response.headers['Content-Type'] = 'application/xml'
     return response

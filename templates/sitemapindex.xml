@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {% for timestamp in timestamps %}
-        <sitemap><loc>{{ url_for('sitemap', start=timestamp, size=size, _external=True) }}</loc></sitemap>
+    {% for sitemap_start in sitemap_starts %}
+        <sitemap><loc>{{ url_for('sitemap', start=sitemap_start, size=sitemap_size, _external=True) }}</loc></sitemap>
     {% endfor %}
 </sitemapindex> 
