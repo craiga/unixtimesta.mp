@@ -3,11 +3,11 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, abort
+from flask import Flask, render_template, request, redirect, url_for, abort, make_response
 from pytz import utc
 from dateutil.parser import parse
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 
 @app.route('/<int:timestamp>')
@@ -82,6 +82,10 @@ def redirect_to_now():
     """Redirect to current timestamp."""
     url = url_for('show_timestamp', timestamp=datetime.now().timestamp())
     return redirect(url, code=302)
+
+@app.route('/humans.txt')
+def humans():
+    return app.send_static_file('humans.txt')
 
 
 @app.errorhandler(404)
