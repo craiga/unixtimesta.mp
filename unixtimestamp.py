@@ -3,7 +3,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, abort, make_response
+from flask import Flask, render_template, request, redirect, url_for, abort
 from pytz import utc
 from dateutil.parser import parse
 
@@ -83,8 +83,10 @@ def redirect_to_now():
     url = url_for('show_timestamp', timestamp=datetime.now().timestamp())
     return redirect(url, code=302)
 
+
 @app.route('/humans.txt')
 def humans():
+    """Show humans.txt."""
     return app.send_static_file('humans.txt')
 
 
