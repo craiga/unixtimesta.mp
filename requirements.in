@@ -4,6 +4,7 @@ pydocstyle
 pylint
 pylint_mccabe
 pylint-flask
+nose
 flask
 blinker     # Required for signal support in Flask
 pytz
