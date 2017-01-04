@@ -224,6 +224,17 @@ class UsageTestCase(TestCase):
         self.assertEqual(200, response.status_code)
 
 
+class HumansTestCase(TestCase):
+    """Test for humans.txt."""
+
+    def test_humans_txt(self):
+        """Test for humans.txt."""
+        with self.app.get('/humans.txt') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^text/plain')
+            self.assertIn(b'Craig Anderson', response.data)
+
+
 class NotFoundTestCase(TestCase):
     """Test for 404 handler."""
 
