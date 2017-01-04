@@ -237,6 +237,18 @@ class HumansTestCase(TestCase):
             self.assertIn(b'Craig Anderson', response.data)
 
 
+class RobotsTestCase(TestCase):
+    """Tests for robots.txt."""
+
+    def test_robots_txt(self):
+        """Test for robots.txt."""
+        with self.app.get('/robots.txt') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^text/plain')
+            self.assertIn(b'Sitemap: http://localhost/sitemapindex.xml',
+                          response.data)
+
+
 class NotFoundTestCase(TestCase):
     """Test for 404 handler."""
 

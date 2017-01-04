@@ -110,6 +110,29 @@ def sitemap_index():
     return response
 
 
+@app.route('/robots.txt')
+def robots():
+    """Show robots.txt."""
+    # Calculate sitemap index starts
+    first_index = int(app.config.get('ROBOTS_SITEMAP_INDEX_DEFAULT_START'))
+    robots_size = int(app.config.get('ROBOTS_SITEMAP_INDEX_DEFAULT_SIZE'))
+    index_size = int(app.config.get('SITEMAP_INDEX_DEFAULT_SIZE'))
+    sitemap_size = int(app.config.get('SITEMAP_DEFAULT_SIZE'))
+    last_index = first_index + (robots_size * index_size * sitemap_size)
+    sitemap_starts = range(first_index,
+                           last_index,
+                           (index_size * sitemap_size))
+
+    # Render the sitemap index
+    content = render_template('robots.txt',
+                              sitemap_starts=sitemap_starts,
+                              sitemap_size=sitemap_size,
+                              sitemap_index_size=index_size)
+    response = make_response(content)
+    response.headers['Content-Type'] = 'text/plain'
+    return response
+
+
 @app.route('/<string:datetime_string>')
 def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
