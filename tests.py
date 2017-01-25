@@ -3,12 +3,13 @@
 import unittest
 from contextlib import contextmanager
 from urllib.parse import urlparse, quote
-from datetime import datetime, MINYEAR, MAXYEAR
+from datetime import datetime, timedelta, MINYEAR, MAXYEAR
 from calendar import monthrange
 from itertools import product
 import re
 from math import ceil, floor
 from xml.etree import ElementTree
+from calendar import monthrange
 
 from flask import template_rendered
 from pytz import utc
@@ -35,6 +36,69 @@ def captured_templates(app):
         template_rendered.disconnect(record, app)
 
 
+def max_timestamp_for_datetime():
+    """Calculate the maximum timestamp Python will allow in a datetime."""
+    max_datetime = datetime(year=MAXYEAR, month=12, day=31,
+                            hour=23, minute=59, second=59)
+    return int(max_datetime.timestamp())
+
+
+# TODO: Memoize
+def min_timestamp_for_datetime():
+    """
+    Calculate the maximum timestamp Python will allow in a datetime.
+
+    This works by going through all values of year, creating a datetime at the
+    start of that year, then converting it into a timestamp. Once we've found
+    the point at which OverflowErrors start ocurring.
+
+    We then repeat this process with months, days, hours, minutes and seconds
+    until we've found the first timestamp at which an OverflowError occurrs
+    when it's converted to a timestamp.
+
+    We then add one second to this timestamp, and return the result.
+    """
+    # Find highest year which causes a ValueError
+    try:
+        for year in reversed(range(MINYEAR, 1970)):
+            datetime(year=year, month=1, day=1).timestamp()
+    except OverflowError:
+        pass
+    try:
+        for month in reversed(range(1, 13)):
+            datetime(year=year, month=month, day=1).timestamp()
+    except OverflowError:
+        pass
+    try:
+        for day in reversed(range(*(x + 1 for x in monthrange(year, month)))):
+            datetime(year=year, month=month, day=day).timestamp()
+    except OverflowError:
+        pass
+    try:
+        for hour in reversed(range(0, 23)):
+            datetime(year=year, month=month, day=day, hour=hour).timestamp()
+    except OverflowError:
+        pass
+    try:
+        for minute in reversed(range(0, 59)):
+            datetime(year=year, month=month, day=day,
+                     hour=hour, minute=minute).timestamp()
+    except OverflowError:
+        pass
+    try:
+        for second in reversed(range(0, 59)):
+            datetime(year=year, month=month, day=day,
+                     hour=hour, minute=minute, second=second).timestamp()
+    except OverflowError:
+        pass
+    min_datetime = (datetime(year=year, month=month, day=day,
+                             hour=hour, minute=minute, second=second)
+                    + timedelta(seconds=1))
+    print(min_datetime)
+    print(min_datetime.timestamp())
+    return int(min_datetime.timestamp())
+
+
 class TestCase(unittest.TestCase):
     """Base test case."""
 
@@ -49,8 +113,10 @@ class ShowTimestampTestCase(TestCase):
 
     def test_timestamp(self):
         """Test getting timestamps."""
-        for timestamp in (0, 1, 123456, '-0', -1, -123456):
+        for timestamp in (0, 1, 123456, max_timestamp_for_datetime(),
+                          '-0', -1, -123456, min_timestamp_for_datetime()):
             with captured_templates(unixtimestamp.app) as templates:
+                print(timestamp)
                 response = self.app.get('/{}'.format(timestamp))
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(1, len(templates))
@@ -70,6 +136,18 @@ class ShowTimestampTestCase(TestCase):
             self.assertEqual(1, len(templates))
             context = templates[0][1]
             self.assertEqual(locale, context['locale'])
+
+    def test_overflow(self):
+        """Test handling of too large or small dates."""
+        for timestamp in (max_timestamp_for_datetime() + 1,
+                          min_timestamp_for_datetime() - 1):
+            with captured_templates(unixtimestamp.app) as templates:
+                response = self.app.get('/{}'.format(timestamp))
+                self.assertEqual(404, response.status_code)
+                self.assertEqual(1, len(templates))
+                context = templates[0][1]
+                self.assertEqual(int(timestamp), context['timestamp'])
+                self.assertNotIn('datetime', context.keys())
 
 
 class DateRedirectTestCase(TestCase):
