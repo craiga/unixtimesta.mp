@@ -7,6 +7,7 @@
 astroid==1.4.9            # via pylint, pylint-flask, pylint-plugin-utils
 blinker==1.4
 click==6.6                # via flask, pip-tools
+contextlib2==0.5.4        # via raven
 first==2.0.1              # via pip-tools
 flask==0.12
 gunicorn==19.6.0
@@ -27,6 +28,7 @@ pylint-plugin-utils==0.2.4  # via pylint-flask
 pylint==1.6.4
 python-dateutil==2.6.0
 pytz==2016.10
+raven[flask]==5.32.0
 six==1.10.0               # via astroid, pip-tools, pylint, python-dateutil
 werkzeug==0.11.13         # via flask
 wrapt==1.10.8             # via astroid
