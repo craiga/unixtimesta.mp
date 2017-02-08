@@ -111,7 +111,10 @@ class ShowTimestampTestCase(TestCase):
     def test_overflow(self):
         """Test handling of too large or small dates."""
         for timestamp in (max_timestamp_for_datetime() + 1,
-                          min_timestamp_for_datetime() - 1):
+                          min_timestamp_for_datetime() - 1,
+                          9999999999999999,
+                          99999999999999999,
+                          999999999999999999):
             with captured_templates(unixtimestamp.app) as templates:
                 print(timestamp)
                 response = self.app.get('/{}'.format(timestamp))

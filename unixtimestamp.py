@@ -27,7 +27,7 @@ def show_timestamp(timestamp):
                                datetime=datetime.fromtimestamp(timestamp),
                                locale=locale,
                                ga_tracking_id=ga_tracking_id)
-    except ValueError:
+    except (ValueError, OverflowError, OSError):
         return render_template('timestamp.html',
                                timestamp=timestamp,
                                locale=locale,
