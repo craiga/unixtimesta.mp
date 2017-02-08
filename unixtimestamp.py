@@ -20,11 +20,18 @@ sentry = Sentry(app)
 def show_timestamp(timestamp):
     """Display a timestamp."""
     locale = request.headers.get('Accept-Language', 'en-US')
-    return render_template('timestamp.html',
-                           timestamp=timestamp,
-                           datetime=datetime.fromtimestamp(timestamp),
-                           locale=locale,
-                           ga_tracking_id=os.environ.get('GA_TRACKING_ID'))
+    ga_tracking_id = os.environ.get('GA_TRACKING_ID')
+    try:
+        return render_template('timestamp.html',
+                               timestamp=timestamp,
+                               datetime=datetime.fromtimestamp(timestamp),
+                               locale=locale,
+                               ga_tracking_id=ga_tracking_id)
+    except ValueError:
+        return render_template('timestamp.html',
+                               timestamp=timestamp,
+                               locale=locale,
+                               ga_tracking_id=ga_tracking_id), 404
 
 
 @app.route('/-<int:negative_timestamp>')
