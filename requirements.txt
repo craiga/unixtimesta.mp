@@ -28,7 +28,7 @@ pylint-plugin-utils==0.2.4  # via pylint-flask
 pylint==1.6.5
 python-dateutil==2.6.0
 pytz==2016.10
-raven[flask]==5.32.0
+raven[flask]==6.0.0
 six==1.10.0               # via astroid, pip-tools, pylint, python-dateutil
 Werkzeug==0.11.15         # via flask
 wrapt==1.10.8             # via astroid
