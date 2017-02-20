@@ -23,9 +23,11 @@ def show_timestamp(timestamp):
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
     try:
+        timestamp_datetime = datetime.fromtimestamp(timestamp)
+        timestamp_datetime = utc.localize(timestamp_datetime)
         return render_template('timestamp.html',
                                timestamp=timestamp,
-                               datetime=datetime.fromtimestamp(timestamp),
+                               datetime=timestamp_datetime,
                                locale=locale,
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn)
