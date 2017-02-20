@@ -1,12 +1,12 @@
 language: python
 python:
-- '3.5'
-- 3.5-dev
+  - '3.5'
+  - 3.5-dev
 script:
-- pycodestyle
-- pydocstyle
-- pylint *.py
-- nosetests
+  - pycodestyle
+  - pydocstyle
+  - pylint *.py
+  - nosetests
 deploy:
   provider: heroku
   app: unixtimesta-mp
