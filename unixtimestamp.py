@@ -19,7 +19,8 @@ sentry = Sentry(app)
 @app.route('/<int:timestamp>')
 def show_timestamp(timestamp):
     """Display a timestamp."""
-    locale = request.headers.get('Accept-Language', 'en-US')
+    accept_language = request.headers.get('Accept-Language', 'en-US')
+    locale = parse_accept_language(accept_language)
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
     try:
@@ -185,6 +186,11 @@ def page_not_found(error):  # pylint:disable=unused-argument
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
+
+
+def parse_accept_language(accept_language_header):
+    """Parse locale from Accept-Language header."""
+    return accept_language_header[:5]
 
 
 if __name__ == '__main__':
