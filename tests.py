@@ -16,6 +16,7 @@ from dateutil.parser import parse
 from werkzeug.urls import url_encode
 
 import unixtimestamp
+from unixtimestamp import parse_accept_language
 
 
 @contextmanager
@@ -99,14 +100,13 @@ class ShowTimestampTestCase(TestCase):
     def test_locale(self):
         """Test locale is passed into template."""
         with captured_templates(unixtimestamp.app) as templates:
-            locale = 'fr-CA'
-            lang_header = ('Accept-Language', locale)
+            lang_header = ('Accept-Language', 'fr-CA,fr;q=0.5')
             response = self.app.get('/123456',
                                     headers=((lang_header),))
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
-            self.assertEqual(locale, context['locale'])
+            self.assertEqual('fr-CA', context['locale'])
 
     def test_overflow(self):
         """Test handling of too large or small dates."""
@@ -116,7 +116,6 @@ class ShowTimestampTestCase(TestCase):
                           99999999999999999,
                           999999999999999999):
             with captured_templates(unixtimestamp.app) as templates:
-                print(timestamp)
                 response = self.app.get('/{}'.format(timestamp))
                 self.assertEqual(404, response.status_code)
                 self.assertEqual(1, len(templates))
@@ -365,6 +364,19 @@ class SitemapTestCase(TestCase):
             timestamps = range(start, start + size)
             urls = ['http://localhost/{}'.format(t) for t in timestamps]
             self.assertEqual(urls, [l.text for l in locs])
+
+
+class ParseLocaleTestCase(TestCase):
+    """Tests for locale parsing."""
+
+    def test_parse_accept_language(self):
+        """Test parsing of locale strings."""
+        for expected_locale, accept_language in (
+                ('en-US', 'en-US'),
+                ('en-US', 'en-US,en;q=0.5'),
+                ('tr-TR', 'tr-TR,tr;q=0.8,en-US;q=0.6,en;q=0.4')):
+            locale = parse_accept_language(accept_language)
+            self.assertEqual(expected_locale, locale)
 
 
 if __name__ == '__main__':
