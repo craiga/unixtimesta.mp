@@ -82,8 +82,11 @@ def sitemap():
     """Display sitemap XML."""
     start = int(request.args.get('start',
                                  app.config.get('SITEMAP_DEFAULT_START')))
+    max_size = int(app.config.get('SITEMAP_MAX_SIZE'))
     size = int(request.args.get('size',
                                 app.config.get('SITEMAP_DEFAULT_SIZE')))
+    if size > max_size:
+        size = max_size
     content = render_template('sitemap.xml',
                               timestamps=range(start, start + size))
     response = make_response(content)

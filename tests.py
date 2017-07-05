@@ -350,7 +350,8 @@ class SitemapTestCase(TestCase):
 
     def test_sitemap(self):
         """Test sitemap."""
-        for start, size in ((0, 10), (1234, 5678), (-100, 10)):
+        test_data = ((0, 10, 10), (1234, 5678, 1000), (-100, 10, 10))
+        for start, size, real_size in test_data:
             url = '/sitemap.xml?start={}&size={}'.format(start, size)
             response = self.app.get(url)
             self.assertEqual(200, response.status_code)
@@ -360,8 +361,8 @@ class SitemapTestCase(TestCase):
                              root.tag)
             locs = root.findall('./s:url/s:loc',
                                 namespaces={'s': self.XML_NAMESPACE})
-            self.assertEqual(len(locs), size)
-            timestamps = range(start, start + size)
+            self.assertEqual(len(locs), real_size)
+            timestamps = range(start, start + real_size)
             urls = ['http://localhost/{}'.format(t) for t in timestamps]
             self.assertEqual(urls, [l.text for l in locs])
 
