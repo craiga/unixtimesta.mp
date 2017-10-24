@@ -195,7 +195,7 @@ def page_not_found(error):  # pylint:disable=unused-argument
 
 def parse_accept_language(accept_language_header):
     """Parse locale from Accept-Language header."""
-    return accept_language_header[:5]
+    return accept_language_header.split(',')[0]
 
 
 if __name__ == '__main__':
