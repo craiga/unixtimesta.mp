@@ -47,7 +47,7 @@
             </script>
         {% endif %}
         {% if sentry_public_dsn %}
-            <script src="https://cdn.ravenjs.com/3.10.0/raven.min.js"></script>
+            <script src="https://cdn.ravenjs.com/3.19.1/raven.min.js"></script>
             <script>
                 Raven.config('{{ sentry_public_dsn }}').install()
             </script>
