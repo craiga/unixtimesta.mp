@@ -21,7 +21,7 @@ Finally, run the the Flask development server and access the application in a we
 
 # Managing Packages
 
-This project uses [`pip-tools`](https://github.com/nvie/pip-tools) to manage dependencies.
+This project uses [pip-tools](https://github.com/nvie/pip-tools) to manage dependencies.
 
  * Add packages to `requirements.in`.
  * Run `pip-compile` to produce a new version of `requirements.txt` (use `pip-compile --upgrade` to update to the latest versions of packages).
@@ -29,18 +29,17 @@ This project uses [`pip-tools`](https://github.com/nvie/pip-tools) to manage dep
 
 # Ensuring Code Quality
 
-The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/).
+The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
 
     nosetests
+    behave
 
-Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/) and [pydocstyle](http://www.pydocstyle.org) to help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/) and [PEP 257](https://www.python.org/dev/peps/pep-0257/).
+Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/), [pydocstyle](http://www.pydocstyle.org), [Pylint](https://www.pylint.org) and [piprot](https://github.com/sesh/piprot). These help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/), [PEP 257](https://www.python.org/dev/peps/pep-0257/) and other generally-accepted best Python coding practices, as well as ensuring the latest available versions of all packages are installed.
 
     pycodestyle
     pydocstyle
-
-This project also includes [Pylint](https://www.pylint.org) which will run a number of checks across the code.
-
     pylint *.py
+    piprot
 
 Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
 

@@ -8,6 +8,7 @@ script:
   - pylint *.py
   - nosetests
   - behave
+  - piprot
 deploy:
   provider: heroku
   app: unixtimesta-mp
