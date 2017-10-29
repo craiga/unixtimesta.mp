@@ -11,6 +11,7 @@ certifi==2017.7.27.1      # via requests
 chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
 first==2.0.1              # via pip-tools
+flask-sslify==0.1.5
 flask==0.12.2
 gunicorn==19.7.1
 idna==2.6                 # via requests
