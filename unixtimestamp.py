@@ -158,7 +158,7 @@ def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
     try:
         timestamp = parse(datetime_string, fuzzy=True)
-    except ValueError:
+    except (ValueError, OverflowError):
         abort(404)
 
     try:
