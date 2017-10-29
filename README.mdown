@@ -1,6 +1,7 @@
 Code for the web site [http://unixtimesta.mp/](http://unixtimesta.mp/).
 
-[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp)
+[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Requirements Status](https://requires.io/github/craiga/unixtimesta.mp/requirements.svg?branch=master)](https://requires.io/github/craiga/unixtimesta.mp/requirements/?branch=master)
+
 
 # Getting Started
 
