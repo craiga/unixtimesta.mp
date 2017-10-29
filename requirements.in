@@ -4,8 +4,11 @@ pydocstyle
 pylint
 pylint_mccabe
 pylint-flask
+nose
+behave
 flask
 blinker     # Required for signal support in Flask
 pytz
 python-dateutil
 gunicorn
+raven[flask]

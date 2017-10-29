@@ -29,9 +29,9 @@ This project uses [`pip-tools`](https://github.com/nvie/pip-tools) to manage dep
 
 # Ensuring Code Quality
 
-The most important way to ensure code quality is to run the test suite.
+The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/).
 
-    python tests.py
+    nosetests
 
 Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/) and [pydocstyle](http://www.pydocstyle.org) to help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/) and [PEP 257](https://www.python.org/dev/peps/pep-0257/).
 

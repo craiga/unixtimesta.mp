@@ -8,12 +8,15 @@ from calendar import monthrange
 from itertools import product
 import re
 from math import ceil, floor
+from xml.etree import ElementTree
 
 from flask import template_rendered
 from pytz import utc
 from dateutil.parser import parse
+from werkzeug.urls import url_encode
 
 import unixtimestamp
+from unixtimestamp import parse_accept_language
 
 
 @contextmanager
@@ -31,6 +34,21 @@ def captured_templates(app):
         yield recorded
     finally:
         template_rendered.disconnect(record, app)
+
+
+def max_timestamp_for_datetime():
+    """Calculate the latest timestamp Python will allow in a datetime."""
+    max_datetime = datetime(year=MAXYEAR, month=12, day=31,
+                            hour=23, minute=59, second=59)
+    return int(max_datetime.timestamp())
+
+
+def min_timestamp_for_datetime():
+    """Return the earliest timestamp Python will allow in a datetime."""
+    if MINYEAR != 1:
+        raise RuntimeError('Cannot calculate min timestamp')
+
+    return -62135596800  # 1st Jan 1; calculation in code causes OverflowError
 
 
 class TestCase(unittest.TestCase):
@@ -57,17 +75,53 @@ class ShowTimestampTestCase(TestCase):
                 self.assertEqual(int(timestamp),
                                  context['datetime'].timestamp())
 
+    def test_max_timestamp(self):
+        """Test getting maximum timestamp."""
+        with captured_templates(unixtimestamp.app) as templates:
+            timestamp = max_timestamp_for_datetime()
+            response = self.app.get('/{}'.format(timestamp))
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(1, len(templates))
+            context = templates[0][1]
+            self.assertEqual(int(timestamp), context['timestamp'])
+            self.assertEqual(MAXYEAR, context['datetime'].year)
+
+    def test_min_timestamp(self):
+        """Test getting minimum timestamp."""
+        with captured_templates(unixtimestamp.app) as templates:
+            timestamp = min_timestamp_for_datetime()
+            response = self.app.get('/{}'.format(timestamp))
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(1, len(templates))
+            context = templates[0][1]
+            self.assertEqual(int(timestamp), context['timestamp'])
+            self.assertEqual(MINYEAR, context['datetime'].year)
+
     def test_locale(self):
         """Test locale is passed into template."""
         with captured_templates(unixtimestamp.app) as templates:
-            locale = 'fr-CA'
-            lang_header = ('Accept-Language', locale)
+            lang_header = ('Accept-Language', 'fr-CA,fr;q=0.5')
             response = self.app.get('/123456',
                                     headers=((lang_header),))
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
-            self.assertEqual(locale, context['locale'])
+            self.assertEqual('fr-CA', context['locale'])
+
+    def test_overflow(self):
+        """Test handling of too large or small dates."""
+        for timestamp in (max_timestamp_for_datetime() + 1,
+                          min_timestamp_for_datetime() - 1,
+                          9999999999999999,
+                          99999999999999999,
+                          999999999999999999):
+            with captured_templates(unixtimestamp.app) as templates:
+                response = self.app.get('/{}'.format(timestamp))
+                self.assertEqual(404, response.status_code)
+                self.assertEqual(1, len(templates))
+                context = templates[0][1]
+                self.assertEqual(int(timestamp), context['timestamp'])
+                self.assertNotIn('datetime', context.keys())
 
 
 class DateRedirectTestCase(TestCase):
@@ -182,7 +236,7 @@ class StringRedirectTestCase(TestCase):
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
 
-        for invalid_date_string in ('foobar',):
+        for invalid_date_string in ('foobar', '.9999999999999999'):
             url = '/{}'.format(quote(invalid_date_string))
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)
@@ -224,6 +278,29 @@ class UsageTestCase(TestCase):
         self.assertEqual(200, response.status_code)
 
 
+class HumansTestCase(TestCase):
+    """Test for humans.txt."""
+
+    def test_humans_txt(self):
+        """Test for humans.txt."""
+        with self.app.get('/humans.txt') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^text/plain')
+            self.assertIn(b'Craig Anderson', response.data)
+
+
+class RobotsTestCase(TestCase):
+    """Tests for robots.txt."""
+
+    def test_robots_txt(self):
+        """Test for robots.txt."""
+        with self.app.get('/robots.txt') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^text/plain')
+            self.assertIn(b'Sitemap: http://localhost/sitemapindex.xml',
+                          response.data)
+
+
 class NotFoundTestCase(TestCase):
     """Test for 404 handler."""
 
@@ -235,6 +312,73 @@ class NotFoundTestCase(TestCase):
             self.assertEqual(1, len(templates))
             template = templates[0][0]
             self.assertEqual('page_not_found.html', template.name)
+
+
+class SitemapTestCase(TestCase):
+    """Tests for sitemap requests."""
+
+    XML_NAMESPACE = 'http://www.sitemaps.org/schemas/sitemap/0.9'
+
+    def test_sitemap_index(self):
+        """Test sitemap index."""
+        for start, size, sitemap_size in ((0, 10, 10),
+                                          (1234, 5678, 1234),
+                                          (-100000, 10, 10)):
+            query_string = url_encode({'start': start, 'size': size,
+                                       'sitemap_size': sitemap_size})
+            url = '/sitemapindex.xml?' + query_string
+            response = self.app.get(url)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual('application/xml', response.content_type)
+            root = ElementTree.fromstring(response.data)
+            self.assertEqual('{{{}}}sitemapindex'.format(self.XML_NAMESPACE),
+                             root.tag)
+            locs = root.findall('./s:sitemap/s:loc',
+                                namespaces={'s': self.XML_NAMESPACE})
+            self.assertEqual(len(locs), size)
+
+            expected_urls = []
+            for sitemap_index in range(0, size):
+                expected_qs = url_encode({
+                    'start': start + (sitemap_size * sitemap_index),
+                    'size': sitemap_size
+                })
+                expected_url = 'http://localhost/sitemap.xml?' + expected_qs
+                expected_urls.append(expected_url)
+
+            self.assertEqual(expected_urls, [l.text for l in locs])
+
+    def test_sitemap(self):
+        """Test sitemap."""
+        test_data = ((0, 10, 10), (1234, 5678, 1000), (-100, 10, 10))
+        for start, size, real_size in test_data:
+            url = '/sitemap.xml?start={}&size={}'.format(start, size)
+            response = self.app.get(url)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual('application/xml', response.content_type)
+            root = ElementTree.fromstring(response.data)
+            self.assertEqual('{{{}}}urlset'.format(self.XML_NAMESPACE),
+                             root.tag)
+            locs = root.findall('./s:url/s:loc',
+                                namespaces={'s': self.XML_NAMESPACE})
+            self.assertEqual(len(locs), real_size)
+            timestamps = range(start, start + real_size)
+            urls = ['http://localhost/{}'.format(t) for t in timestamps]
+            self.assertEqual(urls, [l.text for l in locs])
+
+
+class ParseLocaleTestCase(TestCase):
+    """Tests for locale parsing."""
+
+    def test_parse_accept_language(self):
+        """Test parsing of locale strings."""
+        for expected_locale, accept_language in (
+                ('en-US', 'en-US'),
+                ('en-US', 'en-US,en;q=0.5'),
+                ('ru', 'ru,en'),
+                ('tr-TR', 'tr-TR,tr;q=0.8,en-US;q=0.6,en;q=0.4')):
+            locale = parse_accept_language(accept_language)
+            self.assertEqual(expected_locale, locale)
 
 
 if __name__ == '__main__':
