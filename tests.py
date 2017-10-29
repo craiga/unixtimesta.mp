@@ -236,7 +236,7 @@ class StringRedirectTestCase(TestCase):
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
 
-        for invalid_date_string in ('foobar',):
+        for invalid_date_string in ('foobar', '.123'):
             url = '/{}'.format(quote(invalid_date_string))
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)

@@ -161,7 +161,11 @@ def redirect_to_timestamp_string(datetime_string):
     except ValueError:
         abort(404)
 
-    url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    try:
+        url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    except OverflowError:
+        abort(404)
+
     return redirect(url, code=302)
 
 
