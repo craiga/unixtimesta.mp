@@ -158,10 +158,14 @@ def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
     try:
         timestamp = parse(datetime_string, fuzzy=True)
-    except ValueError:
+    except (ValueError, OverflowError):
         abort(404)
 
-    url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    try:
+        url = url_for('show_timestamp', timestamp=timestamp.timestamp())
+    except OverflowError:
+        abort(404)
+
     return redirect(url, code=302)
 
 
