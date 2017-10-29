@@ -8,7 +8,7 @@
 <h3>Timestamp URIs</h3>
 <p>The easiest way to get information on a particular timestamp is to enter 
     it directly into your browser's address bar, like so:</p>
-<pre><a href="/123456789" title="Link to example Unix Timestamp">http://unixtimesta.mp/123456789</a></pre>
+<pre><a href="/123456789" title="Link to example Unix Timestamp">https://www.unixtimesta.mp/123456789</a></pre>
 <p>This will bring up information on the timestamp 123456789.</p>
 <h3>Date and Time URIs</h3>
 <p>If you want to go in the opposite direction and get a timestamp for a 
@@ -16,20 +16,20 @@
     month and date, followed by optional hour, minute and second values.</p>
 <p>For example, to get the timestamp for the 31st March, 1978, use the 
     following URI:</p>
-<pre><a href="/1978/3/31" title="Example link to a Unix Timestamp for a specific date and time">http://unixtimesta.mp/1978/3/31</a></pre>
+<pre><a href="/1978/3/31" title="Example link to a Unix Timestamp for a specific date and time">https://www.unixtimesta.mp/1978/3/31</a></pre>
 <p>For 3:45:22 PM on that day, just add the hour (in 24-hour time), the 
     minute and the number of seconds to the URI:</p>
-<pre><a href="/1978/3/31/15/45/22" title="Example link to a Unix Timestamp for a specific date and time">http://unixtimesta.mp/1978/3/31/15/45/22</a></pre>
+<pre><a href="/1978/3/31/15/45/22" title="Example link to a Unix Timestamp for a specific date and time">https://www.unixtimesta.mp/1978/3/31/15/45/22</a></pre>
 <h3>Descriptive URIs</h3>
 <p>You can also request a description of any date and time, and using the 
     magic of the
     <a href="http://labix.org/python-dateutil">python-dateutil</a>
     module, the site will do it's best to try and figure what you're on 
     about.</p>
-<pre><a href="/Wednesday" title="Example link to a Unix Timestamp for a description of a date and time" style="text-decoration: none;">http://unixtimesta.mp/Wednesday</a></pre>
+<pre><a href="/Wednesday" title="Example link to a Unix Timestamp for a description of a date and time" style="text-decoration: none;">https://www.unixtimesta.mp/Wednesday</a></pre>
 <h2>Bookmarklet</h2>
 <p>For easy access to this site, install
-    <a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">this bookmarklet</a>
+    <a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27https://www.unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">this bookmarklet</a>
     by dragging the link to your browser's bookmarks bar. The next time you 
     see a Unix Timestamp in a web page, just select it and click the bookmark 
     &mdash; you'll come to this site and be shown information about the 

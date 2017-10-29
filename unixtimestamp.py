@@ -5,12 +5,15 @@ from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
                    make_response)
+from flask_sslify import SSLify
 from pytz import utc
 from dateutil.parser import parse
 from raven.contrib.flask import Sentry
 
 app = Flask(__name__, static_url_path='')
 app.config.from_object('config')
+
+SSLify(app)
 
 # Sentry should be configured by setting SENTRY_DSN environment variable.
 sentry = Sentry(app)
