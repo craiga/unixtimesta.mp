@@ -35,7 +35,7 @@ pylint-plugin-utils==0.2.6  # via pylint-flask
 pylint==1.7.4
 python-dateutil==2.6.1
 pytz==2017.2
-raven[flask]==6.2.1
+raven[flask]==6.3.0
 requests-futures==0.9.7   # via piprot
 requests==2.18.4          # via piprot, requests-futures
 six==1.11.0               # via astroid, behave, parse-type, pip-tools, piprot, pydocstyle, pylint, python-dateutil
