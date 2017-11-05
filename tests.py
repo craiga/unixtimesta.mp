@@ -326,30 +326,48 @@ class SitemapTestCase(TestCase):
         """Test sitemap index."""
         for start, size, sitemap_size in ((0, 10, 10),
                                           (1234, 5678, 1234),
-                                          (-100000, 10, 10)):
+                                          (-1000, 10, 10)):
+            # Test with values on the query string.
             query_string = url_encode({'start': start, 'size': size,
                                        'sitemap_size': sitemap_size})
             url = '/sitemapindex.xml?' + query_string
             response = self.app.get(url)
             self.assertEqual(200, response.status_code)
             self.assertEqual('application/xml', response.content_type)
-            root = ElementTree.fromstring(response.data)
-            self.assertEqual('{{{}}}sitemapindex'.format(self.XML_NAMESPACE),
-                             root.tag)
-            locs = root.findall('./s:sitemap/s:loc',
-                                namespaces={'s': self.XML_NAMESPACE})
-            self.assertEqual(len(locs), size)
+            xml = ElementTree.fromstring(response.data)
+            self.assert_sitemap_xml_correct(xml, start, size, sitemap_size)
 
-            expected_urls = []
-            for sitemap_index in range(0, size):
-                expected_qs = url_encode({
-                    'start': start + (sitemap_size * sitemap_index),
-                    'size': sitemap_size
-                })
-                expected_url = 'http://localhost/sitemap.xml?' + expected_qs
-                expected_urls.append(expected_url)
+            # Test with values in configuration.
+            config = {'SITEMAP_INDEX_DEFAULT_START': start,
+                      'SITEMAP_INDEX_DEFAULT_SIZE': size,
+                      'SITEMAP_DEFAULT_SIZE': sitemap_size}
+            unixtimestamp.app.config.update(config)
+            response = self.app.get('/sitemapindex.xml')
+            self.assertEqual(200, response.status_code)
+            self.assertEqual('application/xml', response.content_type)
+            xml = ElementTree.fromstring(response.data)
+            self.assert_sitemap_xml_correct(xml, start, size, sitemap_size)
 
-            self.assertEqual(expected_urls, [l.text for l in locs])
+    def assert_sitemap_xml_correct(self, xml, start, size, sitemap_size):
+        """Assert that sitemap XML is correct."""
+        self.assertEqual('{{{}}}sitemapindex'.format(self.XML_NAMESPACE),
+                         xml.tag)
+
+        locs = xml.findall('./s:sitemap/s:loc',
+                           namespaces={'s': self.XML_NAMESPACE})
+        self.assertEqual(len(locs), size)
+
+        expected_urls = []
+        for sitemap_index in range(0, size):
+            expected_qs = url_encode({
+                'start': start + (sitemap_size * sitemap_index),
+                'size': sitemap_size
+            })
+            expected_url = 'http://localhost/sitemap.xml?' + expected_qs
+            expected_urls.append(expected_url)
+
+        self.assertEqual(expected_urls, [l.text for l in locs])
+
 
     def test_sitemap(self):
         """Test sitemap."""
