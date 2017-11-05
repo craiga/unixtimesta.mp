@@ -368,7 +368,6 @@ class SitemapTestCase(TestCase):
 
         self.assertEqual(expected_urls, [l.text for l in locs])
 
-
     def test_sitemap(self):
         """Test sitemap."""
         test_data = ((0, 10, 10), (1234, 5678, 1000), (-100, 10, 10))
