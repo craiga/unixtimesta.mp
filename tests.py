@@ -326,7 +326,7 @@ class SitemapTestCase(TestCase):
         """Test sitemap index."""
         for start, size, sitemap_size in ((0, 10, 10),
                                           (1234, 5678, 1234),
-                                          (-1000, 10, 10)):
+                                          (-100000, 10, 10)):
             # Test with values on the query string.
             query_string = url_encode({'start': start, 'size': size,
                                        'sitemap_size': sitemap_size})
