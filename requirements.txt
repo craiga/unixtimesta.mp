@@ -7,7 +7,7 @@
 astroid==1.5.3            # via pylint, pylint-flask, pylint-plugin-utils
 behave==1.2.5
 blinker==1.4
-certifi==2017.7.27.1      # via requests
+certifi==2017.11.5      # via requests
 chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
 first==2.0.1              # via pip-tools
