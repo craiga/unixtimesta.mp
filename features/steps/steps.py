@@ -5,7 +5,7 @@
 def step_impl(context, path):
     """Code for the user visiting a path on the web site."""
     url = 'http://localhost:8000{}'.format(path)
-    context.response = context.client.get(url)
+    context.response = context.client.get(url, follow_redirects=True)
 
 
 @then(u'the user sees {some_string}')
