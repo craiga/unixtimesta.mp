@@ -10,7 +10,8 @@ script:
   - pycodestyle
   - pydocstyle
   - pylint *.py
-  - nosetests
+  - nosetests --with-coverage --cover-package=unixtimestamp
+  - codecov
   - behave
   - piprot
 deploy:
