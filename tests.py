@@ -130,13 +130,13 @@ class ShowTimestampTestCase(TestCase):
 class DateRedirectTestCase(TestCase):
     """Tests for date URL redirects."""
 
-    valid_years = (MINYEAR, 1969, 1970, MAXYEAR)
+    valid_years = (MINYEAR, 1969, 1970, MAXYEAR)  # '70 is epoch, '69 is 70-1
     invalid_years = (MINYEAR - 1, MAXYEAR + 1)
-    valid_months = (1, 2, 3, 4, 12)
+    valid_months = (1, 2, 11)  # Jan has 31d, Feb is special, Nov has 30d.
     invalid_months = (0, 13)
     valid_days = (1, 28,)  # the last day of the month will be calculated
     invalid_days = (0, 32)  # the last day of the month + 1 will be calculated
-    valid_hours = (0, 12, 23)
+    valid_hours = (0, 23)
     invalid_hours = (-1, 24)
     valid_minutes = (0, 59)
     invalid_minutes = (-1, 60)
@@ -212,14 +212,16 @@ class DateRedirectTestCase(TestCase):
             last_day_of_month = monthrange(year, month)[1]
             yield '/{:d}/{:d}/{:d}'.format(year, month, last_day_of_month + 1)
 
-    def test_redirects(self):
-        """Test redirection to timestamps based on date components."""
+    def test_valid_redirects(self):
+        """Test redirection to timestamps based on valid date components."""
         for url, expected_redirect in self.valid_datetime_redirects():
             response = self.app.get(url)
             self.assertEqual(response.status_code, 301)
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
 
+    def test_invalid_redirects(self):
+        """Test redirection to timestamps based on invalid date components."""
         for url in self.invalid_datetime_redirects():
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)
@@ -325,7 +327,7 @@ class SitemapTestCase(TestCase):
     def test_sitemap_index(self):
         """Test sitemap index."""
         for start, size, sitemap_size in ((0, 10, 10),
-                                          (1234, 5678, 1234),
+                                          (123, 456, 789),
                                           (-100000, 10, 10)):
             # Test with values on the query string.
             query_string = url_encode({'start': start, 'size': size,
