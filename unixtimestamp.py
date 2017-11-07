@@ -40,6 +40,7 @@ def show_timestamp(timestamp):
         return render_template('timestamp.html',
                                timestamp=timestamp,
                                locale=locale,
+                               accept_language=accept_language,
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn), 404
 
