@@ -50,7 +50,10 @@
         {% if sentry_public_dsn %}
             <script src="https://cdn.ravenjs.com/3.19.1/raven.min.js"></script>
             <script>
-                Raven.config('{{ sentry_public_dsn }}').install()
+                Raven.config('{{ sentry_public_dsn }}').install();
+                Raven.setExtraContext({
+                    accept_language: "{{ accept_language }}",
+                    locale: "{{ locale }}"});
             </script>
         {% endif %}
     </body>

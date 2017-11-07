@@ -33,6 +33,7 @@ def show_timestamp(timestamp):
                                timestamp=timestamp,
                                datetime=timestamp_datetime,
                                locale=locale,
+                               accept_language=accept_language,
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn)
     except (ValueError, OverflowError, OSError):
