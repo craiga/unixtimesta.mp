@@ -10,7 +10,7 @@ blinker==1.4
 certifi==2017.11.5        # via requests
 chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
-codecov==2.0.9
+codecov==2.0.10
 coverage==4.4.2           # via codecov
 first==2.0.1              # via pip-tools
 flask-sslify==0.1.5
