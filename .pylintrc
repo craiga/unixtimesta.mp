@@ -1,5 +1,5 @@
 [MASTER]
-load-plugins = pylint_mccabe, pylint_flask
+load-plugins = pylint.extensions.mccabe, pylint_flask
 
 [BASIC]
 const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__)|(app|sentry))$
