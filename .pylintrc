@@ -7,3 +7,7 @@ docstring-min-length=3
 
 [REPORTS]
 output-format = colorized
+
+[FORMAT]
+max-line-length=80
+max-module-lines=250

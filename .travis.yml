@@ -9,7 +9,7 @@ python:
 script:
   - pycodestyle
   - pydocstyle
-  - pylint *.py
+  - find . -iname "*.py" | xargs pylint
   - nosetests --with-coverage --cover-package=unixtimestamp
   - codecov
   - behave
