@@ -1,13 +1,9 @@
 """Behavioural testing environment."""
 
-import os
-import sys
-import tempfile
-
 from unixtimestamp import app
 
 
-def before_feature(context, feature):
+def before_feature(context, feature):  # pylint:disable=unused-argument
     """Add the Flask testing client to the context object."""
     app.testing = True
     # Debug enabled in tests as a workaround for
