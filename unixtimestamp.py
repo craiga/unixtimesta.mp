@@ -159,12 +159,6 @@ def robots():
     return response
 
 
-@app.route('/obscure-error-trigger')
-def trigger_error():
-    """Deliberately raise an error for Sentry testing."""
-    raise RuntimeError('Hello, Sentry!')
-
-
 @app.route('/<string:datetime_string>')
 def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
