@@ -16,9 +16,8 @@ app.config.from_object('config')
 SSLify(app)
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
-# HEROKU_SLUG_COMMIT environment variable provided by runtime-dyno-metadata
-# (https://devcenter.heroku.com/articles/dyno-metadata).
-sentry = Sentry(app, release=os.environ.get('HEROKU_SLUG_COMMIT'))
+# Other configuration is done in app.config.SENTRY_CONFIG.
+sentry = Sentry(app)
 
 
 @app.route('/<int:timestamp>')
@@ -158,6 +157,12 @@ def robots():
     response = make_response(content)
     response.headers['Content-Type'] = 'text/plain'
     return response
+
+
+@app.route('/obscure-error-trigger')
+def trigger_error():
+    """Deliberately raise an error for Sentry testing."""
+    raise RuntimeError('Hello, Sentry!')
 
 
 @app.route('/<string:datetime_string>')
