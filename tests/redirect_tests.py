@@ -16,18 +16,20 @@ from tests import TestCase
 class DateRedirectTestCase(TestCase):
     """Tests for date URL redirects."""
 
+    DATETIME_OVERFLOW = 9999999999  # value which triggers an OverflowError
+
     valid_years = (MINYEAR, 1969, 1970, MAXYEAR)  # '70 is epoch, '69 is 70-1
-    invalid_years = (MINYEAR - 1, MAXYEAR + 1)
-    valid_months = (1, 2, 11)  # Jan has 31d, Feb is special, Nov has 30d.
-    invalid_months = (0, 13)
+    invalid_years = (MINYEAR - 1, MAXYEAR + 1, DATETIME_OVERFLOW)
+    valid_months = (1, 2, 11, 12)  # Jan has 31d, Feb is special, Nov has 30d.
+    invalid_months = (0, 13, DATETIME_OVERFLOW)
     valid_days = (1, 28,)  # the last day of the month will be calculated
-    invalid_days = (0, 32)  # the last day of the month + 1 will be calculated
+    invalid_days = (0, 32, DATETIME_OVERFLOW)  # …and last of the month + 1
     valid_hours = (0, 23)
-    invalid_hours = (-1, 24)
+    invalid_hours = (-1, 24, DATETIME_OVERFLOW)
     valid_minutes = (0, 59)
-    invalid_minutes = (-1, 60)
+    invalid_minutes = (-1, 60, DATETIME_OVERFLOW)
     valid_seconds = (0, 59)
-    invalid_seconds = (-1, 60)
+    invalid_seconds = (-1, 60, DATETIME_OVERFLOW)
 
     def valid_datetime_redirects(self):
         """

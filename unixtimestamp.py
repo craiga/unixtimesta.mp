@@ -68,7 +68,7 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
     try:
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
                              minute=minute, second=second, tzinfo=utc)
-    except ValueError:
+    except (ValueError, OverflowError):
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
