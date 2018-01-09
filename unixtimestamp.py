@@ -15,7 +15,8 @@ app.config.from_object('config')
 
 SSLify(app)
 
-# Sentry should be configured by setting SENTRY_DSN environment variable.
+# Sentry DSN should be configured by setting SENTRY_DSN environment variable.
+# Other configuration is done in app.config.SENTRY_CONFIG.
 sentry = Sentry(app)
 
 
