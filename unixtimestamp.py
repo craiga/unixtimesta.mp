@@ -15,8 +15,10 @@ app.config.from_object('config')
 
 SSLify(app)
 
-# Sentry should be configured by setting SENTRY_DSN environment variable.
-sentry = Sentry(app)
+# Sentry DSN should be configured by setting SENTRY_DSN environment variable.
+# HEROKU_SLUG_COMMIT environment variable provided by runtime-dyno-metadata
+# (https://devcenter.heroku.com/articles/dyno-metadata).
+sentry = Sentry(app, release=os.environ.get('HEROKU_SLUG_COMMIT'))
 
 
 @app.route('/<int:timestamp>')
