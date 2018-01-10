@@ -11,7 +11,7 @@ script:
   - pycodestyle
   - pydocstyle
   - find . -iname "*.py" | xargs pylint
-  - nosetests --with-coverage --cover-package=unixtimestamp
+  - nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
   - codecov
   - behave
   - piprot
