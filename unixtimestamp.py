@@ -19,7 +19,8 @@ app.config.from_object('config')
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.INFO)
 
-# SSLify(app)  # Temporarily disabled due to https://status.heroku.com/incidents/1371
+# Temporarily disabled due to https://status.heroku.com/incidents/1371
+# SSLify(app)
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
