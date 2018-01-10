@@ -7,7 +7,8 @@ from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
                    make_response)
-from flask_sslify import SSLify
+# Temporarily disabled due to https://status.heroku.com/incidents/1371
+# from flask_sslify import SSLify
 from pytz import utc
 from dateutil.parser import parse
 from raven.contrib.flask import Sentry
