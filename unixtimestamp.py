@@ -1,6 +1,8 @@
 """Unix Timestamp Flask application."""
 
+import logging
 import os
+import sys
 from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
@@ -12,6 +14,9 @@ from raven.contrib.flask import Sentry
 
 app = Flask(__name__, static_url_path='')
 app.config.from_object('config')
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.INFO)
 
 SSLify(app)
 
