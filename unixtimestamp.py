@@ -38,6 +38,7 @@ def show_timestamp(timestamp):
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn)
     except (ValueError, OverflowError, OSError):
+        app.logger.warning('Triggering a 404 error.', exc_info=True)
         return render_template('timestamp.html',
                                timestamp=timestamp,
                                locale=locale,
@@ -70,6 +71,7 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
                              minute=minute, second=second, tzinfo=utc)
     except (ValueError, OverflowError):
+        app.logger.warning('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
@@ -165,6 +167,7 @@ def redirect_to_timestamp_string(datetime_string):
     try:
         timestamp = parse(datetime_string, fuzzy=True)
     except (ValueError, OverflowError):
+        app.logger.warning('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
