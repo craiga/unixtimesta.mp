@@ -3,7 +3,6 @@
 import logging
 import os
 import sys
-import traceback
 from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
@@ -205,8 +204,6 @@ def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
     template = '404 error triggered by %s request to %s, path=%s.'
     app.logger.debug(template, request.method, request.url, request.path)
-    for line in traceback.format_stack():
-        app.logger.debug(line)
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
