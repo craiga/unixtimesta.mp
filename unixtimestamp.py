@@ -16,7 +16,7 @@ app = Flask(__name__, static_url_path='')
 app.config.from_object('config')
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.INFO)
+app.logger.setLevel(logging.getLevelName(app.config.get('LOG_LEVEL')))
 
 SSLify(app)
 
@@ -202,6 +202,8 @@ def humans():
 @app.errorhandler(404)
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
+    template = '404 error triggered by {} request to {}.'
+    app.logger.debug(template.format(request.method, request.url))
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
@@ -213,5 +215,5 @@ def parse_accept_language(accept_language_header):
 
 
 if __name__ == '__main__':
-    app.debug = bool(os.environ.get("DEBUG", False))
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    app.debug = bool(os.environ.get('DEBUG', False))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
