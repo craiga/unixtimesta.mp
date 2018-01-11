@@ -22,3 +22,5 @@ ROBOTS_SITEMAP_INDEX_DEFAULT_SIZE = 1000
 SENTRY_CONFIG = {
     'release': os.environ.get('HEROKU_SLUG_COMMIT'),
 }
+
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
