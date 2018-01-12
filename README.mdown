@@ -2,11 +2,6 @@ Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/)
 
 [![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Requirements Status](https://requires.io/github/craiga/unixtimesta.mp/requirements.svg?branch=master)](https://requires.io/github/craiga/unixtimesta.mp/requirements/?branch=master) [![codecov](https://codecov.io/gh/craiga/unixtimesta.mp/branch/master/graph/badge.svg)](https://codecov.io/gh/craiga/unixtimesta.mp) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp)
 
-
-# Note
-
-There are currently issues with the site as deployed to Heroku. I'm working on identifying and fixing this issue.
-
 # Getting Started
 
 First, check out the code:
