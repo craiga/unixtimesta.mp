@@ -8,14 +8,20 @@ python:
   - "3.6-dev"
   - "3.7-dev"
   - "nightly"
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - pycodestyle
   - pydocstyle
-  - pylint *.py
-  - nosetests --with-coverage --cover-package=unixtimestamp
+  - find . -iname "*.py" | xargs pylint
+  - nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
   - codecov
   - behave
   - piprot
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 deploy:
   provider: heroku
   app: unixtimesta-mp

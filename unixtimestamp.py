@@ -1,6 +1,8 @@
 """Unix Timestamp Flask application."""
 
+import logging
 import os
+import sys
 from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
@@ -13,9 +15,13 @@ from raven.contrib.flask import Sentry
 app = Flask(__name__, static_url_path='')
 app.config.from_object('config')
 
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.getLevelName(app.config.get('LOG_LEVEL')))
+
 SSLify(app)
 
-# Sentry should be configured by setting SENTRY_DSN environment variable.
+# Sentry DSN should be configured by setting SENTRY_DSN environment variable.
+# Other configuration is done in app.config.SENTRY_CONFIG.
 sentry = Sentry(app)
 
 
@@ -37,6 +43,7 @@ def show_timestamp(timestamp):
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn)
     except (ValueError, OverflowError, OSError):
+        app.logger.info('Triggering a 404 error.', exc_info=True)
         return render_template('timestamp.html',
                                timestamp=timestamp,
                                locale=locale,
@@ -68,7 +75,8 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
     try:
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
                              minute=minute, second=second, tzinfo=utc)
-    except ValueError:
+    except (ValueError, OverflowError):
+        app.logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
@@ -164,6 +172,7 @@ def redirect_to_timestamp_string(datetime_string):
     try:
         timestamp = parse(datetime_string, fuzzy=True)
     except (ValueError, OverflowError):
+        app.logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
@@ -193,6 +202,8 @@ def humans():
 @app.errorhandler(404)
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
+    template = '404 error triggered by %s request to %s, path=%s.'
+    app.logger.debug(template, request.method, request.url, request.path)
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
@@ -204,5 +215,5 @@ def parse_accept_language(accept_language_header):
 
 
 if __name__ == '__main__':
-    app.debug = bool(os.environ.get("DEBUG", False))
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    app.debug = bool(os.environ.get('DEBUG', False))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

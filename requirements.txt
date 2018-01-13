@@ -10,7 +10,7 @@ blinker==1.4
 certifi==2017.11.5        # via requests
 chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
-codecov==2.0.10
+codecov==2.0.13
 coverage==4.4.2           # via codecov
 first==2.0.1              # via pip-tools
 flask-sslify==0.1.5
@@ -41,5 +41,5 @@ requests==2.18.4          # via codecov, piprot, requests-futures
 six==1.11.0               # via astroid, behave, parse-type, pip-tools, piprot, pydocstyle, pylint, python-dateutil
 snowballstemmer==1.2.1    # via pydocstyle
 urllib3==1.22             # via requests
-werkzeug==0.13            # via flask
+werkzeug==0.14.1            # via flask
 wrapt==1.10.11            # via astroid
