@@ -22,7 +22,9 @@ SSLify(app)
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
-sentry = Sentry(app)
+sentry = Sentry(app,
+                logging=True,
+                level=logging.getLevelName(app.config.get('LOG_LEVEL')))
 
 
 @app.route('/<int:timestamp>')
