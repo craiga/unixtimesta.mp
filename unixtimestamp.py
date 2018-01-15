@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 from flask import (Flask, render_template, request, redirect, url_for, abort,
-                   make_response)
+                   make_response, g)
 from flask_sslify import SSLify
 from pytz import utc
 from dateutil.parser import parse
@@ -207,6 +207,15 @@ def page_not_found(error):  # pylint:disable=unused-argument
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
+
+
+@app.errorhandler(500)
+def server_error(error):  # pylint:disable=unused-argument
+    """Server error."""
+    return (render_template('server_error.html',
+                            event_id=g.sentry_event_id,
+                            public_dsn=sentry.client.get_public_dsn('https')),
+            500)
 
 
 def parse_accept_language(accept_language_header):

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+{% block body %}
+<p>Something's gone wrong.</p>
+{% endblock %}
+{% block script %}
+{% if event_id %}
+<script>
+Raven.showReportDialog({
+    eventId: '{{ event_id }}',
+    dsn: '{{ public_dsn }}'
+});
+</script>
+{% endif %}
+{% endblock %}
