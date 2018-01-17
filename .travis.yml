@@ -1,23 +1,24 @@
 language: python
-cache: pip
 python:
   - "3.4"
   - "3.5"
   - "3.5-dev"
   - "3.6"
   - "3.6-dev"
+install:
+  - pip install pipenv
+  - pipenv install --dev
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - pycodestyle
-  - pydocstyle
-  - find . -iname "*.py" | xargs pylint
-  - nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
-  - codecov
-  - behave
-  - piprot
+  - pipenv run pycodestyle
+  - pipenv run pydocstyle
+  - find . -iname "*.py" | xargs pipenv run pylint
+  - pipenv run nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
+  - pipenv run codecov
+  - pipenv run behave
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 deploy:
