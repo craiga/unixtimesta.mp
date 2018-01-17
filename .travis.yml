@@ -7,12 +7,12 @@ python:
   - "3.6-dev"
 install:
   - pip install pipenv
+  - pipenv install --dev
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - pipenv install
   - pipenv run pycodestyle
   - pipenv run pydocstyle
   - find . -iname "*.py" | xargs pipenv run pylint
