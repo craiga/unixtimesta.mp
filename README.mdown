@@ -9,39 +9,26 @@ First, check out the code:
     git clone https://github.com/craiga/unixtimesta.mp.git
     cd unixtimesta.mp
 
-Set up the project by creating a virtual environment, activating it, and installing the required packages:
+Set up the project by creating a Pipenv virtual environment.
 
-    virtualenv --python=python3 venv
-    . venv/bin/activate
-    pip install -r requirements.txt
+    pipenv --three install
 
 Finally, run the the Flask development server and access the application in a web browser at [http://localhost:5000](http://localhost:5000).
 
-    export FLASK_APP=unixtimestamp.py
-    export FLASK_DEBUG=1
-    flask run
-
-# Managing Packages
-
-This project uses [pip-tools](https://github.com/nvie/pip-tools) to manage dependencies.
-
- * Add packages to `requirements.in`.
- * Run `pip-compile` to produce a new version of `requirements.txt` (use `pip-compile --upgrade` to update to the latest versions of packages).
- * Run `pip-sync` update your environment to the packages in `requirements.txt`.
+    pipenv run flask run
 
 # Ensuring Code Quality
 
 The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
 
-    nosetests
-    behave
+    pipenv run nosetests
+    pipenv run behave
 
-Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/), [pydocstyle](http://www.pydocstyle.org), [Pylint](https://www.pylint.org) and [piprot](https://github.com/sesh/piprot). These help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/), [PEP 257](https://www.python.org/dev/peps/pep-0257/) and other generally-accepted best Python coding practices, as well as ensuring the latest available versions of all packages are installed.
+Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/), [pydocstyle](http://www.pydocstyle.org) and [Pylint](https://www.pylint.org). These help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/), [PEP 257](https://www.python.org/dev/peps/pep-0257/) and other generally-accepted best Python coding practices.
 
-    pycodestyle
-    pydocstyle
-    find . -iname "*.py" | xargs pylint
-    piprot
+    pipenv run pycodestyle
+    pipenv run pydocstyle
+    find . -iname "*.py" | xargs pipenv run pylint
 
 Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
 

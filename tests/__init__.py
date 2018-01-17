@@ -30,5 +30,6 @@ class TestCase(unittest.TestCase):
 
     def setUp(self):
         """Set up test case."""
+        unixtimestamp.app.debug = False
         unixtimestamp.app.testing = True
         self.app = unixtimestamp.app.test_client()
