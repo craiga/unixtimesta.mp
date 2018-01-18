@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "275b1f4abb2a7c57b12a0bb7cdec183af67ec4b0563ea1130985fcd688624d59"
+            "sha256": "5c51557c68774552c104f780079a05561d740548c7715eeb8e76ad7193676693"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -50,7 +50,8 @@
         "flask-sslify": {
             "editable": true,
             "git": "git://github.com/kennethreitz/flask-sslify.git",
-            "ref": "9b21aeb"
+            "ref": "9b21aeb",
+            "version": "0.1.6-dev"
         },
         "gunicorn": {
             "hashes": [
@@ -154,10 +155,10 @@
         },
         "codecov": {
             "hashes": [
-                "sha256:ea7d3ac73c50058a89a29ae47e96c59e86cd582aa1ab123b173ccaf2de8d3c7f",
-                "sha256:3296d228271d5cdc1fa5bccb37f6e0819ce177afe37eccce5378b2403b58a077"
+                "sha256:e89fae06665eb574de9a8233a359ca03ca9f7d500436cfb74c6f699fbc4d7f5b",
+                "sha256:ba77d1438683daeae122962776c38fb88c5dc9b12dd0b40b3d1a98fef8219727"
             ],
-            "version": "==2.0.13"
+            "version": "==2.0.14"
         },
         "coverage": {
             "hashes": [
