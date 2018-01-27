@@ -30,8 +30,6 @@ class TestCase(unittest.TestCase):
 
     def setUp(self):
         """Set up test case."""
+        unixtimestamp.app.debug = False
         unixtimestamp.app.testing = True
-        # Debug enabled in tests as a workaround for
-        # https://github.com/kennethreitz/flask-sslify/issues/50.
-        unixtimestamp.app.debug = True
         self.app = unixtimestamp.app.test_client()

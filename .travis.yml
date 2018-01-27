@@ -1,5 +1,4 @@
 language: python
-cache: pip
 python:
   - "3.4"
   - "3.5"
@@ -8,22 +7,19 @@ python:
   - "3.6-dev"
   - "3.7-dev"
   - "nightly"
+install:
+  - pip install pipenv
+  - pipenv install --dev
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - pycodestyle
-  - pydocstyle
-  - find . -iname "*.py" | xargs pylint
-  - nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
-  - codecov
-  - behave
-  - piprot
+  - pipenv run pycodestyle
+  - pipenv run pydocstyle
+  - find . -iname "*.py" | xargs pipenv run pylint
+  - pipenv run nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
+  - pipenv run codecov
+  - pipenv run behave
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-deploy:
-  provider: heroku
-  app: unixtimesta-mp
-  api_key:
-    secure: D4u59gKzq2srbHH8PhBwQxdEBkMChscJUzKa4yjAgm9TFpCk6Ygt076KsXg6sxKdj+kBsWnhPb88APe5gxJvQxQw/8tzonIKndVuL5Alz+JTSL2n6eE6+RNjwbkFi8jceMMaYNmwU4h5qKm03wEARVJGDAjNoOXm+W63cFawGRPdqdsHKUZeh5w4n0ZbE/6HS0EBd+JFFqpX3VAh5YMosNBh4TBOO6SZA71AQapuzmn2JjA/jXLqMUn7uqfVLIszij4P7z6yQ+MemonvNr9bVyFA0ZW8eThkmjMzKcqspd2I2dh54NxIxRXA6G3q4ZaQRPxyJ6pPWsa98m1zKLKvNNp4SqZsy7+kV+1vY84OBSO8agkg9YzLtiAf+ZMy1MG9hy+lU9SjUd9o+pJbqcqj7az2e1heRj9/TD5WOWPhog//liLR0ibqHlcXoaSuLFceTpQ3eTh8j+Icu74Pwp2/F+8dKCiHnuHPV9CIFkEaU3DqijUIVLzOAe0PHhrePej0OILohYxyfWpDszNX/ZAk92/AJAXyZy2wwA+fwJz6No7slB/d90jE2IwtBpWlnZb3sQRepty1v8vN3qfrMRItc5BYzNQ9E7tJjRyRw7MQeqv7q2EeGbOFq5oRJb59cHoGTuFp8JU5bsOVqL5T1bx4ko0+XgdPLqJJ4l1oLE34z1c=
