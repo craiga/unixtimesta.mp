@@ -2,7 +2,7 @@ Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/)
 
 [![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Requirements Status](https://requires.io/github/craiga/unixtimesta.mp/requirements.svg?branch=master)](https://requires.io/github/craiga/unixtimesta.mp/requirements/?branch=master) [![codecov](https://codecov.io/gh/craiga/unixtimesta.mp/branch/master/graph/badge.svg)](https://codecov.io/gh/craiga/unixtimesta.mp) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp)
 
-# Getting Started
+# Getting Started for Development
 
 First, check out the code:
 
@@ -11,7 +11,7 @@ First, check out the code:
 
 Set up the project by creating a Pipenv virtual environment.
 
-    pipenv --three install
+    pipenv --three --dev install
 
 Finally, run the the Flask development server and access the application in a web browser at [http://localhost:5000](http://localhost:5000).
 
