@@ -32,6 +32,10 @@ Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/
 
 Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
 
+# Credits
+
+Icon adapted from http://openclipart.org/detail/192402/clock-icon-by-cinemacookie-192402.
+
 # Reporting Issues
 
 [Report bugs, issues and requests through GitHub.](https://github.com/craiga/unixtimesta.mp/issues)

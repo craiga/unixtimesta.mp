@@ -33,3 +33,13 @@ class RobotsTestCase(TestCase):
             self.assertRegex(response.content_type, '^text/plain')
             self.assertIn(b'Sitemap: http://localhost/sitemapindex.xml',
                           response.data)
+
+
+class FaviconTestCase(TestCase):
+    """Tests for favicon.ico."""
+
+    def test_favicon_ico(self):
+        """Test for favicon.ico."""
+        with self.app.get('/favicon.ico') as response:
+            self.assertEqual(200, response.status_code)
+            self.assertRegex(response.content_type, '^image/x-icon')
