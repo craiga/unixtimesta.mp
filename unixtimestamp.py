@@ -201,6 +201,12 @@ def humans():
     return app.send_static_file('humans.txt')
 
 
+@app.route('/favicon.ico')
+def favicon():
+    """Show favicon.ico."""
+    return app.send_static_file('favicon.ico')
+
+
 @app.errorhandler(404)
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
