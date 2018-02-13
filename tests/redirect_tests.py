@@ -120,10 +120,15 @@ class StringRedirectTestCase(TestCase):
 
     def test_redirect(self):
         """Test datetime description URL redirects."""
-        for valid_date_string in ('31st March 1978', '2017-07-29'):
-            url = '/{}'.format(quote(valid_date_string))
+        for valid_date_string in ('31st March 1978',
+                                  '2017-07-29',
+                                  '0001-01-01'):
+
             expected_datetime = parse(valid_date_string, fuzzy=True)
+            expected_datetime = utc.localize(expected_datetime)
             expected_redirect = '/{:.0f}'.format(expected_datetime.timestamp())
+
+            url = '/{}'.format(quote(valid_date_string))
             response = self.app.get(url)
             self.assertEqual(response.status_code, 302)
             redirect = urlparse(response.location).path
@@ -133,6 +138,17 @@ class StringRedirectTestCase(TestCase):
             url = '/{}'.format(quote(invalid_date_string))
             response = self.app.get(url)
             self.assertEqual(response.status_code, 404)
+
+    def test_naive_dates_are_utc(self):
+        """Test that naive dates are handled as UTC."""
+        response = self.app.get('/31st March 1978')
+        naive_location = urlparse(response.location).path
+        response = self.app.get('/31st March 1978 UTC')
+        utc_location = urlparse(response.location).path
+        response = self.app.get('/31st March 1978 +10:00')
+        aest_location = urlparse(response.location).path
+        self.assertEqual(naive_location, utc_location)
+        self.assertNotEqual(naive_location, aest_location)
 
 
 class PostRedirectTestCase(TestCase):
