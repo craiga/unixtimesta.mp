@@ -42,4 +42,4 @@ class FaviconTestCase(TestCase):
         """Test for favicon.ico."""
         with self.app.get('/favicon.ico') as response:
             self.assertEqual(200, response.status_code)
-            self.assertRegex(response.content_type, '^image/x-icon')
+            self.assertRegex(response.content_type, '^image/.*icon')
