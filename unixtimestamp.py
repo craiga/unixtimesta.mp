@@ -211,7 +211,7 @@ def favicon():
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
     template = '404 error triggered by %s request to %s, path=%s.'
-    app.logger.debug(template, request.method, request.url, request.path)
+    app.logger.info(template, request.method, request.url, request.path)
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
