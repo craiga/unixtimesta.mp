@@ -177,6 +177,9 @@ def redirect_to_timestamp_string(datetime_string):
         app.logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
+    if timestamp.tzinfo is None:
+        timestamp = utc.localize(timestamp)
+
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
     return redirect(url, code=302)
 
