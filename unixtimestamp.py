@@ -177,6 +177,9 @@ def redirect_to_timestamp_string(datetime_string):
         app.logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
+    if timestamp.tzinfo is None:
+        timestamp = utc.localize(timestamp)
+
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
     return redirect(url, code=302)
 
@@ -201,11 +204,17 @@ def humans():
     return app.send_static_file('humans.txt')
 
 
+@app.route('/favicon.ico')
+def favicon():
+    """Show favicon.ico."""
+    return app.send_static_file('favicon.ico')
+
+
 @app.errorhandler(404)
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
     template = '404 error triggered by %s request to %s, path=%s.'
-    app.logger.debug(template, request.method, request.url, request.path)
+    app.logger.info(template, request.method, request.url, request.path)
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
