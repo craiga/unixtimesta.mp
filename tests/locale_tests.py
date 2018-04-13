@@ -13,6 +13,7 @@ class ParseLocaleTestCase(TestCase):
                 ('en-US', 'en-US'),
                 ('en-US', 'en-US,en;q=0.5'),
                 ('ru', 'ru,en'),
-                ('tr-TR', 'tr-TR,tr;q=0.8,en-US;q=0.6,en;q=0.4')):
+                ('tr-TR', 'tr-TR,tr;q=0.8,en-US;q=0.6,en;q=0.4'),
+                ('es-ES', 'es-ES_tradnl')):
             locale = parse_accept_language(accept_language)
             self.assertEqual(expected_locale, locale)

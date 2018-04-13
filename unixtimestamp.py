@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 import sys
 from datetime import datetime
 
@@ -231,7 +232,8 @@ def server_error(error):  # pylint:disable=unused-argument
 
 def parse_accept_language(accept_language_header):
     """Parse locale from Accept-Language header."""
-    return accept_language_header.split(',')[0]
+    match = re.search(r'^[A-Za-z]{2}(\-[A-Za-z]{2})?', accept_language_header)
+    return match.group(0)
 
 
 if __name__ == '__main__':
