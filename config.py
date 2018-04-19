@@ -24,3 +24,5 @@ SENTRY_CONFIG = {
 }
 
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+
+DEFAULT_LOCALE = 'en-US'

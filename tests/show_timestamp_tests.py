@@ -60,14 +60,17 @@ class ShowTimestampTestCase(TestCase):
 
     def test_locale(self):
         """Test locale is passed into template."""
-        with captured_templates(unixtimestamp.app) as templates:
-            lang_header = ('Accept-Language', 'fr-CA,fr;q=0.5')
-            response = self.app.get('/123456',
-                                    headers=((lang_header),))
-            self.assertEqual(200, response.status_code)
-            self.assertEqual(1, len(templates))
-            context = templates[0][1]
-            self.assertEqual('fr-CA', context['locale'])
+        unixtimestamp.app.config.update({'DEFAULT_LOCALE': 'ab-cd'})
+        for accept_language, expected_locale in (('fr-CA,fr;q=0.5', 'fr-CA'),
+                                                 ('', 'ab-cd')):
+            with captured_templates(unixtimestamp.app) as templates:
+                lang_header = ('Accept-Language', accept_language)
+                response = self.app.get('/123456',
+                                        headers=((lang_header),))
+                self.assertEqual(200, response.status_code)
+                self.assertEqual(1, len(templates))
+                context = templates[0][1]
+                self.assertEqual(expected_locale, context['locale'])
 
     def test_overflow(self):
         """Test handling of too large or small dates."""

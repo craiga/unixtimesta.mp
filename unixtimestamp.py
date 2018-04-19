@@ -31,10 +31,15 @@ sentry = Sentry(app,
 @app.route('/<int:timestamp>')
 def show_timestamp(timestamp):
     """Display a timestamp."""
-    accept_language = request.headers.get('Accept-Language', 'en-US')
+    accept_language = request.headers.get('Accept-Language')
+    if not accept_language:
+        accept_language = app.config.get('DEFAULT_LOCALE')
+
     locale = parse_accept_language(accept_language)
+
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
+
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
         timestamp_datetime = utc.localize(timestamp_datetime)
