@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 import sys
 from datetime import datetime
 
@@ -30,10 +31,15 @@ sentry = Sentry(app,
 @app.route('/<int:timestamp>')
 def show_timestamp(timestamp):
     """Display a timestamp."""
-    accept_language = request.headers.get('Accept-Language', 'en-US')
+    accept_language = request.headers.get('Accept-Language')
+    if not accept_language:
+        accept_language = app.config.get('DEFAULT_LOCALE')
+
     locale = parse_accept_language(accept_language)
+
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
+
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
         timestamp_datetime = utc.localize(timestamp_datetime)
@@ -231,7 +237,8 @@ def server_error(error):  # pylint:disable=unused-argument
 
 def parse_accept_language(accept_language_header):
     """Parse locale from Accept-Language header."""
-    return accept_language_header.split(',')[0]
+    match = re.search(r'^[A-Za-z]{2}(\-[A-Za-z]{2})?', accept_language_header)
+    return match.group(0)
 
 
 if __name__ == '__main__':
