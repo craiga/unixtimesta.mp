@@ -6,6 +6,7 @@ import re
 import sys
 from datetime import datetime
 
+import flask
 from flask import (Flask, render_template, request, redirect, url_for, abort,
                    make_response, g)
 from pytz import utc
@@ -16,15 +17,18 @@ from flask_sslify import SSLify
 app = Flask(__name__, static_url_path='')
 app.config.from_object('config')
 
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.getLevelName(app.config.get('LOG_LEVEL')))
+# Workaround for
+# https://github.com/PyCQA/pylint/issues/1061#issuecomment-393858322
+logger = flask.logging.create_logger(app)
+
+logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.getLevelName(app.config.get('LOG_LEVEL')))
 
 SSLify(app)
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
-sentry = Sentry(app,
-                logging=True,
+sentry = Sentry(app, logging=True,
                 level=logging.getLevelName(app.config.get('LOG_LEVEL')))
 
 
@@ -51,7 +55,7 @@ def show_timestamp(timestamp):
                                ga_tracking_id=ga_tracking_id,
                                sentry_public_dsn=sentry_public_dsn)
     except (ValueError, OverflowError, OSError):
-        app.logger.info('Triggering a 404 error.', exc_info=True)
+        logger.info('Triggering a 404 error.', exc_info=True)
         return render_template('timestamp.html',
                                timestamp=timestamp,
                                locale=locale,
@@ -84,7 +88,7 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
         timestamp = datetime(year=year, month=month, day=day, hour=hour,
                              minute=minute, second=second, tzinfo=utc)
     except (ValueError, OverflowError):
-        app.logger.info('Triggering a 404 error.', exc_info=True)
+        logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
@@ -180,7 +184,7 @@ def redirect_to_timestamp_string(datetime_string):
     try:
         timestamp = parse(datetime_string, fuzzy=True)
     except (ValueError, OverflowError):
-        app.logger.info('Triggering a 404 error.', exc_info=True)
+        logger.info('Triggering a 404 error.', exc_info=True)
         abort(404)
 
     if timestamp.tzinfo is None:
@@ -220,7 +224,7 @@ def favicon():
 def page_not_found(error):  # pylint:disable=unused-argument
     """Page not found."""
     template = '404 error triggered by %s request to %s, path=%s.'
-    app.logger.info(template, request.method, request.url, request.path)
+    logger.info(template, request.method, request.url, request.path)
     return (render_template('page_not_found.html',
                             ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
             404)
