@@ -1,13 +1,14 @@
 [MASTER]
-load-plugins = pylint.extensions.mccabe, pylint_flask
+load-plugins = pylint.extensions.mccabe
 
 [BASIC]
-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__)|(app|sentry))$
-docstring-min-length=3
+const-rgx = (([A-Z_][A-Z0-9_]*)|(__.*__)|(app|sentry|logger))$
+docstring-min-length = 3
+
 
 [REPORTS]
 output-format = colorized
 
 [FORMAT]
-max-line-length=80
-max-module-lines=250
+max-line-length = 80
+max-module-lines = 250

@@ -18,7 +18,6 @@ flask-sslify = {git = "git://github.com/kennethreitz/flask-sslify.git", editable
 pycodestyle = "*"
 pydocstyle = "*"
 pylint = "*"
-pylint-flask = "*"
 nose = "*"
 behave = "*"
 codecov = "*"
