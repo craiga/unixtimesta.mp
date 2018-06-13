@@ -1,45 +1,23 @@
 """Unix Timestamp Flask application."""
 
-import logging
 import os
-import re
-import sys
 from datetime import datetime
 
-import flask
-from flask import (Flask, render_template, request, redirect, url_for, abort,
-                   make_response, g)
+from flask import (render_template, request, redirect, url_for, abort,
+                   make_response)
 from pytz import utc
 from dateutil.parser import parse
-from raven.contrib.flask import Sentry
-from flask_sslify import SSLify
 
-app = Flask(__name__, static_url_path='')
-app.config.from_object('config')
-
-# Workaround for
-# https://github.com/PyCQA/pylint/issues/1061#issuecomment-393858322
-logger = flask.logging.create_logger(app)
-
-logger.addHandler(logging.StreamHandler(sys.stdout))
-logger.setLevel(logging.getLevelName(app.config.get('LOG_LEVEL')))
-
-SSLify(app)
-
-# Sentry DSN should be configured by setting SENTRY_DSN environment variable.
-# Other configuration is done in app.config.SENTRY_CONFIG.
-sentry = Sentry(app, logging=True,
-                level=logging.getLevelName(app.config.get('LOG_LEVEL')))
+from unixtimestamp import app, logger  # pylint:disable=cyclic-import
+from unixtimestamp.utils import parse_accept_language
 
 
 @app.route('/<int:timestamp>')
 def show_timestamp(timestamp):
     """Display a timestamp."""
     accept_language = request.headers.get('Accept-Language')
-    if not accept_language:
-        accept_language = app.config.get('DEFAULT_LOCALE')
-
-    locale = parse_accept_language(accept_language)
+    locale = parse_accept_language(accept_language,
+                                   app.config.get('DEFAULT_LOCALE'))
 
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
@@ -218,33 +196,3 @@ def humans():
 def favicon():
     """Show favicon.ico."""
     return app.send_static_file('favicon.ico')
-
-
-@app.errorhandler(404)
-def page_not_found(error):  # pylint:disable=unused-argument
-    """Page not found."""
-    template = '404 error triggered by %s request to %s, path=%s.'
-    logger.info(template, request.method, request.url, request.path)
-    return (render_template('page_not_found.html',
-                            ga_tracking_id=os.environ.get('GA_TRACKING_ID')),
-            404)
-
-
-@app.errorhandler(500)
-def server_error(error):  # pylint:disable=unused-argument
-    """Server error."""
-    return (render_template('server_error.html',
-                            event_id=g.sentry_event_id,
-                            public_dsn=sentry.client.get_public_dsn('https')),
-            500)
-
-
-def parse_accept_language(accept_language_header):
-    """Parse locale from Accept-Language header."""
-    match = re.search(r'^[A-Za-z]{2}(\-[A-Za-z]{2})?', accept_language_header)
-    return match.group(0)
-
-
-if __name__ == '__main__':
-    app.debug = bool(os.environ.get('DEBUG', False))
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
