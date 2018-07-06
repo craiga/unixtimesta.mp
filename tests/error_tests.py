@@ -32,7 +32,7 @@ class ServerErrorTestCase(TestCase):
         unixtimestamp.app.testing = True
         super().tearDown()
 
-    @patch('unixtimestamp.parse_accept_language')
+    @patch('unixtimestamp.views.parse_accept_language')
     def test_server_error(self, mock_parse_accept_language):
         """Test for 500 handler."""
         mock_parse_accept_language.side_effect = RuntimeError()
