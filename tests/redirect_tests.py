@@ -176,3 +176,15 @@ class NowTestCase(TestCase):
             match = re.match(r'^/(\d+)$', redirect)
             timestamp = int(match.group(1))
             self.assertTrue(lower_bound <= timestamp <= upper_bound)
+
+
+class RoundingTestCase(TestCase):
+    """Test requests for times with decimal points should be redirected."""
+
+    def test_redirect(self):
+        """Test redirecting requests for with decimal points."""
+        for url in ('/123.123', '/123.987'):
+            response = self.app.get(url)
+            self.assertEqual(response.status_code, 302)
+            redirect = urlparse(response.location).path
+            self.assertEqual(redirect, '/123')
