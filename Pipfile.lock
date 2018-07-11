@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "93c58fd4b12090e2124b75eb71814143c95027fc7e40ae63893a5c335d6f0088"
+            "sha256": "3a671945a8461835952b213381701555db421b3f6bd2840089bd6f4b3753be17"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -37,9 +37,11 @@
             "version": "==1.0.2"
         },
         "flask-sslify": {
-            "editable": true,
-            "git": "git://github.com/kennethreitz/flask-sslify.git",
-            "ref": "9b21aeb07577e9e78dadaf48aac5a6c3d136c368"
+            "hashes": [
+                "sha256:d33e1d3c09cd95154176aa8a7319418e52129fc482dd56d8a8ad7c24500d543e"
+            ],
+            "index": "pypi",
+            "version": "==0.1.5"
         },
         "gunicorn": {
             "hashes": [
@@ -75,6 +77,14 @@
             ],
             "index": "pypi",
             "version": "==2.7.3"
+        },
+        "python-dotenv": {
+            "hashes": [
+                "sha256:4965ed170bf51c347a89820e8050655e9c25db3837db6602e906b6d850fad85c",
+                "sha256:509736185257111613009974e666568a1b031b028b61b500ef1ab4ee780089d5"
+            ],
+            "index": "pypi",
+            "version": "==0.8.2"
         },
         "pytz": {
             "hashes": [
