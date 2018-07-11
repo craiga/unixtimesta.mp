@@ -32,7 +32,3 @@ sentry = Sentry(app, logging=True,
                 level=logging.getLevelName(app.config.get('LOG_LEVEL')))
 
 from unixtimestamp import views, error_handlers  # noqa: E402 pylint:disable=wrong-import-position
-
-if __name__ == '__main__':
-    app.debug = bool(os.environ.get('DEBUG', False))
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
