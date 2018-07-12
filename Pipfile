@@ -19,7 +19,6 @@ pydocstyle = "*"
 pylint = "*"
 nose = "*"
 behave = "*"
-codecov = "*"
 
 [pipenv]
 allow_prereleases = true
