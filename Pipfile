@@ -10,9 +10,8 @@ pytz = "*"
 python-dateutil = "*"
 gunicorn = "*"
 raven = {extras = ["flask"], version = "*"}
-# Installing flask-sslify directly from GitHub due to
-# https://github.com/kennethreitz/flask-sslify/issues/50.
-flask-sslify = {git = "git://github.com/kennethreitz/flask-sslify.git", editable = true, ref = "9b21aeb", version="0.1.6-dev"}
+flask-sslify = "*"
+python-dotenv = "*"
 
 [dev-packages]
 pycodestyle = "*"
@@ -21,3 +20,6 @@ pylint = "*"
 nose = "*"
 behave = "*"
 codecov = "*"
+
+[pipenv]
+allow_prereleases = true
