@@ -28,7 +28,8 @@ class ShowTimestampTestCase(TestCase):
         """Test getting timestamps."""
         for timestamp in (0, 1, 123456, '-0', -1, -123456):
             with captured_templates(unixtimestamp.app) as templates:
-                response = self.app.get('/{}'.format(timestamp))
+                response = self.app.get('/{}'.format(timestamp),
+                                        follow_redirects=True)
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
@@ -40,7 +41,8 @@ class ShowTimestampTestCase(TestCase):
         """Test getting maximum timestamp."""
         with captured_templates(unixtimestamp.app) as templates:
             timestamp = max_timestamp_for_datetime()
-            response = self.app.get('/{}'.format(timestamp))
+            response = self.app.get('/{}'.format(timestamp),
+                                    follow_redirects=True)
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
@@ -51,7 +53,8 @@ class ShowTimestampTestCase(TestCase):
         """Test getting minimum timestamp."""
         with captured_templates(unixtimestamp.app) as templates:
             timestamp = min_timestamp_for_datetime()
-            response = self.app.get('/{}'.format(timestamp))
+            response = self.app.get('/{}'.format(timestamp),
+                                    follow_redirects=True)
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
@@ -64,9 +67,9 @@ class ShowTimestampTestCase(TestCase):
         for accept_language, expected_locale in (('fr-CA,fr;q=0.5', 'fr-CA'),
                                                  ('', 'ab-cd')):
             with captured_templates(unixtimestamp.app) as templates:
-                lang_header = ('Accept-Language', accept_language)
-                response = self.app.get('/123456',
-                                        headers=((lang_header),))
+                headers = {'Accept-Language': accept_language,
+                           'X-Forwarded-Proto': 'https'}
+                response = self.app.get('/123456', headers=headers)
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
@@ -80,7 +83,8 @@ class ShowTimestampTestCase(TestCase):
                           99999999999999999,
                           999999999999999999):
             with captured_templates(unixtimestamp.app) as templates:
-                response = self.app.get('/{}'.format(timestamp))
+                response = self.app.get('/{}'.format(timestamp),
+                                        follow_redirects=True)
                 self.assertEqual(404, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
