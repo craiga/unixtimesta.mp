@@ -2,6 +2,7 @@ Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/)
 
 [![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Requirements Status](https://requires.io/github/craiga/unixtimesta.mp/requirements.svg?branch=master)](https://requires.io/github/craiga/unixtimesta.mp/requirements/?branch=master) [![codecov](https://codecov.io/gh/craiga/unixtimesta.mp/branch/master/graph/badge.svg)](https://codecov.io/gh/craiga/unixtimesta.mp) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp)
 
+
 # Getting Started for Development
 
 First, check out the code:
@@ -21,6 +22,7 @@ Finally, run the the Flask development server and access the application in a we
 
 Note that you'll need to configure your browser to allow for your self-signed certificate.
 
+
 # Ensuring Code Quality
 
 The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
@@ -36,9 +38,11 @@ Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/
 
 Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
 
+
 # Credits
 
 Icon adapted from http://openclipart.org/detail/192402/clock-icon-by-cinemacookie-192402.
+
 
 # Reporting Issues
 
