@@ -1,5 +1,6 @@
 """Unix Timestamp Flask application."""
 
+import math
 import os
 from datetime import datetime
 
@@ -71,6 +72,13 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
 
     url = url_for('show_timestamp', timestamp=timestamp.timestamp())
     return redirect(url, code=301)
+
+
+@app.route('/<float:timestamp>')
+def redirect_to_rounded_timestamp(timestamp):
+    """Redirect to a rounded timestamp."""
+    url = url_for('show_timestamp', timestamp=math.floor(timestamp))
+    return redirect(url, code=302)
 
 
 @app.route('/usage')
