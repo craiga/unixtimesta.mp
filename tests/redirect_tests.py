@@ -103,7 +103,8 @@ class DateRedirectTestCase(TestCase):
     def test_valid_redirects(self):
         """Test redirection to timestamps based on valid date components."""
         for url, expected_redirect in self.valid_datetime_redirects():
-            response = self.app.get(url)
+            response = self.app.get(url,
+                                    headers={'X-Forwarded-Proto': 'https'})
             self.assertEqual(response.status_code, 301)
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
@@ -111,7 +112,8 @@ class DateRedirectTestCase(TestCase):
     def test_invalid_redirects(self):
         """Test redirection to timestamps based on invalid date components."""
         for url in self.invalid_datetime_redirects():
-            response = self.app.get(url)
+            response = self.app.get(url,
+                                    headers={'X-Forwarded-Proto': 'https'})
             self.assertEqual(response.status_code, 404)
 
 
@@ -129,23 +131,28 @@ class StringRedirectTestCase(TestCase):
             expected_redirect = '/{:.0f}'.format(expected_datetime.timestamp())
 
             url = '/{}'.format(quote(valid_date_string))
-            response = self.app.get(url)
+            response = self.app.get(url,
+                                    headers={'X-Forwarded-Proto': 'https'})
             self.assertEqual(response.status_code, 302)
             redirect = urlparse(response.location).path
             self.assertEqual(expected_redirect, redirect)
 
         for invalid_date_string in ('foobar', '.9999999999999999'):
             url = '/{}'.format(quote(invalid_date_string))
-            response = self.app.get(url)
+            response = self.app.get(url,
+                                    headers={'X-Forwarded-Proto': 'https'})
             self.assertEqual(response.status_code, 404)
 
     def test_naive_dates_are_utc(self):
         """Test that naive dates are handled as UTC."""
-        response = self.app.get('/31st March 1978')
+        response = self.app.get('/31st March 1978',
+                                headers={'X-Forwarded-Proto': 'https'})
         naive_location = urlparse(response.location).path
-        response = self.app.get('/31st March 1978 UTC')
+        response = self.app.get('/31st March 1978 UTC',
+                                headers={'X-Forwarded-Proto': 'https'})
         utc_location = urlparse(response.location).path
-        response = self.app.get('/31st March 1978 +10:00')
+        response = self.app.get('/31st March 1978 +10:00',
+                                headers={'X-Forwarded-Proto': 'https'})
         aest_location = urlparse(response.location).path
         self.assertEqual(naive_location, utc_location)
         self.assertNotEqual(naive_location, aest_location)
@@ -156,7 +163,8 @@ class PostRedirectTestCase(TestCase):
 
     def test_redirect(self):
         """Test redirecting post requests."""
-        response = self.app.post('/', data={'time': 'foobar'})
+        response = self.app.post('/', data={'time': 'foobar'},
+                                 headers={'X-Forwarded-Proto': 'https'})
         self.assertEqual(response.status_code, 302)
         redirect = urlparse(response.location).path
         self.assertEqual('/foobar', redirect)
@@ -169,7 +177,8 @@ class NowTestCase(TestCase):
         """Test redirecting requests for now."""
         for url in ('/', '/now'):
             lower_bound = floor(datetime.now().timestamp())
-            response = self.app.get(url)
+            response = self.app.get(url,
+                                    headers={'X-Forwarded-Proto': 'https'})
             upper_bound = ceil(datetime.now().timestamp())
             self.assertEqual(response.status_code, 302)
             redirect = urlparse(response.location).path
