@@ -1,5 +1,6 @@
 """Unix Timestamp Flask application."""
 
+import locale
 import math
 import os
 from datetime import datetime
@@ -18,10 +19,12 @@ def render_timestamp_html(**kwargs):
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
 
-    locale = request.accept_languages.best or app.config.get('DEFAULT_LOCALE')
+    language = request.accept_languages.best
+    if not language:
+        language = app.config.get('DEFAULT_LOCALE')
 
     return render_template('timestamp.html',
-                           locale=locale,
+                           locale=language,
                            ga_tracking_id=ga_tracking_id,
                            sentry_public_dsn=sentry_public_dsn,
                            **kwargs)
@@ -29,6 +32,15 @@ def render_timestamp_html(**kwargs):
 
 def render_timestamp(timestamp, renderer):
     """Render a timestamp."""
+    language = request.accept_languages.best
+    if not language:
+        language = app.config.get('DEFAULT_LOCALE')
+
+    try:
+        locale.setlocale(locale.LC_ALL, (language, 'UTF-8'))
+    except locale.Error:
+        logger.warning('Failed setting locale to f{language} UTF-8')
+
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
         timestamp_datetime = utc.localize(timestamp_datetime)
