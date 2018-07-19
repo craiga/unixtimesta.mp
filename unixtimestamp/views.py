@@ -39,7 +39,7 @@ def render_timestamp(timestamp, renderer):
     try:
         locale.setlocale(locale.LC_ALL, (language, 'UTF-8'))
     except locale.Error:
-        logger.warning('Failed setting locale to f{language} UTF-8')
+        logger.warning('Failed setting locale to %s UTF-8', language)
 
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
