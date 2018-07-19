@@ -5,7 +5,8 @@ import os
 from datetime import datetime
 
 from flask import (render_template, request, redirect, url_for, abort,
-                   make_response)
+                   make_response, jsonify)
+from flask_accept import accept_fallback
 from pytz import utc
 from dateutil.parser import parse
 
@@ -13,9 +14,8 @@ from unixtimestamp import app, logger  # pylint:disable=cyclic-import
 from unixtimestamp.utils import parse_accept_language
 
 
-@app.route('/<int:timestamp>')
-def show_timestamp(timestamp):
-    """Display a timestamp."""
+def render_timestamp_html(**kwargs):
+    """Render a timestamp in HTML."""
     accept_language = request.headers.get('Accept-Language')
     locale = parse_accept_language(accept_language,
                                    app.config.get('DEFAULT_LOCALE'))
@@ -23,24 +23,36 @@ def show_timestamp(timestamp):
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
 
+    return render_template('timestamp.html',
+                           locale=locale,
+                           accept_language=accept_language,
+                           ga_tracking_id=ga_tracking_id,
+                           sentry_public_dsn=sentry_public_dsn,
+                           **kwargs)
+
+
+def render_timestamp(timestamp, renderer):
+    """Render a timestamp."""
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
         timestamp_datetime = utc.localize(timestamp_datetime)
-        return render_template('timestamp.html',
-                               timestamp=timestamp,
-                               datetime=timestamp_datetime,
-                               locale=locale,
-                               accept_language=accept_language,
-                               ga_tracking_id=ga_tracking_id,
-                               sentry_public_dsn=sentry_public_dsn)
+        return renderer(timestamp=timestamp, datetime=timestamp_datetime)
     except (ValueError, OverflowError, OSError):
         logger.info('Triggering a 404 error.', exc_info=True)
-        return render_template('timestamp.html',
-                               timestamp=timestamp,
-                               locale=locale,
-                               accept_language=accept_language,
-                               ga_tracking_id=ga_tracking_id,
-                               sentry_public_dsn=sentry_public_dsn), 404
+        return renderer(timestamp=timestamp), 404
+
+
+@app.route('/<int:timestamp>')
+@accept_fallback
+def show_timestamp(timestamp):
+    """Display a timestamp as HTML."""
+    return render_timestamp(timestamp, renderer=render_timestamp_html)
+
+
+@show_timestamp.support('application/json')
+def show_timestamp_json(timestamp):
+    """Display a timestamp as JSON."""
+    return render_timestamp(timestamp, renderer=jsonify)
 
 
 @app.route('/-<int:negative_timestamp>')

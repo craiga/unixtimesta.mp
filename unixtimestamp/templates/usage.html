@@ -27,6 +27,14 @@
     module, the site will do it's best to try and figure what you're on 
     about.</p>
 <pre><a href="/Wednesday" title="Example link to a Unix Timestamp for a description of a date and time" style="text-decoration: none;">https://www.unixtimesta.mp/Wednesday</a></pre>
+<h2>Unix Timestamps as a Service (UTaaS)</h2>
+<p>By setting the Accept header of your request to <kbd>application/json</kbd>,
+    you can get the same information in JSON format.</p>
+<pre>$ curl -L -H "Accept: application/json" https://www.unixtimesta.mp/1978/3/31
+{
+  "datetime": "Fri, 31 Mar 1978 00:00:00 GMT", 
+  "timestamp": 260150400
+}</pre>
 <h2>Bookmarklet</h2>
 <p>For easy access to this site, install
     <a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27https://www.unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">this bookmarklet</a>

@@ -12,6 +12,7 @@ gunicorn = "*"
 raven = {extras = ["flask"], version = "*"}
 flask-sslify = "*"
 python-dotenv = "*"
+flask-accept = "*"
 
 [dev-packages]
 pycodestyle = "*"
@@ -19,6 +20,7 @@ pydocstyle = "*"
 pylint = "*"
 nose = "*"
 behave = "*"
+ipython = "*"
 
 [pipenv]
 allow_prereleases = true
