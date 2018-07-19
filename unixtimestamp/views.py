@@ -11,21 +11,17 @@ from pytz import utc
 from dateutil.parser import parse
 
 from unixtimestamp import app, logger  # pylint:disable=cyclic-import
-from unixtimestamp.utils import parse_accept_language
 
 
 def render_timestamp_html(**kwargs):
     """Render a timestamp in HTML."""
-    accept_language = request.headers.get('Accept-Language')
-    locale = parse_accept_language(accept_language,
-                                   app.config.get('DEFAULT_LOCALE'))
-
     ga_tracking_id = os.environ.get('GA_TRACKING_ID')
     sentry_public_dsn = os.environ.get('SENTRY_PUBLIC_DSN')
 
+    locale = request.accept_languages.best or app.config.get('DEFAULT_LOCALE')
+
     return render_template('timestamp.html',
                            locale=locale,
-                           accept_language=accept_language,
                            ga_tracking_id=ga_tracking_id,
                            sentry_public_dsn=sentry_public_dsn,
                            **kwargs)
