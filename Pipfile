@@ -21,6 +21,3 @@ pylint = "*"
 nose = "*"
 behave = "*"
 ipython = "*"
-
-[pipenv]
-allow_prereleases = true
