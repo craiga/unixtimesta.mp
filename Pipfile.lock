@@ -88,11 +88,11 @@
         },
         "python-dotenv": {
             "hashes": [
-                "sha256:4965ed170bf51c347a89820e8050655e9c25db3837db6602e906b6d850fad85c",
-                "sha256:509736185257111613009974e666568a1b031b028b61b500ef1ab4ee780089d5"
+                "sha256:38f22d75f1180256e60c8b06aa06f5254479c1bf5947430c97e3d737d90e8731",
+                "sha256:52e8c56e7c362fe9082abc949ea5fed6993c3651e059df0d7c8e18883827d737"
             ],
             "index": "pypi",
-            "version": "==0.8.2"
+            "version": "==0.9.0"
         },
         "pytz": {
             "hashes": [
@@ -176,7 +176,7 @@
                 "sha256:b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8",
                 "sha256:ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497"
             ],
-            "markers": "python_version != '3.3.*' and python_version >= '2.7' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.0.*' and python_version != '3.2.*' and python_version >= '2.7' and python_version != '3.1.*' and python_version != '3.3.*'",
             "version": "==4.3.4"
         },
         "jedi": {
