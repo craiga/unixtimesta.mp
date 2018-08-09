@@ -1,6 +1,8 @@
 """Tests for showing timestamps."""
 
+import locale
 from datetime import datetime, MINYEAR, MAXYEAR
+from unittest.mock import patch
 
 import unixtimestamp
 from tests import captured_templates, TestCase
@@ -62,18 +64,21 @@ class ShowTimestampTestCase(TestCase):
             self.assertEqual(MINYEAR, context['datetime'].year)
 
     def test_locale(self):
-        """Test locale is passed into template."""
+        """Test locale is set and passed into template."""
         unixtimestamp.app.config.update({'DEFAULT_LOCALE': 'ab-cd'})
-        for accept_language, expected_locale in (('fr-CA,fr;q=0.5', 'fr-CA'),
-                                                 ('', 'ab-cd')):
-            with captured_templates(unixtimestamp.app) as templates:
-                headers = {'Accept-Language': accept_language,
-                           'X-Forwarded-Proto': 'https'}
-                response = self.app.get('/123456', headers=headers)
-                self.assertEqual(200, response.status_code)
-                self.assertEqual(1, len(templates))
-                context = templates[0][1]
-                self.assertEqual(expected_locale, context['locale'])
+        test_data = [('fr-CA,fr;q=0.5', 'fr_CA', 'fr-CA'),
+                     ('', 'ab_cd', 'ab-cd')]
+        for language, python_locale, js_locale in test_data:
+            with patch('locale.setlocale') as mock_setlocale:
+                with captured_templates(unixtimestamp.app) as templates:
+                    headers = {'Accept-Language': language,
+                               'X-Forwarded-Proto': 'https'}
+                    self.app.get('/123456', headers=headers)
+                    mock_setlocale.assert_called_once_with(
+                        locale.LC_ALL, (python_locale, 'UTF-8'))
+                    self.assertEqual(1, len(templates))
+                    context = templates[0][1]
+                    self.assertEqual(js_locale, context['locale'])
 
     def test_overflow(self):
         """Test handling of too large or small dates."""

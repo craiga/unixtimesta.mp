@@ -37,7 +37,7 @@ def render_timestamp(timestamp, renderer):
         language = app.config.get('DEFAULT_LOCALE')
 
     try:
-        locale.setlocale(locale.LC_ALL, (language, 'UTF-8'))
+        locale.setlocale(locale.LC_ALL, (language.replace('-', '_'), 'UTF-8'))
     except locale.Error:
         logger.warning('Failed setting locale to %s UTF-8', language)
 
