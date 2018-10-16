@@ -19,7 +19,7 @@ script:
   - find . -iname "*.py" | xargs pipenv run pylint
   - pipenv run nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
   - pipenv run behave
-  - for locale in $(cat .locales); apt-cache search --names-only '^language-pack-$(echo $locale | cut -d'_' -f1)-base$'; done
+  - for locale in $(cat .locales); do apt-cache search --names-only '^language-pack-$(echo $locale | cut -d'_' -f1)-base$'; done
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 notifications:
