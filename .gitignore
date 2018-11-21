@@ -92,3 +92,6 @@ ENV/
 # Self-signed certificate
 server.crt
 server.key
+
+# Where I like to put the output of `pylint --generate-rcfile`.
+pylint.txt

@@ -9,15 +9,18 @@ blinker = "*" # Required for signal support in Flask
 pytz = "*"
 python-dateutil = "*"
 gunicorn = "*"
-raven = {extras = ["flask"], version = "*"}
+raven = {extras = ["flask"],version = "*"}
 flask-sslify = "*"
 python-dotenv = "*"
 flask-accept = "*"
 
 [dev-packages]
-pycodestyle = "*"
 pydocstyle = "*"
 pylint = "*"
 nose = "*"
 behave = "*"
 ipython = "*"
+black = "*"
+
+[pipenv]
+allow_prereleases = true
