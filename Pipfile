@@ -21,6 +21,7 @@ nose = "*"
 behave = "*"
 ipython = "*"
 black = "*"
+coverage = "*"
 
 [pipenv]
 allow_prereleases = true

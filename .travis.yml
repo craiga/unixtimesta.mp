@@ -13,7 +13,7 @@ script:
   - pipenv run black --check .
   - pipenv run pydocstyle
   - find . -iname "*.py" | xargs pipenv run pylint
-  - pipenv run nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
+  - pipenv run nosetests --with-coverage --cover-package=unixtimestamp
   - pipenv run behave
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
