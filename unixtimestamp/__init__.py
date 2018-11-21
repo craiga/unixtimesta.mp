@@ -30,5 +30,5 @@ sentry = Sentry(
     app, logging=True, level=logging.getLevelName(app.config.get("LOG_LEVEL"))
 )
 
-# pylint: disable=wrong-import-position
+# noqa: E402 pylint: disable=wrong-import-position
 from unixtimestamp import views, error_handlers
