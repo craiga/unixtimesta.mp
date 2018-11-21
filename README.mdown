@@ -1,6 +1,6 @@
 Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/).
 
-[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Test Coverage](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/test_coverage)](https://codeclimate.com/github/craiga/unixtimesta.mp/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp/maintainability)
+[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Test Coverage](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/test_coverage)](https://codeclimate.com/github/craiga/unixtimesta.mp/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp/maintainability)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
 # Getting Started for Development
@@ -23,20 +23,21 @@ Finally, run the the Flask development server and access the application in a we
 Note that you'll need to configure your browser to allow for your self-signed certificate.
 
 
-# Ensuring Code Quality
+## Ensuring Code Quality
 
-The most important way to ensure code quality is to run the test suite with [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
+Code is formatted with [black](https://black.readthedocs.io/en/latest/):
+
+     pipenv run black .
+
+Run the test suite using [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
 
     pipenv run nosetests
     pipenv run behave
 
-Setting up this project will install [pycodestyle](http://pycodestyle.pycqa.org/), [pydocstyle](http://www.pydocstyle.org) and [Pylint](https://www.pylint.org). These help test for adherance to [PEP 8](https://www.python.org/dev/peps/pep-0008/), [PEP 257](https://www.python.org/dev/peps/pep-0257/) and other generally-accepted best Python coding practices.
+Test code quality with [pydocstyle](http://www.pydocstyle.org) and [pylint](https://www.pylint.org).
 
-    pipenv run pycodestyle
     pipenv run pydocstyle
     find . -iname "*.py" | xargs pipenv run pylint
-
-Note that Travis CI is set up to automatically run these when commits are pushed to GitHub. If any of them fail, you should be notified of it.
 
 
 # Credits

@@ -1,11 +1,7 @@
 language: python
 python:
-  - "3.5"
-  - "3.5-dev"
   - "3.6"
   - "3.6-dev"
-  - "3.7-dev"
-  - "nightly"
 install:
   - pip install pipenv
   - pipenv install --dev
@@ -14,7 +10,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - pipenv run pycodestyle
+  - pipenv run black --check .
   - pipenv run pydocstyle
   - find . -iname "*.py" | xargs pipenv run pylint
   - pipenv run nosetests --logging-clear-handlers --with-coverage --cover-package=unixtimestamp
