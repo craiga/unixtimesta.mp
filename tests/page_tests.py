@@ -1,6 +1,5 @@
 """Tests for miscellaneous pages."""
 
-import unixtimestamp
 from tests import TestCase
 
 

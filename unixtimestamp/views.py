@@ -122,8 +122,8 @@ def show_usage():
 def make_streamed_response(template, content_type, **context):
     """Make a stream."""
     app.update_template_context(context)
-    template = app.jinja_env.get_template(template)
-    stream = template.stream(context)
+    tpl = app.jinja_env.get_template(template)  # pylint: disable=no-member
+    stream = tpl.stream(context)
     response = flask.Response(stream)
     response.headers["Content-Type"] = content_type
     return response
