@@ -119,6 +119,16 @@ def show_usage():
     )
 
 
+def make_streamed_response(template, content_type, **context):
+    """Make a stream."""
+    app.update_template_context(context)
+    tpl = app.jinja_env.get_template(template)  # pylint: disable=no-member
+    stream = tpl.stream(context)
+    response = flask.Response(stream)
+    response.headers["Content-Type"] = content_type
+    return response
+
+
 @app.route("/sitemap.xml")
 def sitemap():
     """Display sitemap XML."""
@@ -131,12 +141,9 @@ def sitemap():
     )
     if size > max_size:
         size = max_size
-    content = flask.render_template(
-        "sitemap.xml", timestamps=range(start, start + size)
+    return make_streamed_response(
+        "sitemap.xml", "application/xml", timestamps=range(start, start + size)
     )
-    response = flask.make_response(content)
-    response.headers["Content-Type"] = "application/xml"
-    return response
 
 
 @app.route("/sitemapindex.xml")
@@ -168,14 +175,12 @@ def sitemap_index():
     )
 
     # Render the sitemap index
-    content = flask.render_template(
+    return make_streamed_response(
         "sitemapindex.xml",
+        "application/xml",
         sitemap_starts=sitemap_starts,
         sitemap_size=sitemap_size,
     )
-    response = flask.make_response(content)
-    response.headers["Content-Type"] = "application/xml"
-    return response
 
 
 @app.route("/robots.txt")
@@ -192,15 +197,13 @@ def robots():
     )
 
     # Render the sitemap index
-    content = flask.render_template(
+    return make_streamed_response(
         "robots.txt",
+        "text/plain",
         sitemap_starts=sitemap_starts,
         sitemap_size=sitemap_size,
         sitemap_index_size=index_size,
     )
-    response = flask.make_response(content)
-    response.headers["Content-Type"] = "text/plain"
-    return response
 
 
 @app.route("/<string:datetime_string>")

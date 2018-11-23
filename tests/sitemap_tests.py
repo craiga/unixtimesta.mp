@@ -63,7 +63,9 @@ class SitemapTestCase(TestCase):
                     "size": sitemap_size,
                 }
             )
-            expected_url = "https://localhost/sitemap.xml?" + expected_qs
+            expected_url = (
+                "https://www.unixtimesta.mp/sitemap.xml?" + expected_qs
+            )
             expected_urls.append(expected_url)
 
         self.assertEqual(expected_urls, [l.text for l in locs])
@@ -85,5 +87,7 @@ class SitemapTestCase(TestCase):
             )
             self.assertEqual(len(locs), real_size)
             timestamps = range(start, start + real_size)
-            urls = ["https://localhost/{}".format(t) for t in timestamps]
+            urls = [
+                "https://www.unixtimesta.mp/{}".format(t) for t in timestamps
+            ]
             self.assertEqual(urls, [l.text for l in locs])
