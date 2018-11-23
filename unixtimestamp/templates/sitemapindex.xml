@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{% for sitemap_start in sitemap_starts %}
-<sitemap><loc>{{ url_for('sitemap', start=sitemap_start, size=sitemap_size, _external=True) }}</loc></sitemap>{% endfor %}
+<sitemap><loc>https://www.unixtimesta.mp/sitemap.xml?start={{sitemap_start}}&amp;size={{sitemap_size}}</loc></sitemap>{% endfor %}
 </sitemapindex> 

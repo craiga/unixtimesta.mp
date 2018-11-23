@@ -1,3 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{% for timestamp in timestamps %}
-<url><loc>{{ url_for('show_timestamp', timestamp=timestamp, _external=True) }}</loc></url>{% endfor %}</urlset> 
+<url><loc>https://www.unixtimesta.mp/{{timestamp}}</loc></url>{% endfor %}</urlset> 

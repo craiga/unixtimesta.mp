@@ -1,5 +1,6 @@
 """Tests for miscellaneous pages."""
 
+import unixtimestamp
 from tests import TestCase
 
 
@@ -32,7 +33,8 @@ class RobotsTestCase(TestCase):
             self.assertEqual(200, response.status_code)
             self.assertRegex(response.content_type, "^text/plain")
             self.assertIn(
-                b"Sitemap: https://localhost/sitemapindex.xml", response.data
+                b"Sitemap: https://www.unixtimesta.mp/sitemapindex.xml",
+                response.data,
             )
 
 

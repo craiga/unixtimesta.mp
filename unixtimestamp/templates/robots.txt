@@ -1,2 +1,2 @@
-{% for sitemap_start in sitemap_starts %}Sitemap: {{ url_for('sitemap_index', start=sitemap_start, sitemap_size=sitemap_size, size=sitemap_index_size, _external=True) }}
+{% for sitemap_start in sitemap_starts %}Sitemap: https://www.unixtimesta.mp/sitemapindex.xml?start={{sitemap_start}}&sitemap_size={{sitemap_size}}&size={{sitemap_index_size}}
 {% endfor %}
