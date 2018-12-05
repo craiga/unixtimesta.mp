@@ -116,11 +116,11 @@
         },
         "python-dotenv": {
             "hashes": [
-                "sha256:122290a38ece9fe4f162dc7c95cae3357b983505830a154d3c98ef7f6c6cea77",
-                "sha256:4a205787bc829233de2a823aa328e44fd9996fedb954989a21f1fc67c13d7a77"
+                "sha256:4f3582904d08dac5ab4c9aa44cb17ce056c9a35e585cfda6183d80054d247307",
+                "sha256:cb8cd327109898c7725f76c5256a081e8a9efe72ebbf127f8d1221ceb7f38bf2"
             ],
             "index": "pypi",
-            "version": "==0.9.1"
+            "version": "==0.10.0"
         },
         "pytz": {
             "hashes": [
