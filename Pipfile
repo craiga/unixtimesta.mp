@@ -20,8 +20,5 @@ pylint = "*"
 nose = "*"
 behave = "*"
 ipython = "*"
-black = "*"
+black = "==18.9b0"
 coverage = "*"
-
-[pipenv]
-allow_prereleases = true
