@@ -10,7 +10,7 @@ import flask
 from pytz import utc
 from dateutil.parser import parse
 from raven.contrib.flask import Sentry
-from flask_sslify import SSLify
+from flask_talisman import Talisman
 
 app = flask.Flask(__name__, static_url_path="")
 app.config.from_object("config")
@@ -22,7 +22,7 @@ logger = flask.logging.create_logger(app)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logger.setLevel(logging.getLevelName(app.config.get("LOG_LEVEL")))
 
-SSLify(app)
+Talisman(app)
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
