@@ -31,9 +31,7 @@ class ShowTimestampTestCase(TestCase):
         """Test getting timestamps."""
         for timestamp in (0, 1, 123456, "-0", -1, -123456):
             with captured_templates(unixtimestamp.app) as templates:
-                response = self.app.get(
-                    "/{}".format(timestamp), follow_redirects=True
-                )
+                response = self.app.get("/{}".format(timestamp))
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
@@ -46,9 +44,7 @@ class ShowTimestampTestCase(TestCase):
         """Test getting maximum timestamp."""
         with captured_templates(unixtimestamp.app) as templates:
             timestamp = max_timestamp_for_datetime()
-            response = self.app.get(
-                "/{}".format(timestamp), follow_redirects=True
-            )
+            response = self.app.get("/{}".format(timestamp))
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
@@ -59,9 +55,7 @@ class ShowTimestampTestCase(TestCase):
         """Test getting minimum timestamp."""
         with captured_templates(unixtimestamp.app) as templates:
             timestamp = min_timestamp_for_datetime()
-            response = self.app.get(
-                "/{}".format(timestamp), follow_redirects=True
-            )
+            response = self.app.get("/{}".format(timestamp))
             self.assertEqual(200, response.status_code)
             self.assertEqual(1, len(templates))
             context = templates[0][1]
@@ -78,10 +72,7 @@ class ShowTimestampTestCase(TestCase):
         for language, python_locale, js_locale in test_data:
             with patch("locale.setlocale") as mock_setlocale:
                 with captured_templates(unixtimestamp.app) as templates:
-                    headers = {
-                        "Accept-Language": language,
-                        "X-Forwarded-Proto": "https",
-                    }
+                    headers = {"Accept-Language": language}
                     self.app.get("/123456", headers=headers)
                     mock_setlocale.assert_called_once_with(
                         locale.LC_ALL, (python_locale, "UTF-8")
@@ -100,9 +91,7 @@ class ShowTimestampTestCase(TestCase):
             999999999999999999,
         ):
             with captured_templates(unixtimestamp.app) as templates:
-                response = self.app.get(
-                    "/{}".format(timestamp), follow_redirects=True
-                )
+                response = self.app.get("/{}".format(timestamp))
                 self.assertEqual(404, response.status_code)
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]

@@ -10,9 +10,9 @@ pytz = "*"
 python-dateutil = "*"
 gunicorn = "*"
 raven = {extras = ["flask"],version = "*"}
-flask-sslify = "*"
 python-dotenv = "*"
 flask-accept = "*"
+flask-talisman = "*"
 
 [dev-packages]
 pydocstyle = "*"

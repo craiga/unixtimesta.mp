@@ -12,7 +12,7 @@ class NotFoundTestCase(TestCase):
     def test_not_found(self):
         """Test for 404 handler."""
         with captured_templates(unixtimestamp.app) as templates:
-            response = self.app.get("/blahblahblah", follow_redirects=True)
+            response = self.app.get("/blahblahblah")
             self.assertEqual(404, response.status_code)
             self.assertEqual(1, len(templates))
             template = templates[0][0]
@@ -25,10 +25,12 @@ class ServerErrorTestCase(TestCase):
     def setUp(self):
         """Disable Flask testing mode so error handlers are used."""
         super().setUp()
+        unixtimestamp.app.debug = False
         unixtimestamp.app.testing = False
 
     def tearDown(self):
         """Re-enable Flask testing mode."""
+        unixtimestamp.app.debug = True
         unixtimestamp.app.testing = True
         super().tearDown()
 

@@ -14,13 +14,9 @@ Set up the project by creating a Pipenv virtual environment.
 
     pipenv install --dev
 
-You'll also need a self-signed SSL certificate. [Heroku provide some instructions on how to do that.](https://devcenter.heroku.com/articles/ssl-certificate-self)
+Finally, run the the Flask development server and access the application in a web browser at [http://localhost:5000](http://localhost:5000).
 
-Finally, run the the Flask development server and access the application in a web browser at [https://localhost:5000](https://localhost:5000).
-
-    FLASK_DEBUG=1 pipenv run flask run --cert server.crt --key server.key
-
-Note that you'll need to configure your browser to allow for your self-signed certificate.
+    FLASK_DEBUG=1 pipenv run flask run
 
 
 ## Ensuring Code Quality
