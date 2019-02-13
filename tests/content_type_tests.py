@@ -10,8 +10,7 @@ class ContentTypeTextMixin:
         """Test expected content type is returned when in header."""
         for content_type in [self.CONTENT_TYPE] + self.ALIAS_CONTENT_TYPES:
             response = self.app.get(
-                "/123456",
-                headers={"Accept": content_type, "X-Forwarded-Proto": "https"},
+                "/123456", headers={"Accept": content_type}
             )
             resp_ct = response.content_type
             self.assertTrue(resp_ct.startswith(self.CONTENT_TYPE))
@@ -26,9 +25,7 @@ class HtmlTestCase(ContentTypeTextMixin, TestCase):
 
     def test_default_content_type(self):
         """Test that HTML is the default content type."""
-        response = self.app.get(
-            "/123456", headers={"Accept": "", "X-Forwarded-Proto": "https"}
-        )
+        response = self.app.get("/123456", headers={"Accept": ""})
         self.assertTrue(response.content_type.startswith(self.CONTENT_TYPE))
 
 

@@ -25,7 +25,7 @@ class SitemapTestCase(TestCase):
                 {"start": start, "size": size, "sitemap_size": sitemap_size}
             )
             url = "/sitemapindex.xml?" + query_string
-            response = self.app.get(url, follow_redirects=True)
+            response = self.app.get(url)
             self.assertEqual(200, response.status_code)
             self.assertEqual("application/xml", response.content_type)
             xml = ElementTree.fromstring(response.data)
@@ -38,7 +38,7 @@ class SitemapTestCase(TestCase):
                 "SITEMAP_DEFAULT_SIZE": sitemap_size,
             }
             unixtimestamp.app.config.update(config)
-            response = self.app.get("/sitemapindex.xml", follow_redirects=True)
+            response = self.app.get("/sitemapindex.xml")
             self.assertEqual(200, response.status_code)
             self.assertEqual("application/xml", response.content_type)
             xml = ElementTree.fromstring(response.data)
@@ -75,7 +75,7 @@ class SitemapTestCase(TestCase):
         test_data = ((0, 10, 10), (1234, 5678, 1000), (-100, 10, 10))
         for start, size, real_size in test_data:
             url = "/sitemap.xml?start={}&size={}".format(start, size)
-            response = self.app.get(url, follow_redirects=True)
+            response = self.app.get(url)
             self.assertEqual(200, response.status_code)
             self.assertEqual("application/xml", response.content_type)
             root = ElementTree.fromstring(response.data)
