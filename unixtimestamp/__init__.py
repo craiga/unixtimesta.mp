@@ -22,7 +22,26 @@ logger = flask.logging.create_logger(app)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logger.setLevel(logging.getLevelName(app.config.get("LOG_LEVEL")))
 
-Talisman(app)
+Talisman(
+    app,
+    content_security_policy={
+        "style-src": [
+            "'self'",
+            "'unsafe-inline'",
+            "maxcdn.bootstrapcdn.com",
+            "fonts.googleapis.com",
+            "fonts.gstatic.com",
+        ],
+        "script-src": [
+            "'self'",
+            "'unsafe-inline'",
+            "code.jquery.com",
+            "cdn.ravenjs.com",
+        ],
+        "img-src": ["camo.githubusercontent.com"],
+    },
+)
+
 
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
