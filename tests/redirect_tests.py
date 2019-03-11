@@ -1,14 +1,14 @@
 """Tests for redirection."""
 
-from urllib.parse import urlparse, quote
-from datetime import datetime, MINYEAR, MAXYEAR
-from calendar import monthrange
-from itertools import product
 import re
+from calendar import monthrange
+from datetime import MAXYEAR, MINYEAR, datetime
+from itertools import product
 from math import ceil, floor
+from urllib.parse import quote, urlparse
 
-from pytz import utc
 from dateutil.parser import parse
+from pytz import utc
 
 from tests import TestCase
 

@@ -7,9 +7,10 @@ from datetime import datetime
 
 import flask
 from flask import request
+
+from dateutil.parser import parse
 from flask_accept import accept_fallback
 from pytz import utc
-from dateutil.parser import parse
 
 from unixtimestamp import app, logger  # pylint:disable=cyclic-import
 

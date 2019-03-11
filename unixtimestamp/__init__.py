@@ -7,10 +7,11 @@ import sys
 from datetime import datetime
 
 import flask
-from pytz import utc
+
 from dateutil.parser import parse
-from raven.contrib.flask import Sentry
 from flask_talisman import Talisman
+from pytz import utc
+from raven.contrib.flask import Sentry
 
 app = flask.Flask(__name__, static_url_path="")
 app.config.from_object("config")
@@ -49,5 +50,6 @@ sentry = Sentry(
     app, logging=True, level=logging.getLevelName(app.config.get("LOG_LEVEL"))
 )
 
+
 # pylint: disable=wrong-import-position
-from unixtimestamp import views, error_handlers
+from unixtimestamp import error_handlers, views  # isort:skip
