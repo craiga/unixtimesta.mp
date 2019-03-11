@@ -3,7 +3,7 @@
 from unittest.mock import patch
 
 import unixtimestamp
-from tests import captured_templates, TestCase
+from tests import TestCase, captured_templates
 
 
 class NotFoundTestCase(TestCase):

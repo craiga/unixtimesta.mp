@@ -2,7 +2,7 @@
 
 import os
 
-from flask import render_template, request, g
+from flask import g, render_template, request
 
 from unixtimestamp import app, logger, sentry  # pylint:disable=cyclic-import
 

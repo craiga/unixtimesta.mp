@@ -1,11 +1,11 @@
 """Tests for showing timestamps."""
 
 import locale
-from datetime import datetime, MINYEAR, MAXYEAR
+from datetime import MAXYEAR, MINYEAR, datetime
 from unittest.mock import patch
 
 import unixtimestamp
-from tests import captured_templates, TestCase
+from tests import TestCase, captured_templates
 
 
 def max_timestamp_for_datetime():

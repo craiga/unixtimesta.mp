@@ -11,6 +11,7 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - pipenv run black --check .
+  - pipenv run isort --check-only
   - pipenv run pydocstyle
   - find . -iname "*.py" | xargs pipenv run pylint
   - pipenv run nosetests --with-coverage --cover-xml --cover-package=unixtimestamp
