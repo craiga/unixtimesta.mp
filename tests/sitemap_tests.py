@@ -46,26 +46,17 @@ class SitemapTestCase(TestCase):
 
     def assert_sitemap_xml_correct(self, xml, start, size, sitemap_size):
         """Assert that sitemap XML is correct."""
-        self.assertEqual(
-            "{{{}}}sitemapindex".format(self.XML_NAMESPACE), xml.tag
-        )
+        self.assertEqual("{{{}}}sitemapindex".format(self.XML_NAMESPACE), xml.tag)
 
-        locs = xml.findall(
-            "./s:sitemap/s:loc", namespaces={"s": self.XML_NAMESPACE}
-        )
+        locs = xml.findall("./s:sitemap/s:loc", namespaces={"s": self.XML_NAMESPACE})
         self.assertEqual(len(locs), size)
 
         expected_urls = []
         for sitemap_index in range(0, size):
             expected_qs = url_encode(
-                {
-                    "start": start + (sitemap_size * sitemap_index),
-                    "size": sitemap_size,
-                }
+                {"start": start + (sitemap_size * sitemap_index), "size": sitemap_size}
             )
-            expected_url = (
-                "https://www.unixtimesta.mp/sitemap.xml?" + expected_qs
-            )
+            expected_url = "https://www.unixtimesta.mp/sitemap.xml?" + expected_qs
             expected_urls.append(expected_url)
 
         self.assertEqual(expected_urls, [l.text for l in locs])
@@ -79,15 +70,9 @@ class SitemapTestCase(TestCase):
             self.assertEqual(200, response.status_code)
             self.assertEqual("application/xml", response.content_type)
             root = ElementTree.fromstring(response.data)
-            self.assertEqual(
-                "{{{}}}urlset".format(self.XML_NAMESPACE), root.tag
-            )
-            locs = root.findall(
-                "./s:url/s:loc", namespaces={"s": self.XML_NAMESPACE}
-            )
+            self.assertEqual("{{{}}}urlset".format(self.XML_NAMESPACE), root.tag)
+            locs = root.findall("./s:url/s:loc", namespaces={"s": self.XML_NAMESPACE})
             self.assertEqual(len(locs), real_size)
             timestamps = range(start, start + real_size)
-            urls = [
-                "https://www.unixtimesta.mp/{}".format(t) for t in timestamps
-            ]
+            urls = ["https://www.unixtimesta.mp/{}".format(t) for t in timestamps]
             self.assertEqual(urls, [l.text for l in locs])

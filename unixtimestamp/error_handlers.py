@@ -14,8 +14,7 @@ def page_not_found(error):  # pylint:disable=unused-argument
     logger.info(template, request.method, request.url, request.path)
     return (
         render_template(
-            "page_not_found.html",
-            ga_tracking_id=os.environ.get("GA_TRACKING_ID"),
+            "page_not_found.html", ga_tracking_id=os.environ.get("GA_TRACKING_ID")
         ),
         404,
     )

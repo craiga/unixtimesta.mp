@@ -9,9 +9,7 @@ class ContentTypeTextMixin:
     def test_content_type(self):
         """Test expected content type is returned when in header."""
         for content_type in [self.CONTENT_TYPE] + self.ALIAS_CONTENT_TYPES:
-            response = self.app.get(
-                "/123456", headers={"Accept": content_type}
-            )
+            response = self.app.get("/123456", headers={"Accept": content_type})
             resp_ct = response.content_type
             self.assertTrue(resp_ct.startswith(self.CONTENT_TYPE))
 
