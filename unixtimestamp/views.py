@@ -76,9 +76,7 @@ def show_negative_timestamp(negative_timestamp):
 @app.route("/<int:year>/<int:month>/<int:day>")
 @app.route("/<int:year>/<int:month>/<int:day>/<int:hour>")
 @app.route("/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>")
-@app.route(
-    "/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>/<int:second>"
-)
+@app.route("/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>/<int:second>")
 # pylint:disable=too-many-arguments
 def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
     """
@@ -133,13 +131,9 @@ def make_streamed_response(template, content_type, **context):
 @app.route("/sitemap.xml")
 def sitemap():
     """Display sitemap XML."""
-    start = int(
-        request.args.get("start", app.config.get("SITEMAP_DEFAULT_START"))
-    )
+    start = int(request.args.get("start", app.config.get("SITEMAP_DEFAULT_START")))
     max_size = int(app.config.get("SITEMAP_MAX_SIZE"))
-    size = int(
-        request.args.get("size", app.config.get("SITEMAP_DEFAULT_SIZE"))
-    )
+    size = int(request.args.get("size", app.config.get("SITEMAP_DEFAULT_SIZE")))
     if size > max_size:
         size = max_size
     return make_streamed_response(
@@ -165,15 +159,11 @@ def sitemap_index():
     sitemap_size = int(sitemap_size)
 
     # Get the number of sitemaps to include
-    size = int(
-        request.args.get("size", app.config.get("SITEMAP_INDEX_DEFAULT_SIZE"))
-    )
+    size = int(request.args.get("size", app.config.get("SITEMAP_INDEX_DEFAULT_SIZE")))
 
     # Calculate a list of sitemap start timestamps
     last_sitemap_start = first_sitemap_start + (sitemap_size * size)
-    sitemap_starts = range(
-        first_sitemap_start, last_sitemap_start, sitemap_size
-    )
+    sitemap_starts = range(first_sitemap_start, last_sitemap_start, sitemap_size)
 
     # Render the sitemap index
     return make_streamed_response(
@@ -193,9 +183,7 @@ def robots():
     index_size = int(app.config.get("SITEMAP_INDEX_DEFAULT_SIZE"))
     sitemap_size = int(app.config.get("SITEMAP_DEFAULT_SIZE"))
     last_index = first_index + (robots_size * index_size * sitemap_size)
-    sitemap_starts = range(
-        first_index, last_index, (index_size * sitemap_size)
-    )
+    sitemap_starts = range(first_index, last_index, (index_size * sitemap_size))
 
     # Render the sitemap index
     return make_streamed_response(

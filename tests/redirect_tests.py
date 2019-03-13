@@ -42,12 +42,7 @@ class DateRedirectTestCase(TestCase):
         # A list of n-tuples of lists to generate valid dates
         valid_datetime_lists = (
             (self.valid_years, self.valid_months, self.valid_days),
-            (
-                self.valid_years,
-                self.valid_months,
-                self.valid_days,
-                self.valid_hours,
-            ),
+            (self.valid_years, self.valid_months, self.valid_days, self.valid_hours),
             (
                 self.valid_years,
                 self.valid_months,
@@ -76,9 +71,7 @@ class DateRedirectTestCase(TestCase):
         for year, month in product(self.valid_years, self.valid_months):
             # Month without day
             path = "/{:d}/{:d}".format(year, month)
-            valid_datetime = datetime(
-                year=year, month=month, day=1, tzinfo=utc
-            )
+            valid_datetime = datetime(year=year, month=month, day=1, tzinfo=utc)
             redirect = "/{:.0f}".format(valid_datetime.timestamp())
             yield (path, redirect)
 
@@ -102,12 +95,7 @@ class DateRedirectTestCase(TestCase):
             (self.invalid_years, self.valid_months),
             (self.valid_years, self.invalid_months),
             (self.valid_years, self.valid_months, self.invalid_days),
-            (
-                self.valid_years,
-                self.valid_months,
-                self.valid_days,
-                self.invalid_hours,
-            ),
+            (self.valid_years, self.valid_months, self.valid_days, self.invalid_hours),
             (
                 self.valid_years,
                 self.valid_months,
@@ -154,11 +142,7 @@ class StringRedirectTestCase(TestCase):
 
     def test_redirect(self):
         """Test datetime description URL redirects."""
-        for valid_date_string in (
-            "31st March 1978",
-            "2017-07-29",
-            "0001-01-01",
-        ):
+        for valid_date_string in ("31st March 1978", "2017-07-29", "0001-01-01"):
 
             expected_datetime = parse(valid_date_string, fuzzy=True)
             expected_datetime = utc.localize(expected_datetime)

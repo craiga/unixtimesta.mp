@@ -36,9 +36,7 @@ class ShowTimestampTestCase(TestCase):
                 self.assertEqual(1, len(templates))
                 context = templates[0][1]
                 self.assertEqual(int(timestamp), context["timestamp"])
-                self.assertEqual(
-                    int(timestamp), context["datetime"].timestamp()
-                )
+                self.assertEqual(int(timestamp), context["datetime"].timestamp())
 
     def test_max_timestamp(self):
         """Test getting maximum timestamp."""
@@ -65,10 +63,7 @@ class ShowTimestampTestCase(TestCase):
     def test_locale(self):
         """Test locale is set and passed into template."""
         unixtimestamp.app.config.update({"DEFAULT_LOCALE": "ab-cd"})
-        test_data = [
-            ("fr-CA,fr;q=0.5", "fr_CA", "fr-CA"),
-            ("", "ab_cd", "ab-cd"),
-        ]
+        test_data = [("fr-CA,fr;q=0.5", "fr_CA", "fr-CA"), ("", "ab_cd", "ab-cd")]
         for language, python_locale, js_locale in test_data:
             with patch("locale.setlocale") as mock_setlocale:
                 with captured_templates(unixtimestamp.app) as templates:
