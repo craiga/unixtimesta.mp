@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Unix Timestamp {{ timestamp }}{% endblock %}
+{% block title %}Unix Time {{ timestamp }}{% endblock %}
 {% block body %}
     {% if datetime %}
         <p id="utctime">Unix time {{ timestamp }} is {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }}.</p>
