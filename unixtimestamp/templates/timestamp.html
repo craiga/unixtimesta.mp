@@ -2,9 +2,9 @@
 {% block title %}Unix Timestamp {{ timestamp }}{% endblock %}
 {% block body %}
     {% if datetime %}
-        <p id="utctime">It's {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }}.</p>
+        <p id="utctime">Unix time {{ timestamp }} is {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }}.</p>
     {% else %}
-        <p>Can't display a date for this timestamp as it's either too large or too small.</p>
+        <p>Can't display a date for Unix time {{ timestamp }} as it's either too large or too small.</p>
     {% endif %}
 {% endblock %}
 {% block script %}
