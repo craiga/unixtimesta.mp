@@ -31,7 +31,7 @@ def min_timestamp_for_datetime():
             max_timestamp_for_datetime(),
             ["31 December {}".format(MAXYEAR), "23:59:59 UTC"],
         ),
-        (min_timestamp_for_datetime(), ["1 January 0001", "00:00:00 UTC"]),
+        (min_timestamp_for_datetime(), ["1 January", "00:00:00 UTC"]),
     ],
 )
 def test_timestamp(client, timestamp, expected_strings):
