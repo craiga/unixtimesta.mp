@@ -1,46 +1,25 @@
 """Tests for miscellaneous pages."""
 
-from tests import TestCase
+import pytest
 
 
-class UsageTestCase(TestCase):
+@pytest.mark.parametrize(
+    "url, content_type_prefix, content",
+    [
+        ("/usage", "text/html", None),
+        ("/humans.txt", "text/plain", "Craig Anderson"),
+        (
+            "/robots.txt",
+            "text/plain",
+            "Sitemap: https://www.unixtimesta.mp/sitemapindex.xml",
+        ),
+        ("/favicon.ico", "image/", None),
+    ],
+)
+def test_get(client, url, content_type_prefix, content):
     """Test for usage information."""
-
-    def test_usage(self):
-        """Test for usage information."""
-        response = self.app.get("/usage")
-        self.assertEqual(200, response.status_code)
-
-
-class HumansTestCase(TestCase):
-    """Test for humans.txt."""
-
-    def test_humans_txt(self):
-        """Test for humans.txt."""
-        with self.app.get("/humans.txt") as response:
-            self.assertEqual(200, response.status_code)
-            self.assertRegex(response.content_type, "^text/plain")
-            self.assertIn(b"Craig Anderson", response.data)
-
-
-class RobotsTestCase(TestCase):
-    """Tests for robots.txt."""
-
-    def test_robots_txt(self):
-        """Test for robots.txt."""
-        with self.app.get("/robots.txt") as response:
-            self.assertEqual(200, response.status_code)
-            self.assertRegex(response.content_type, "^text/plain")
-            self.assertIn(
-                b"Sitemap: https://www.unixtimesta.mp/sitemapindex.xml", response.data
-            )
-
-
-class FaviconTestCase(TestCase):
-    """Tests for favicon.ico."""
-
-    def test_favicon_ico(self):
-        """Test for favicon.ico."""
-        with self.app.get("/favicon.ico") as response:
-            self.assertEqual(200, response.status_code)
-            self.assertRegex(response.content_type, "^image/.*icon")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.content_type.startswith(content_type_prefix)
+    if content:
+        assert content in response.get_data(as_text=True)

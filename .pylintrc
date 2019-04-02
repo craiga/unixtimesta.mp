@@ -2,7 +2,7 @@
 load-plugins = pylint.extensions.mccabe
 
 [BASIC]
-const-rgx = (([A-Z_][A-Z0-9_]*)|(__.*__)|(app|sentry|logger))$
+const-rgx = (([A-Z_][A-Z0-9_]*)|(__.*__)|(app|blueprint|sentry|logger))$
 docstring-min-length = 3
 
 [REPORTS]
