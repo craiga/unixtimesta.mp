@@ -17,8 +17,8 @@ script:
   - pipenv run isort --check-only
   - pipenv run pydocstyle
   - find . -iname "*.py" | xargs pipenv run pylint
-  - pipenv run coverage run --module pytest --source=unixtimestamp --append
-  - pipenv run coverage run --module behave --source=unixtimestamp --append
+  - pipenv run coverage run --source=unixtimestamp --append --module pytest
+  - pipenv run coverage run --source=unixtimestamp --append --module behave
   - pipenv run coverage xml
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
