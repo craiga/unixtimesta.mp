@@ -13,8 +13,19 @@ from flask_talisman import Talisman
 from pytz import utc
 from raven.contrib.flask import Sentry
 
-app = flask.Flask(__name__, static_url_path="")
-app.config.from_object("config")
+from unixtimestamp import error_handlers, views
+
+
+def create_app():
+    """Create the Unix Timestamp Flask application."""
+    the_app = flask.Flask(__name__, static_url_path="")
+    the_app.config.from_object("config")
+    the_app.register_blueprint(views.blueprint)
+    the_app.register_blueprint(error_handlers.blueprint)
+    return the_app
+
+
+app = create_app()
 
 # Workaround for
 # https://github.com/PyCQA/pylint/issues/1061#issuecomment-393858322
@@ -43,13 +54,8 @@ Talisman(
     },
 )
 
-
 # Sentry DSN should be configured by setting SENTRY_DSN environment variable.
 # Other configuration is done in app.config.SENTRY_CONFIG.
 sentry = Sentry(
     app, logging=True, level=logging.getLevelName(app.config.get("LOG_LEVEL"))
 )
-
-
-# pylint: disable=wrong-import-position
-from unixtimestamp import error_handlers, views  # isort:skip

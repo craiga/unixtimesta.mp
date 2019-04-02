@@ -12,7 +12,9 @@ from dateutil.parser import parse
 from flask_accept import accept_fallback
 from pytz import utc
 
-from unixtimestamp import app, logger  # pylint:disable=cyclic-import
+import unixtimestamp  # pylint:disable=cyclic-import
+
+blueprint = flask.Blueprint("views", __name__)
 
 
 def render_timestamp_html(**kwargs):
@@ -22,7 +24,7 @@ def render_timestamp_html(**kwargs):
 
     language = request.accept_languages.best
     if not language:
-        language = app.config.get("DEFAULT_LOCALE")
+        language = flask.current_app.config.get("DEFAULT_LOCALE")
 
     return flask.render_template(
         "timestamp.html",
@@ -37,23 +39,23 @@ def render_timestamp(timestamp, renderer):
     """Render a timestamp."""
     language = request.accept_languages.best
     if not language:
-        language = app.config.get("DEFAULT_LOCALE")
+        language = flask.current_app.config.get("DEFAULT_LOCALE")
 
     try:
         locale.setlocale(locale.LC_ALL, (language.replace("-", "_"), "UTF-8"))
     except locale.Error:
-        logger.warning("Failed setting locale to %s UTF-8", language)
+        unixtimestamp.logger.warning("Failed setting locale to %s UTF-8", language)
 
     try:
         timestamp_datetime = datetime.utcfromtimestamp(timestamp)
         timestamp_datetime = utc.localize(timestamp_datetime)
         return renderer(timestamp=timestamp, datetime=timestamp_datetime)
     except (ValueError, OverflowError, OSError):
-        logger.info("Triggering a 404 error.", exc_info=True)
+        unixtimestamp.logger.info("Triggering a 404 error.", exc_info=True)
         return renderer(timestamp=timestamp), 404
 
 
-@app.route("/<int:timestamp>")
+@blueprint.route("/<int:timestamp>")
 @accept_fallback
 def show_timestamp(timestamp):
     """Display a timestamp as HTML."""
@@ -66,17 +68,19 @@ def show_timestamp_json(timestamp):
     return render_timestamp(timestamp, renderer=flask.jsonify)
 
 
-@app.route("/-<int:negative_timestamp>")
+@blueprint.route("/-<int:negative_timestamp>")
 def show_negative_timestamp(negative_timestamp):
     """Display a negative timestamp (i.e. one before the epoch)."""
     return show_timestamp(negative_timestamp * -1)
 
 
-@app.route("/<int:year>/<int:month>")
-@app.route("/<int:year>/<int:month>/<int:day>")
-@app.route("/<int:year>/<int:month>/<int:day>/<int:hour>")
-@app.route("/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>")
-@app.route("/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>/<int:second>")
+@blueprint.route("/<int:year>/<int:month>")
+@blueprint.route("/<int:year>/<int:month>/<int:day>")
+@blueprint.route("/<int:year>/<int:month>/<int:day>/<int:hour>")
+@blueprint.route("/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>")
+@blueprint.route(
+    "/<int:year>/<int:month>/<int:day>/<int:hour>/<int:minute>/<int:second>"
+)
 # pylint:disable=too-many-arguments
 def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
     """
@@ -96,21 +100,21 @@ def redirect_to_timestamp(year, month, day=1, hour=0, minute=0, second=0):
             tzinfo=utc,
         )
     except (ValueError, OverflowError):
-        logger.info("Triggering a 404 error.", exc_info=True)
+        unixtimestamp.logger.info("Triggering a 404 error.", exc_info=True)
         flask.abort(404)
 
-    url = flask.url_for("show_timestamp", timestamp=timestamp.timestamp())
+    url = flask.url_for("views.show_timestamp", timestamp=timestamp.timestamp())
     return flask.redirect(url, code=301)
 
 
-@app.route("/<float:timestamp>")
+@blueprint.route("/<float:timestamp>")
 def redirect_to_rounded_timestamp(timestamp):
     """Redirect to a rounded timestamp."""
-    url = flask.url_for("show_timestamp", timestamp=math.floor(timestamp))
+    url = flask.url_for("views.show_timestamp", timestamp=math.floor(timestamp))
     return flask.redirect(url, code=302)
 
 
-@app.route("/usage")
+@blueprint.route("/usage")
 def show_usage():
     """Display usage information."""
     return flask.render_template(
@@ -120,6 +124,7 @@ def show_usage():
 
 def make_streamed_response(template, content_type, **context):
     """Make a stream."""
+    app = flask.current_app
     app.update_template_context(context)
     tpl = app.jinja_env.get_template(template)  # pylint: disable=no-member
     stream = tpl.stream(context)
@@ -128,12 +133,13 @@ def make_streamed_response(template, content_type, **context):
     return response
 
 
-@app.route("/sitemap.xml")
+@blueprint.route("/sitemap.xml")
 def sitemap():
     """Display sitemap XML."""
-    start = int(request.args.get("start", app.config.get("SITEMAP_DEFAULT_START")))
-    max_size = int(app.config.get("SITEMAP_MAX_SIZE"))
-    size = int(request.args.get("size", app.config.get("SITEMAP_DEFAULT_SIZE")))
+    config = flask.current_app.config
+    start = int(request.args.get("start", config.get("SITEMAP_DEFAULT_START")))
+    max_size = int(config.get("SITEMAP_MAX_SIZE"))
+    size = int(request.args.get("size", config.get("SITEMAP_DEFAULT_SIZE")))
     if size > max_size:
         size = max_size
     return make_streamed_response(
@@ -141,25 +147,23 @@ def sitemap():
     )
 
 
-@app.route("/sitemapindex.xml")
+@blueprint.route("/sitemapindex.xml")
 def sitemap_index():
     """Display sitemap index XML."""
-    # Get the first timestamp to display in the first sitemap
-    first_sitemap_start = request.args.get("start")
-    if first_sitemap_start is None:
-        first_sitemap_start = app.config.get("SITEMAP_INDEX_DEFAULT_START")
+    config = flask.current_app.config
 
-    first_sitemap_start = int(first_sitemap_start)
+    # Get the first timestamp to display in the first sitemap
+    first_sitemap_start = int(
+        request.args.get("start", config.get("SITEMAP_INDEX_DEFAULT_START"))
+    )
 
     # Get the size of each sitemap
-    sitemap_size = request.args.get("sitemap_size")
-    if sitemap_size is None:
-        sitemap_size = app.config.get("SITEMAP_DEFAULT_SIZE")
-
-    sitemap_size = int(sitemap_size)
+    sitemap_size = int(
+        request.args.get("sitemap_size", config.get("SITEMAP_DEFAULT_SIZE"))
+    )
 
     # Get the number of sitemaps to include
-    size = int(request.args.get("size", app.config.get("SITEMAP_INDEX_DEFAULT_SIZE")))
+    size = int(request.args.get("size", config.get("SITEMAP_INDEX_DEFAULT_SIZE")))
 
     # Calculate a list of sitemap start timestamps
     last_sitemap_start = first_sitemap_start + (sitemap_size * size)
@@ -174,14 +178,15 @@ def sitemap_index():
     )
 
 
-@app.route("/robots.txt")
+@blueprint.route("/robots.txt")
 def robots():
     """Show robots.txt."""
+    config = flask.current_app.config
     # Calculate sitemap index starts
-    first_index = int(app.config.get("ROBOTS_SITEMAP_INDEX_DEFAULT_START"))
-    robots_size = int(app.config.get("ROBOTS_SITEMAP_INDEX_DEFAULT_SIZE"))
-    index_size = int(app.config.get("SITEMAP_INDEX_DEFAULT_SIZE"))
-    sitemap_size = int(app.config.get("SITEMAP_DEFAULT_SIZE"))
+    first_index = int(config.get("ROBOTS_SITEMAP_INDEX_DEFAULT_START"))
+    robots_size = int(config.get("ROBOTS_SITEMAP_INDEX_DEFAULT_SIZE"))
+    index_size = int(config.get("SITEMAP_INDEX_DEFAULT_SIZE"))
+    sitemap_size = int(config.get("SITEMAP_DEFAULT_SIZE"))
     last_index = first_index + (robots_size * index_size * sitemap_size)
     sitemap_starts = range(first_index, last_index, (index_size * sitemap_size))
 
@@ -195,43 +200,43 @@ def robots():
     )
 
 
-@app.route("/<string:datetime_string>")
+@blueprint.route("/<string:datetime_string>")
 def redirect_to_timestamp_string(datetime_string):
     """Redirect to a timestamp based on the given description of a datetime."""
     try:
         timestamp = parse(datetime_string, fuzzy=True)
     except (ValueError, OverflowError):
-        logger.info("Triggering a 404 error.", exc_info=True)
+        unixtimestamp.logger.info("Triggering a 404 error.", exc_info=True)
         flask.abort(404)
 
     if timestamp.tzinfo is None:
         timestamp = utc.localize(timestamp)
 
-    url = flask.url_for("show_timestamp", timestamp=timestamp.timestamp())
+    url = flask.url_for("views.show_timestamp", timestamp=timestamp.timestamp())
     return flask.redirect(url, code=302)
 
 
-@app.route("/", methods=["POST"])
+@blueprint.route("/", methods=["POST"])
 def handle_post():
     """Handle post request."""
     return flask.redirect("/{}".format(request.form.get("time")))
 
 
-@app.route("/")
-@app.route("/now")
+@blueprint.route("/")
+@blueprint.route("/now")
 def redirect_to_now():
     """Redirect to current timestamp."""
-    url = flask.url_for("show_timestamp", timestamp=datetime.now().timestamp())
+    url = flask.url_for("views.show_timestamp", timestamp=datetime.now().timestamp())
     return flask.redirect(url, code=302)
 
 
-@app.route("/humans.txt")
+@blueprint.route("/humans.txt")
 def humans():
     """Show humans.txt."""
-    return app.send_static_file("humans.txt")
+    return flask.current_app.send_static_file("humans.txt")
 
 
-@app.route("/favicon.ico")
+@blueprint.route("/favicon.ico")
 def favicon():
     """Show favicon.ico."""
-    return app.send_static_file("favicon.ico")
+    return flask.current_app.send_static_file("favicon.ico")
