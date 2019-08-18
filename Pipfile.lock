@@ -400,9 +400,10 @@
         },
         "parse": {
             "hashes": [
-                "sha256:1b68657434d371e5156048ca4a0c5aea5afc6ca59a2fea4dd1a575354f617142"
+                "sha256:a5fca7000c6588d77bc65c28f3f21bfce03b5e44daa8f9f07c17fe364990d717"
             ],
-            "version": "==1.12.0"
+            "index": "pypi",
+            "version": "==1.12.1"
         },
         "parse-type": {
             "hashes": [
