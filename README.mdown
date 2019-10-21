@@ -1,6 +1,6 @@
 Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/).
 
-[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Test Coverage](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/test_coverage)](https://codeclimate.com/github/craiga/unixtimesta.mp/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp/maintainability)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Build Status](https://travis-ci.org/craiga/unixtimesta.mp.svg?branch=master)](https://travis-ci.org/craiga/unixtimesta.mp) [![Test Coverage](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/test_coverage)](https://codeclimate.com/github/craiga/unixtimesta.mp/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/bd45bad0c1d6d7484bb0/maintainability)](https://codeclimate.com/github/craiga/unixtimesta.mp/maintainability)  ![Security Headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.unixtimesta.mp%2F)
 
 
 # Getting Started for Development
