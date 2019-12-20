@@ -25,14 +25,13 @@ Code is formatted with [black](https://black.readthedocs.io/en/latest/):
 
      pipenv run black .
 
-Run the test suite using [nose](https://nose.readthedocs.io/en/latest/) and [behave](http://behave.readthedocs.io/en/latest/).
+Run the test suite using [pytest](https://pytest.org/) and [behave](http://behave.readthedocs.io/en/latest/).
 
-    pipenv run nosetests
+    pipenv run pytest
     pipenv run behave
 
-Test code quality with [pydocstyle](http://www.pydocstyle.org) and [pylint](https://www.pylint.org).
+Test code quality with [pylint](https://www.pylint.org).
 
-    pipenv run pydocstyle
     find . -iname "*.py" | xargs pipenv run pylint
 
 
