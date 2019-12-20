@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/unixtimesta.mp
+    docker:
+      - image: circleci/python:3.8
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            sudo pip install pipenv
+            pipenv install --dev
+
+      - run:
+          name: run tests
+          command: pipenv run pytest
+
+      - run:
+          name: run BDD tests
+          command: pipenv run behave
+
+      - run:
+          name: check code formatting
+          command: |
+            pipenv run black --check --diff .
+            pipenv run isort --check-only
+            find . -iname "*.py" | xargs pipenv run pylint
+
+      - store_test_results:
+          path: test-results
+
+      - store_artifacts:
+          path: test-results
+          destination: tr1
