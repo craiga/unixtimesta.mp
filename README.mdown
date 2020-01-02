@@ -1,6 +1,6 @@
 Code for the web site [https://www.unixtimesta.mp/](https://www.unixtimesta.mp/).
 
-[![CircleCI](https://img.shields.io/circleci/build/github/craiga/unixtimesta.mp)](https://circleci.com/gh/craiga/unixtimesta.mp) ![Security Headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.unixtimesta.mp%2F)
+[![Build Status](https://img.shields.io/circleci/build/github/craiga/unixtimesta.mp)](https://travis-ci.org/craiga/unixtimesta.mp) ![Security Headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.unixtimesta.mp%2F)
 
 
 # Getting Started for Development
