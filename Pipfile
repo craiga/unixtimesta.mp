@@ -15,12 +15,10 @@ flask-accept = "*"
 flask-talisman = "*"
 
 [dev-packages]
-pydocstyle = "*"
 pylint = "*"
 behave = "*"
 ipython = "*"
 black = "==19.3b0"
-coverage = "*"
 isort = "*"
 pytest = "*"
 pytest-flask = "*"
