@@ -49,6 +49,7 @@ Talisman(
             "'unsafe-inline'",
             "code.jquery.com",
             "cdn.ravenjs.com",
+            "cdn.usefathom.com",
         ],
         "img-src": ["camo.githubusercontent.com"],
     },
