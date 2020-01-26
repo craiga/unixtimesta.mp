@@ -51,7 +51,7 @@ Talisman(
             "cdn.ravenjs.com",
             "cdn.usefathom.com",
         ],
-        "img-src": ["camo.githubusercontent.com"],
+        "img-src": ["camo.githubusercontent.com", "collect.usefathom.com"],
     },
 )
 
