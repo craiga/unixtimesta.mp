@@ -49,9 +49,13 @@ Talisman(
             "'unsafe-inline'",
             "code.jquery.com",
             "cdn.ravenjs.com",
-            "cdn.usefathom.com",
+            "https://cdn.usefathom.com",
         ],
-        "img-src": ["camo.githubusercontent.com", "collect.usefathom.com"],
+        "img-src": ["camo.githubusercontent.com", "https://*.usefathom.com"],
+        "content_security_policy_report_uri": (
+            "https://sentry.io/api/132394/security/"
+            "?sentry_key=c813e4a1c67c4965a1ef3d6e2949d76b"
+        ),
     },
 )
 
