@@ -455,11 +455,11 @@
         },
         "pytest-flask": {
             "hashes": [
-                "sha256:9001f6128c5c4a0d243ce46c117f3691052828d2faf39ac151b8388657dce447",
-                "sha256:cbd8c5b9f8f1b83e9c159ac4294964807c4934317a5fba181739ac15e1b823e6"
+                "sha256:44948d3feab48c69e89b087129cc4db66bad9cb5aa472c08dfc798c69f4eac67",
+                "sha256:4d5678a045c07317618d80223ea124e21e8acc89dae109542dd1fdf6783d96c2"
             ],
             "index": "pypi",
-            "version": "==0.15.1"
+            "version": "==1.0.0"
         },
         "six": {
             "hashes": [
