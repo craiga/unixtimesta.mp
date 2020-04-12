@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "prettier": "$(npm bin)/prettier",
-    "sass": "$(npm bin)/sass"
+    "sass": "$(npm bin)/sass",
+    "postinstall": "$(npm bin)/sass scss/:unixtimestamp/static/css/"
   },
-  "devDependencies": {
+  "dependencies": {
     "sass": "^1.26.3"
   }
 }
