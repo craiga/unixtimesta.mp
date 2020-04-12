@@ -7,3 +7,6 @@ pylint.txt
 
 # node_modules
 /node_modules
+
+# Built CSS
+/unixtimestamp/static/css
