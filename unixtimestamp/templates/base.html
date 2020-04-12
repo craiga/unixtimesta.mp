@@ -6,48 +6,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" integrity="sha384-Li5uVfY2bSkD3WQyiHX8tJd0aMF91rMrQP5aAewFkHkVSTT2TmD2PehZeMmm7aiL" crossorigin="anonymous">
+        <link href="/css/main.css" rel="stylesheet" />
         <link type="text/plain" rel="author" href="/humans.txt" />
     </head>
     <body>
-        
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1>{{ self.title() }}</h1>
-                    {% block body %}{% endblock %}
-                    <form action="/" method="post" class="form-inline">
-                        <div class="form-group">
-                            <label for="time">Enter a Unix time, or any description of a time</label>
-                            <input type="text" name="time" id="time" value="" class="form-control" />
-                            <input type="submit" value="Go" class="btn btn-default" />
-                        </div>
-                    </form>
-                    <ul>
-                        <li><a href="/usage">Usage</a></li>
-                        <li><a href="/now">Now</a></li>
-                        <li><a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">Bookmarklet</a></li>
-                    </ul>
-                    <p>By <a href="https://www.craiga.id.au">Craig Anderson</a> of <a href="https://www.uhf62.co.uk">UHF 62</a>. <a href="https://github.com/craiga/unixtimesta.mp">Get the code on GitHub.</a></p>
-                </div>
-            </div>
-        </div>
-        <a href="https://github.com/craiga/unixtimesta.mp"><img style="position: absolute; top: 0; right: 0; border: 0;" class="hidden-xs" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+        <h1>{{ self.title() }}</h1>
+        {% block body %}{% endblock %}
+        <form action="/" method="post">
+              <label for="time">Enter a Unix time, or any description of a time</label>
+              <input type="text" name="time" id="time" value="" />
+              <input type="submit" value="Go" />
+        </form>
+        <ul>
+            <li><a href="/usage">Usage</a></li>
+            <li><a href="/now">Now</a></li>
+            <li><a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">Bookmarklet</a></li>
+        </ul>
+        <p>By <a href="https://www.craiga.id.au">Craig Anderson</a> of <a href="https://www.uhf62.co.uk">UHF 62</a>. <a href="https://github.com/craiga/unixtimesta.mp">Get the code on GitHub.</a></p>
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
                 integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
                 crossorigin="anonymous"></script>
         {% block script %}{% endblock %}
-        {% if ga_tracking_id %}
-            <script>
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-                ga('create', '{{ ga_tracking_id }}', {'siteSpeedSampleRate': 100});
-                ga('send', 'pageview');
-            </script>
-        {% endif %}
         {% if sentry_public_dsn %}
             <script src="https://cdn.ravenjs.com/3.22.3/raven.min.js"></script>
             <script>
@@ -57,6 +36,7 @@
         {% endif %}
 <!-- Fathom - simple website analytics - https://usefathom.com -->
 <script>
+if (window.location.hostname === "www.unixtimesta.mp") {
 (function(f, a, t, h, o, m){
 a[h]=a[h]||function(){
 (a[h].q=a[h].q||[]).push(arguments)
@@ -68,6 +48,7 @@ m.parentNode.insertBefore(o,m)
 })(document, window, 'https://cdn.usefathom.com/tracker.js', 'fathom');
 fathom('set', 'siteId', 'VMMDCYFS');
 fathom('trackPageview');
+}
 </script>
 <!-- / Fathom -->
     </body>

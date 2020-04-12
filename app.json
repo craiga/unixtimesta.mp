@@ -17,6 +17,9 @@
       "url": "https://github.com/heroku/heroku-buildpack-locale"
     },
     {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs"
+    },
+    {
       "url": "heroku/python"
     }
   ]

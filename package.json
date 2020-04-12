@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "sass": "$(npm bin)/sass",
+    "postinstall": "$(npm bin)/sass scss/:unixtimestamp/static/css/"
+  },
+  "dependencies": {
+    "sass": "^1.26.3"
+  }
+}
