@@ -1,0 +1,68 @@
+body {
+  margin: 10%;
+  background: #002b36;
+  color: #eee8d5;
+  text-shadow: 0 0 5px #eee8d5;
+  font-family: monospace;
+  font-size: max(3vh, 1em);
+}
+@media (orientation: portrait) {
+  body {
+    font-size: max(3vw, 1em);
+  }
+}
+
+a {
+  color: #268bd2;
+  text-shadow: 0 0 5px #268bd2;
+}
+a:hover {
+  color: #b0d6f1;
+  text-shadow: 0 0 5px #b0d6f1;
+}
+
+h1, h2, h3 {
+  font-size: 1em;
+  text-decoration: underline;
+}
+
+h1 {
+  color: #ffd85e;
+  text-shadow: 0 0 5px #ffd85e;
+}
+
+h2 {
+  color: #859900;
+  text-shadow: 0 0 5px #859900;
+}
+
+h3 {
+  color: #2aa198;
+  text-shadow: 0 0 5px #2aa198;
+}
+
+input {
+  background: inherit;
+  font-family: inherit;
+  color: inherit;
+  font-size: inherit;
+  text-shadow: inhert;
+  border-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+input[type=text] {
+  color: #859900;
+  border-bottom: 1px solid #859900;
+}
+input[type=text]:focus {
+  outline-width: 0px;
+}
+
+input[type=submit] {
+  color: #859900;
+  border-bottom: 1px solid #859900;
+}
+
+/*# sourceMappingURL=main.css.map */

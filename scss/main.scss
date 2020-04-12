@@ -1,0 +1,93 @@
+// Colours from Solarized.
+$blue:    #268bd2;
+$indigo:  #6c71c4;
+$purple:  #6c71c4;
+$pink:    #d33682;
+$red:     #dc322f;
+$orange:  #cb4b16;
+$yellow:  #b58900;
+$green:   #859900;
+$teal:    #2aa198;
+$cyan:    #2aa198;
+
+
+// Additional colours from Solarized.
+$base03:  #002b36;
+$base02:  #073642;
+$base01:  #586e75;
+$base00:  #657b83;
+$base0:   #839496;
+$base1:   #93a1a1;
+$base2:   #eee8d5;
+$base3:   #fdf6e3;
+
+$white:   #ffffff;
+
+$blur: 5px;
+
+body {
+  margin: 10%;
+  background: $base03;
+  color: $base2;
+  text-shadow: 0 0 $blur $base2;
+  font-family: monospace;
+  font-size: max(3vh, 1em);
+  @media (orientation: portrait) {
+    font-size: max(3vw, 1em);
+  }
+  
+}
+
+
+a {
+  color: $blue;
+  text-shadow: 0 0 $blur $blue;
+  &:hover {
+    color: lighten($blue, 33%);
+    text-shadow: 0 0 $blur lighten($blue, 33%);;
+  }
+}
+
+h1, h2, h3 {
+  font-size: 1em;
+  text-decoration: underline;
+}
+
+h1 {
+  color: lighten($yellow, 33%);
+  text-shadow: 0 0 $blur lighten($yellow, 33%);
+}
+h2 {
+  color: $green;
+  text-shadow: 0 0 $blur $green;
+}
+h3 {
+  color: $cyan;
+  text-shadow: 0 0 $blur $cyan;
+}
+
+input {
+  background: inherit;
+  font-family: inherit;
+  color: inherit;
+  font-size: inherit;
+  text-shadow: inhert;
+  border-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+input[type="text"] {
+  color: $green;
+  border-bottom: 1px solid $green;
+  
+  &:focus {
+    outline-width: 0px;
+  }
+}
+
+
+input[type="submit"] {
+  color: $green;
+  border-bottom: 1px solid $green;
+}
