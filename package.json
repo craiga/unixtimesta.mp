@@ -4,8 +4,6 @@
     "sass": "$(npm bin)/sass"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.7",
-    "prettier": "^2.0.4",
     "sass": "^1.26.3"
   }
 }
