@@ -2,7 +2,7 @@ body {
   margin: 10%;
   background: #002b36;
   color: #eee8d5;
-  text-shadow: 0 0 5px #eee8d5;
+  text-shadow: 0 0 0.5vw #eee8d5;
   font-family: monospace;
   font-size: max(3vh, 1em);
 }
@@ -11,14 +11,27 @@ body {
     font-size: max(3vw, 1em);
   }
 }
+body::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 43, 54, 0.1) 50%);
+  z-index: 2;
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
 
 a {
   color: #268bd2;
-  text-shadow: 0 0 5px #268bd2;
+  text-shadow: 0 0 0.5vw #268bd2;
 }
 a:hover {
   color: #b0d6f1;
-  text-shadow: 0 0 5px #b0d6f1;
+  text-shadow: 0 0 0.5vw #b0d6f1;
 }
 
 h1, h2, h3 {
@@ -27,18 +40,19 @@ h1, h2, h3 {
 }
 
 h1 {
+  text-transform: uppercase;
   color: #ffd85e;
-  text-shadow: 0 0 5px #ffd85e;
+  text-shadow: 0 0 0.5vw #ffd85e;
 }
 
 h2 {
   color: #859900;
-  text-shadow: 0 0 5px #859900;
+  text-shadow: 0 0 0.5vw #859900;
 }
 
 h3 {
   color: #2aa198;
-  text-shadow: 0 0 5px #2aa198;
+  text-shadow: 0 0 0.5vw #2aa198;
 }
 
 input {
@@ -46,23 +60,12 @@ input {
   font-family: inherit;
   color: inherit;
   font-size: inherit;
-  text-shadow: inhert;
   border-width: 0;
-  padding: 0;
+  padding: 0 0.5em;
   margin: 0;
-}
-
-input[type=text] {
-  color: #859900;
-  border-bottom: 1px solid #859900;
-}
-input[type=text]:focus {
-  outline-width: 0px;
-}
-
-input[type=submit] {
-  color: #859900;
-  border-bottom: 1px solid #859900;
+  color: #e6ff42;
+  border: 2px solid #e6ff42;
+  text-shadow: 0 0 0.5vw #e6ff42;
 }
 
 /*# sourceMappingURL=main.css.map */

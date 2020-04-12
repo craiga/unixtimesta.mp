@@ -23,7 +23,8 @@ $base3:   #fdf6e3;
 
 $white:   #ffffff;
 
-$blur: 5px;
+$blur: 0.5vw;
+
 
 body {
   margin: 10%;
@@ -36,8 +37,24 @@ body {
     font-size: max(3vw, 1em);
   }
   
+  // Scanlines adapted from https://codepen.io/lbebber/pen/XJRdrV
+  &::before{
+    content:" ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom :0;
+    right: 0;
+    background: linear-gradient(
+      rgba(0, 0, 0, 0) 50%,
+      transparentize($base03, 0.9) 50%),
+    ;
+    z-index: 2;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+  }
 }
-
 
 a {
   color: $blue;
@@ -54,6 +71,7 @@ h1, h2, h3 {
 }
 
 h1 {
+  text-transform: uppercase;
   color: lighten($yellow, 33%);
   text-shadow: 0 0 $blur lighten($yellow, 33%);
 }
@@ -71,23 +89,10 @@ input {
   font-family: inherit;
   color: inherit;
   font-size: inherit;
-  text-shadow: inhert;
   border-width: 0;
-  padding: 0;
+  padding: 0 0.5em;
   margin: 0;
-}
-
-input[type="text"] {
-  color: $green;
-  border-bottom: 1px solid $green;
-  
-  &:focus {
-    outline-width: 0px;
-  }
-}
-
-
-input[type="submit"] {
-  color: $green;
-  border-bottom: 1px solid $green;
+  color: lighten($green, 33%);
+  border: 2px solid lighten($green, 33%);
+  text-shadow: 0 0 $blur lighten($green, 33%);
 }
