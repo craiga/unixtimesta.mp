@@ -13,9 +13,10 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get upgrade -y
-            sudo apt-get install -y locales-all
+            sudo apt-get install -y locales-all npm
             sudo pip install pipenv
             pipenv install --dev
+            npm ci
 
       - run:
           name: run tests
@@ -31,6 +32,8 @@ jobs:
             pipenv run black --check --diff .
             pipenv run isort --check-only
             find . -iname "*.py" | xargs pipenv run pylint
+            npm run prettier -- **/*.html --check
+            npm run prettier -- **/*.scss --check
 
       - store_test_results:
           path: test-results

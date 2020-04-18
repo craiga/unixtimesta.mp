@@ -1,26 +1,28 @@
-{% extends "base.html" %}
-{% block title %}Unix Time {{ timestamp }}{% endblock %}
-{% block body %}
-    {% if datetime %}
-        <p id="utctime">Unix time {{ timestamp }} is {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z') }}.</p>
-    {% else %}
-        <p>Can't display a date for Unix time {{ timestamp }} as it's either too large or too small.</p>
-    {% endif %}
-{% endblock %}
-{% block script %}
-    <script>
-    $(function() {
-        var d = new Date({{ timestamp * 1000 }});
-        var s = d.toLocaleDateString("{{ locale }}", {
-                "weekday": "long",
-                "day": "numeric",
-                "month": "long",
-                "year": "numeric"
-            })
-            + ' '
-            + d.toLocaleTimeString("{{ locale }}");
-        $("p#utctime").after("<p id=\"localtime\" style=\"display: none;\">That's <span class=\"date\">" + s + "</span> in your local time zone.</p>");
-        $("p#localtime").show("slow");
-    });
-    </script>
+{% extends "base.html" %} {% block title %}Unix Time {{ timestamp }}{% endblock
+%} {% block body %} {% if datetime %}
+<p id="utctime">
+  Unix time {{ timestamp }} is {{ datetime.strftime('%A, %-d %B %Y %H:%M:%S %Z')
+  }}.
+</p>
+{% else %}
+<p>
+  Can't display a date for Unix time {{ timestamp }} as it's either too large or
+  too small.
+</p>
+{% endif %} {% endblock %} {% block script %}
+<script>
+  $(function() {
+      var d = new Date({{ timestamp * 1000 }});
+      var s = d.toLocaleDateString("{{ locale }}", {
+              "weekday": "long",
+              "day": "numeric",
+              "month": "long",
+              "year": "numeric"
+          })
+          + ' '
+          + d.toLocaleTimeString("{{ locale }}");
+      $("p#utctime").after("<p id=\"localtime\" style=\"display: none;\">That's <span class=\"date\">" + s + "</span> in your local time zone.</p>");
+      $("p#localtime").show("slow");
+  });
+</script>
 {% endblock %}
