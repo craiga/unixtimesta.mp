@@ -16,10 +16,15 @@
     <h1>{{ self.title() }}</h1>
     {% block body %}{% endblock %}
     <form action="/" method="post">
-      <label for="time">Enter a Unix time, or any description of a time:</label
-      ><br />
-      <input type="text" name="time" id="time" value="" />
-      <input type="submit" value="Go" />
+      <p>
+        <label for="time"
+          >Enter a Unix time, or any description of a time:</label
+        >
+      </p>
+      <p>
+        <input type="text" name="time" id="time" value="" />
+        <input type="submit" value="Go" />
+      </p>
     </form>
     <ul>
       <li><a href="/usage">Usage</a></li>
