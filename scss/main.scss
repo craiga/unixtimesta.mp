@@ -23,12 +23,24 @@ $base3: #fdf6e3;
 $white: #ffffff;
 
 $blur: 0.3vw;
+$backgroundColor: $base03;
+$foregroundColor: $base2;
+$linkColor: $blue;
+$linkHoverColor: lighten($linkColor, 33%);
+$heading1Color: lighten($yellow, 33%);
+$heading2Color: $green;
+$heading3Color: $cyan;
+$textInputColor: lighten($green, 33%);
+$submitInputForegroundColor: $backgroundColor;
+$submitInputHoverForegroundColor: $backgroundColor;
+$submitInputBackgroundColor: lighten($green, 33%);
+$submitInputHoverBackgroundColor: lighten($submitInputBackgroundColor, 33%);
 
 body {
   margin: 10%;
-  background: $base03;
-  color: $base2;
-  text-shadow: 0 0 $blur $base2;
+  background: $backgroundColor;
+  color: $foregroundColor;
+  text-shadow: 0 0 $blur $foregroundColor;
   font-family: monospace;
   font-size: max(3vh, 1em);
   @media (orientation: portrait) {
@@ -46,7 +58,7 @@ body {
     right: 0;
     background: linear-gradient(
       rgba(0, 0, 0, 0) 50%,
-      transparentize($base03, 0.9) 50%
+      transparentize($backgroundColor, 0.9) 50%
     );
     z-index: 2;
     background-size: 100% 3px, 3px 100%;
@@ -55,11 +67,11 @@ body {
 }
 
 a {
-  color: $blue;
-  text-shadow: 0 0 $blur $blue;
+  color: $linkColor;
+  text-shadow: 0 0 $blur $linkColor;
   &:hover {
-    color: lighten($blue, 33%);
-    text-shadow: 0 0 $blur lighten($blue, 33%);
+    color: $linkHoverColor;
+    text-shadow: 0 0 $blur $linkHoverColor;
   }
 }
 
@@ -72,16 +84,16 @@ h3 {
 
 h1 {
   text-transform: uppercase;
-  color: lighten($yellow, 33%);
-  text-shadow: 0 0 $blur lighten($yellow, 33%);
+  color: $heading1Color;
+  text-shadow: 0 0 $blur $heading1Color;
 }
 h2 {
-  color: $green;
-  text-shadow: 0 0 $blur $green;
+  color: $heading2Color;
+  text-shadow: 0 0 $blur $heading2Color;
 }
 h3 {
-  color: $cyan;
-  text-shadow: 0 0 $blur $cyan;
+  color: $heading3Color;
+  text-shadow: 0 0 $blur $heading3Color;
 }
 
 input {
@@ -92,7 +104,32 @@ input {
   border-width: 0;
   padding: 0 0.5em;
   margin: 0;
-  color: lighten($green, 33%);
-  border: 2px solid lighten($green, 33%);
-  text-shadow: 0 0 $blur lighten($green, 33%);
+  &[type="text"] {
+    color: $textInputColor;
+    border: 2px solid $textInputColor;
+    text-shadow: 0 0 $blur $textInputColor;
+    box-shadow: 0 0 $blur $textInputColor;
+  }
+  &[type="submit"] {
+    background: $submitInputBackgroundColor;
+    border: 2px solid $submitInputBackgroundColor;
+    color: $submitInputForegroundColor;
+    text-shadow: 0 0 $blur $submitInputForegroundColor;
+    box-shadow: 0 0 $blur $submitInputForegroundColor;
+    &:hover {
+      background: $submitInputHoverBackgroundColor;
+      border: 2px solid $submitInputHoverBackgroundColor;
+      color: $submitInputHoverForegroundColor;
+      text-shadow: 0 0 $blur $submitInputHoverForegroundColor;
+      box-shadow: 0 0 $blur $submitInputHoverForegroundColor;
+    }
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  li::before {
+    content: "* ";
+  }
 }
