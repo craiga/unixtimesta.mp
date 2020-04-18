@@ -1,55 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{% block title %}unixtimesta.mp{% endblock %}</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="format-detection" content="telephone=no">
-        <link href="/css/main.css" rel="stylesheet" />
-        <link type="text/plain" rel="author" href="/humans.txt" />
-    </head>
-    <body>
-        <h1>{{ self.title() }}</h1>
-        {% block body %}{% endblock %}
-        <form action="/" method="post">
-              <label for="time">Enter a Unix time, or any description of a time:</label><br />
-              <input type="text" name="time" id="time" value="" />
-              <input type="submit" value="Go" />
-        </form>
-        <ul>
-            <li><a href="/usage">Usage</a></li>
-            <li><a href="/now">Now</a></li>
-            <li><a href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;">Bookmarklet</a></li>
-        </ul>
-        <p>By <a href="https://www.craiga.id.au">Craig Anderson</a> of <a href="https://www.uhf62.co.uk">UHF 62</a>. <a href="https://github.com/craiga/unixtimesta.mp">Get the code on GitHub.</a></p>
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
-                integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
-                crossorigin="anonymous"></script>
-        {% block script %}{% endblock %}
-        {% if sentry_public_dsn %}
-            <script src="https://cdn.ravenjs.com/3.22.3/raven.min.js"></script>
-            <script>
-                Raven.config('{{ sentry_public_dsn }}').install();
-                Raven.setExtraContext({locale: "{{ locale }}"});
-            </script>
-        {% endif %}
-<!-- Fathom - simple website analytics - https://usefathom.com -->
-<script>
-if (window.location.hostname === "www.unixtimesta.mp") {
-(function(f, a, t, h, o, m){
-a[h]=a[h]||function(){
-(a[h].q=a[h].q||[]).push(arguments)
-};
-o=f.createElement('script'),
-m=f.getElementsByTagName('script')[0];
-o.async=1; o.src=t; o.id='fathom-script';
-m.parentNode.insertBefore(o,m)
-})(document, window, 'https://cdn.usefathom.com/tracker.js', 'fathom');
-fathom('set', 'siteId', 'VMMDCYFS');
-fathom('trackPageview');
-}
-</script>
-<!-- / Fathom -->
-    </body>
+  <head>
+    <title>{% block title %}unixtimesta.mp{% endblock %}</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <link href="/css/main.css" rel="stylesheet" />
+    <link type="text/plain" rel="author" href="/humans.txt" />
+  </head>
+  <body>
+    <h1>{{ self.title() }}</h1>
+    {% block body %}{% endblock %}
+    <form action="/" method="post">
+      <label for="time">Enter a Unix time, or any description of a time:</label
+      ><br />
+      <input type="text" name="time" id="time" value="" />
+      <input type="submit" value="Go" />
+    </form>
+    <ul>
+      <li><a href="/usage">Usage</a></li>
+      <li><a href="/now">Now</a></li>
+      <li>
+        <a
+          href="javascript:var%20s=null;if(window.getSelection)s=window.getSelection();else%20if(document.getSelection)s=document.getSelection();else%20if(document.selection)s=document.selection.createRange().text;url=%27http://unixtimesta.mp/%27;if(s)url+=encodeURIComponent(s);document.location.href=url;"
+          >Bookmarklet</a
+        >
+      </li>
+    </ul>
+    <p>
+      By <a href="https://www.craiga.id.au">Craig Anderson</a> of
+      <a href="https://www.uhf62.co.uk">UHF 62</a>.
+      <a href="https://github.com/craiga/unixtimesta.mp"
+        >Get the code on GitHub.</a
+      >
+    </p>
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+      integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+      crossorigin="anonymous"
+    ></script>
+    {% block script %}{% endblock %} {% if sentry_public_dsn %}
+    <script src="https://cdn.ravenjs.com/3.22.3/raven.min.js"></script>
+    <script>
+      Raven.config("{{ sentry_public_dsn }}").install();
+      Raven.setExtraContext({ locale: "{{ locale }}" });
+    </script>
+    {% endif %}
+    <!-- Fathom - simple website analytics - https://usefathom.com -->
+    <script>
+      if (window.location.hostname === "www.unixtimesta.mp") {
+        (function (f, a, t, h, o, m) {
+          a[h] =
+            a[h] ||
+            function () {
+              (a[h].q = a[h].q || []).push(arguments);
+            };
+          (o = f.createElement("script")),
+            (m = f.getElementsByTagName("script")[0]);
+          o.async = 1;
+          o.src = t;
+          o.id = "fathom-script";
+          m.parentNode.insertBefore(o, m);
+        })(document, window, "https://cdn.usefathom.com/tracker.js", "fathom");
+        fathom("set", "siteId", "VMMDCYFS");
+        fathom("trackPageview");
+      }
+    </script>
+    <!-- / Fathom -->
+  </body>
 </html>
