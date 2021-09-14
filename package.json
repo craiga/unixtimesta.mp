@@ -1,4 +1,5 @@
 {
+  "name": "unixtimesta.mp",
   "scripts": {
     "prettier": "$(npm bin)/prettier",
     "sass": "$(npm bin)/sass",
