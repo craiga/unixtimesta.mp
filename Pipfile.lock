@@ -49,11 +49,11 @@
         },
         "flask-talisman": {
             "hashes": [
-                "sha256:468131464a249274ed226efc21b372518f442487e58918ccab8357eaa638fd1f",
-                "sha256:eaa754f4b771dfbe473843391d69643b79e3a38c865790011ac5e4179c68e3ec"
+                "sha256:08a25360c771f7a79d6d4db2abfa71f7422e62a714418b671d69d6a201764d05",
+                "sha256:5d502ec0c51bf1755a797b8cffbe4e94f8684af712ba0b56f3d80b79277ef285"
             ],
             "index": "pypi",
-            "version": "==0.7.0"
+            "version": "==0.8.1"
         },
         "gunicorn": {
             "hashes": [
