@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -ex
+
+npx sass --style compressed scss/:unixtimestamp/static/css/

@@ -3,7 +3,7 @@
 from xml.etree import ElementTree
 
 import pytest
-from werkzeug.urls import url_encode
+from urllib.parse import urlencode
 
 XML_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
@@ -13,7 +13,7 @@ XML_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9"
 )
 def test_sitemap_index_query_string(client, start, size, sitemap_size):
     """Test sitemap index with values on the query string."""
-    query_string = url_encode(
+    query_string = urlencode(
         {"start": start, "size": size, "sitemap_size": sitemap_size}
     )
     url = "/sitemapindex.xml?" + query_string
@@ -52,7 +52,7 @@ def assert_sitemap_index_xml_correct(xml, start, size, sitemap_size):
 
     expected_urls = []
     for sitemap_index in range(0, size):
-        expected_qs = url_encode(
+        expected_qs = urlencode(
             {"start": start + (sitemap_size * sitemap_index), "size": sitemap_size}
         )
         expected_url = "https://www.unixtimesta.mp/sitemap.xml?" + expected_qs

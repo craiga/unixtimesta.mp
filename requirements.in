@@ -1,0 +1,16 @@
+flask
+blinker
+pytz
+python-dateutil
+gunicorn
+raven[flask]
+python-dotenv
+flask-accept
+flask-talisman
+pylint
+behave
+ipython
+black
+isort
+pytest
+pytest-flask
