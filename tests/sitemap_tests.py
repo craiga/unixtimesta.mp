@@ -1,9 +1,9 @@
 """Tests for sitemaps and sitemap index."""
 
+from urllib.parse import urlencode
 from xml.etree import ElementTree
 
 import pytest
-from urllib.parse import urlencode
 
 XML_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
@@ -45,7 +45,7 @@ def test_sitemap_index_config(client, config, start, size, sitemap_size):
 
 def assert_sitemap_index_xml_correct(xml, start, size, sitemap_size):
     """Assert that sitemap index XML is correct."""
-    assert xml.tag == "{{{}}}sitemapindex".format(XML_NAMESPACE)
+    assert xml.tag == f"{{{XML_NAMESPACE}}}sitemapindex"
 
     locs = xml.findall("./s:sitemap/s:loc", namespaces={"s": XML_NAMESPACE})
     assert len(locs) == size
@@ -66,14 +66,14 @@ def assert_sitemap_index_xml_correct(xml, start, size, sitemap_size):
 )
 def test_sitemap_query_string(client, start, size, real_size):
     """Test sitemap."""
-    url = "/sitemap.xml?start={}&size={}".format(start, size)
+    url = f"/sitemap.xml?start={start}&size={size}"
     response = client.get(url)
     assert response.status_code == 200
     assert response.content_type == "application/xml"
     root = ElementTree.fromstring(response.data)
-    assert root.tag == "{{{}}}urlset".format(XML_NAMESPACE)
+    assert root.tag == f"{{{XML_NAMESPACE}}}urlset"
     locs = root.findall("./s:url/s:loc", namespaces={"s": XML_NAMESPACE})
     assert len(locs) == real_size
     timestamps = range(start, start + real_size)
-    urls = ["https://www.unixtimesta.mp/{}".format(t) for t in timestamps]
+    urls = [f"https://www.unixtimesta.mp/{t}" for t in timestamps]
     assert [l.text for l in locs] == urls

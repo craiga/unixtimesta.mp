@@ -13,6 +13,3 @@ max-module-lines = 250
 
 [DESIGN]
 min-public-methods=0
-
-[MESSAGES CONTROL]
-disable = bad-continuation  # https://github.com/PyCQA/pylint/issues/289
