@@ -4,8 +4,8 @@ import os
 
 SERVER_NAME = os.environ.get("SERVER_NAME")
 if not SERVER_NAME:
-    if os.environ.get("HEROKU_APP_NAME"):
-        SERVER_NAME = "{}.{}".format(os.environ.get("HEROKU_APP_NAME"), "herokuapp.com")
+    if heroku_app_name := os.environ.get("HEROKU_APP_NAME"):
+        SERVER_NAME = f"{heroku_app_name}.herokuapp.com"
 
 SITEMAP_DEFAULT_START = os.environ.get("SITEMAP_DEFAULT_START", 0)
 SITEMAP_DEFAULT_SIZE = os.environ.get("SITEMAP_DEFAULT_SIZE", 1000)

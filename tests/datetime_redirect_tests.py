@@ -55,24 +55,24 @@ def valid_datetime_redirects():
         for valid_datetime_parts in product(*valid_datetime_list):
             path = "/" + "/".join([str(i) for i in valid_datetime_parts])
             valid_datetime = datetime(*valid_datetime_parts, tzinfo=utc)
-            redirect = "/{:.0f}".format(valid_datetime.timestamp())
+            redirect = f"/{valid_datetime.timestamp():.0f}"
             yield (path, redirect)
 
     # Ensure special cases are tested
     for year, month in product(VALID_YEARS, VALID_MONTHS):
         # Month without day
-        path = "/{:d}/{:d}".format(year, month)
+        path = f"/{year:d}/{month:d}"
         valid_datetime = datetime(year=year, month=month, day=1, tzinfo=utc)
-        redirect = "/{:.0f}".format(valid_datetime.timestamp())
+        redirect = f"/{valid_datetime.timestamp():.0f}"
         yield (path, redirect)
 
         # Last day of the month
         last_day_of_month = monthrange(year, month)[1]
-        path = "/{:d}/{:d}/{:d}".format(year, month, last_day_of_month)
+        path = f"/{year:d}/{month:d}/{last_day_of_month:d}"
         valid_datetime = datetime(
             year=year, month=month, day=last_day_of_month, tzinfo=utc
         )
-        redirect = "/{:.0f}".format(valid_datetime.timestamp())
+        redirect = f"/{valid_datetime.timestamp():.0f}"
         yield (path, redirect)
 
 
@@ -106,7 +106,7 @@ def invalid_datetime_redirects():
     # Test last day of month + 1
     for year, month in product(VALID_YEARS, VALID_MONTHS):
         last_day_of_month = monthrange(year, month)[1]
-        yield "/{:d}/{:d}/{:d}".format(year, month, last_day_of_month + 1)
+        yield f"/{year:d}/{month:d}/{last_day_of_month + 1:d}"
 
 
 @pytest.mark.parametrize("url, expected_redirect", valid_datetime_redirects())

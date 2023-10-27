@@ -6,7 +6,7 @@ from flask import Blueprint, g, render_template, request
 
 import unixtimestamp  # pylint:disable=cyclic-import
 
-blueprint = Blueprint(__name__, __name__)
+blueprint = Blueprint("error_handlers", __name__)
 
 
 @blueprint.errorhandler(404)

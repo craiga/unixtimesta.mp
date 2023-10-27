@@ -17,7 +17,7 @@ def test_valid_redirect(client, datetime_string):
     """Test datetime string redirects."""
     expected_datetime = parse(datetime_string, fuzzy=True)
     expected_datetime = utc.localize(expected_datetime)
-    expected_redirect = "/{:.0f}".format(expected_datetime.timestamp())
+    expected_redirect = f"/{expected_datetime.timestamp():.0f}"
 
     response = client.get("/" + quote(datetime_string))
     assert response.status_code == 302

@@ -1,12 +1,7 @@
-# Self-signed certificate
 server.crt
 server.key
-
-# Where I like to put the output of `pylint --generate-rcfile`.
 pylint.txt
-
-# node_modules
 /node_modules
-
-# Built CSS
 /unixtimestamp/static/css
+__pycache__
+/.python-version

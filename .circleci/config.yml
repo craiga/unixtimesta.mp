@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/unixtimesta.mp
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.12
 
     steps:
       - checkout
@@ -14,26 +14,25 @@ jobs:
             sudo apt-get update
             sudo apt-get upgrade -y
             sudo apt-get install -y locales-all npm
-            sudo pip install pipenv
-            pipenv install --dev
-            npm ci
+            pip install --requirement requirements.txt
+            npm install
 
       - run:
           name: run tests
-          command: pipenv run pytest
+          command: pytest
 
       - run:
           name: run BDD tests
-          command: pipenv run behave
+          command: behave
 
       - run:
           name: check code formatting
           command: |
-            pipenv run black --check --diff .
-            pipenv run isort --check-only
-            find . -iname "*.py" | xargs pipenv run pylint
-            npm run prettier -- **/*.html --check
-            npm run prettier -- **/*.scss --check
+            black --check --diff .
+            isort --check-only .
+            find . -iname "*.py" | xargs pylint
+            npx prettier --check -- **/*.html 
+            npx prettier --check -- **/*.scss
 
       - store_test_results:
           path: test-results

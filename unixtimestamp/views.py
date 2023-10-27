@@ -31,7 +31,7 @@ def render_timestamp_html(**kwargs):
         locale=language,
         ga_tracking_id=ga_tracking_id,
         sentry_public_dsn=sentry_public_dsn,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -139,9 +139,9 @@ def sitemap():
     config = flask.current_app.config
     start = int(request.args.get("start", config.get("SITEMAP_DEFAULT_START")))
     max_size = int(config.get("SITEMAP_MAX_SIZE"))
-    size = int(request.args.get("size", config.get("SITEMAP_DEFAULT_SIZE")))
-    if size > max_size:
-        size = max_size
+    size = min(
+        int(request.args.get("size", config.get("SITEMAP_DEFAULT_SIZE"))), max_size
+    )
     return make_streamed_response(
         "sitemap.xml", "application/xml", timestamps=range(start, start + size)
     )
@@ -219,7 +219,7 @@ def redirect_to_timestamp_string(datetime_string):
 @blueprint.route("/", methods=["POST"])
 def handle_post():
     """Handle post request."""
-    return flask.redirect("/{}".format(request.form.get("time")))
+    return flask.redirect(f"/{request.form.get('time')}")
 
 
 @blueprint.route("/")
